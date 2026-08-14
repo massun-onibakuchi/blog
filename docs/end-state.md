@@ -38,6 +38,8 @@ would add nothing.
 
 URLs are permanent. No dates in URLs.
 
+List entries carry title, date, and tags only — no excerpt, no thumbnail.
+
 ### Navigation
 
 Minimal header, present on every page: the `bakuchi` wordmark linking to `/`,
@@ -60,7 +62,8 @@ Deeper commentary lives in a Publication that the entry links to.
 
 Articles are written in **either Japanese or English, per article** — never both.
 
-- Lists mix languages in one chronological stream; each entry carries a `JA` / `EN` badge.
+- Lists mix languages in one chronological stream, with no language marking.
+  The badge appears on the article page itself.
 - No language filter, no locale routing, no auto-detection, no translated duplicates.
 - Readers cross the language gap via the translation button (§4).
 
@@ -68,7 +71,7 @@ Articles are written in **either Japanese or English, per article** — never bo
 
 Contains exactly:
 
-- Title, published date, tags (tags link to `/tags/<tag>`)
+- Title, published date, tags (tags link to `/tags/<tag>`), `JA` / `EN` badge
 - **Translation button** — opens ChatGPT in a new tab with a prefilled prompt
   containing an instruction plus the article's public URL. The target language is
   the opposite of the article's own language.
@@ -89,8 +92,9 @@ Deferred to v2: Mermaid diagrams.
 
 ## 5. Appearance
 
-Typographic and quiet: readable body face, ~65–75 character measure, generous
-whitespace, a single accent color. Code and diagrams are the visual interest.
+Bare minimal, in the manner of <https://vitalik.eth.limo/>: one column, plain
+background, unstyled-looking links, no cards, borders, shadows, or hero areas.
+Body face is a readable default at ~65–75 character measure. Code and figures are the only visual interest.
 
 Dark / light toggle. Switching plays a circular reveal expanding from the click
 point, degrading to a plain switch where unsupported. Both themes are
@@ -102,6 +106,21 @@ Responsive: desktop and mobile, including in-app browsers.
 
 - Articles are Markdown files in this repository; pushing to `main` publishes them.
 - No CMS, no admin UI, no external content service.
+- Every article carries structured frontmatter, validated at build time:
+
+  ```yaml
+  ---
+  title:
+  date: '2025-12-14'
+  isPublished: true
+  lang: en # en | ja — drives the badge and the translation button's target
+  tags: []
+  ogImage: # optional; overrides the generated card
+  ---
+  ```
+
+  `isPublished: false` excludes the article from the build entirely. The slug
+  comes from the filename, and the section from the directory the file sits in.
 - **OGP image**: per-article override allowed; otherwise auto-generated at build
   time as a solid-background card carrying the title (falling back to the site name).
 - No analytics of any kind.
