@@ -20,12 +20,15 @@ git author is `onibakuchi`.)_
 
 ## 2. Site structure
 
-Four sections. `Showcases` from the original spec is **out of scope for v1**.
+Three sections. `Showcases` from the original spec is **out of scope for v1**.
+
+There is no `/about` page: the bio lives on `/` and stays short (3–5 lines).
+X and GitHub are always reachable from the header, so a separate About page
+would add nothing.
 
 | Path                     | Content                                                       |
 | ------------------------ | ------------------------------------------------------------- |
 | `/`                      | Short bio + latest excerpts from every section, each linking out |
-| `/about`                 | 3–5 line bio + X / GitHub links. Nothing else                  |
 | `/publications`          | List of publications                                           |
 | `/publications/<slug>`   | Publication article                                            |
 | `/posts`                 | List of posts                                                  |
@@ -38,7 +41,7 @@ URLs are permanent. No dates in URLs.
 ### Navigation
 
 Minimal header, present on every page: the `bakuchi` wordmark linking to `/`,
-links to the four sections, and — in the top-right corner — X, GitHub, and the
+links to the three sections, and — in the top-right corner — X, GitHub, and the
 theme toggle. No footer navigation beyond a copyright line.
 
 ### Publications vs Posts
@@ -109,7 +112,7 @@ Responsive: desktop and mobile, including in-app browsers.
 
 Content present at launch:
 
-- About page filled in
+- Bio written on `/`
 - Open Source list populated
 - At least **one** Publication
 - Posts may be empty
