@@ -209,21 +209,59 @@ code {
 .profile {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 1rem 0 2rem;
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .name {
-  margin: 0 0 0.25rem;
+  margin: 0;
+  font-size: 1.85rem;
 }
 
-.profile p {
+.prompt {
+  margin: 0.35rem 0 0.7rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.prompt span:first-child {
+  color: var(--link);
+  margin-right: 0.4em;
+}
+
+/* A steady blink reads as "still typing" without being distracting. */
+.cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 0.2em;
+  background: var(--muted);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+.bio {
   margin: 0;
 }
 

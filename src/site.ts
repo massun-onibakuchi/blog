@@ -14,8 +14,6 @@ export const SITE = {
     github: 'https://github.com/massun-onibakuchi',
     x: 'https://x.com/0xbakuchi',
   },
-  /** Where the earlier writing lives; linked from the home page, not the header. */
-  previousBlog: 'https://mirror.xyz/bakuchi.eth',
 } as const;
 
 /** Sections that appear in the header, in order. */

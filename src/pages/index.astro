@@ -8,14 +8,13 @@ import { SITE } from '../site';
 
 <BaseLayout>
   <div class="profile">
-    <img class="avatar" src="/avatar.jpg" alt="" width="72" height="72" />
+    <img class="avatar" src="/avatar.jpg" alt="" width="96" height="96" />
     <div>
       <h1 class="name">{SITE.name}</h1>
-      <p>
-        {SITE.bio}{' '}
-        Earlier writing is at{' '}
-        <a href={SITE.previousBlog} rel="noopener" target="_blank">mirror.xyz</a>.
+      <p class="prompt">
+        <span aria-hidden="true">$</span> whoami<span class="cursor" aria-hidden="true"></span>
       </p>
+      <p class="bio">{SITE.bio}</p>
     </div>
   </div>
 </BaseLayout>

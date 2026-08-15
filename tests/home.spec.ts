@@ -11,7 +11,7 @@ test.describe('home page', () => {
     // Bio: end-state §2 says it lives on "/" and stays 3-5 lines. We don't pin
     // the exact copy (that's content, not contract) — just that a substantial
     // paragraph of prose is present in the main content area.
-    const bio = page.locator('main p').first();
+    const bio = page.locator('main p.bio').first();
     await expect(bio).toBeVisible();
     const bioText = (await bio.textContent())?.trim() ?? '';
     expect(bioText.length, 'expected a bio paragraph with real content').toBeGreaterThan(30);

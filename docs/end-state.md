@@ -16,8 +16,9 @@ Consequences that constrain everything below:
 
 Identity: handle **bakuchi** (header wordmark and `<title>`).
 Header links to X (<https://x.com/0xbakuchi>) and GitHub
-(<https://github.com/massun-onibakuchi>). The home page links to the earlier
-blog at mirror.xyz.
+(<https://github.com/massun-onibakuchi>). The earlier blog at mirror.xyz is
+reachable through an externally-hosted entry in the Posts list (§2, "Writing
+hosted elsewhere"), not linked from the home page directly.
 
 ## 2. Site structure
 
