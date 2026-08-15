@@ -15,8 +15,8 @@ Consequences that constrain everything below:
 - Nothing on the site may require ongoing curation to avoid looking stale.
 
 Identity: handle **bakuchi** (header wordmark and `<title>`).
-Header links to X and GitHub. _(TBD: X account URL, GitHub profile URL —
-git author is `onibakuchi`.)_
+Header links to GitHub (<https://github.com/massun-onibakuchi>). The X link is
+withheld for now; the header must accommodate it being added later.
 
 ## 2. Site structure
 
@@ -43,8 +43,8 @@ List entries carry title, date, and tags only — no excerpt, no thumbnail.
 ### Navigation
 
 Minimal header, present on every page: the `bakuchi` wordmark linking to `/`,
-links to the three sections, and — in the top-right corner — X, GitHub, and the
-theme toggle. No footer navigation beyond a copyright line.
+links to the three sections, and — in the top-right corner — GitHub and the
+theme toggle (X joins them later). No footer navigation beyond a copyright line.
 
 ### Publications vs Posts
 
