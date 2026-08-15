@@ -135,10 +135,25 @@ code {
   flex-wrap: wrap;
 }
 
+/* Four section links don't fit a phone's width next to the wordmark and
+   corner icons. Below the breakpoint, the wordmark and icons keep their own
+   first row and the nav is pushed onto a clean, left-aligned second row,
+   instead of breaking mid-row wherever the last link happens to run out of
+   space. */
+@media (max-width: 640px) {
+  .site-header nav {
+    order: 3;
+    flex-basis: 100%;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
 .wordmark {
   font-weight: 700;
   color: var(--fg);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .site-header .spacer {
@@ -148,12 +163,14 @@ code {
 .icon-link {
   color: var(--muted);
   display: inline-flex;
+  flex-shrink: 0;
 }
 
 .theme-toggle {
   background: none;
   border: 0;
   padding: 0;
+  flex-shrink: 0;
   cursor: pointer;
   color: var(--muted);
   font: inherit;
