@@ -16,8 +16,7 @@ test.describe('home page', () => {
     const bioText = (await bio.textContent())?.trim() ?? '';
     expect(bioText.length, 'expected a bio paragraph with real content').toBeGreaterThan(30);
 
-    // Links out to each section (either from the "latest excerpts" per §2, or
-    // the header nav present on every page — either satisfies "linking out").
+    // Links out to each section, via the header nav present on every page.
     for (const path of ['/publications', '/posts', '/open-source']) {
       const link = page.locator(`a[href^="${path}"]`).first();
       await expect(link, `expected a link to ${path} on the home page`).toBeVisible();

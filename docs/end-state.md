@@ -29,7 +29,7 @@ would add nothing.
 
 | Path                     | Content                                                       |
 | ------------------------ | ------------------------------------------------------------- |
-| `/`                      | Short bio + latest excerpts from every section, each linking out |
+| `/`                      | Avatar, name, short bio. Sections are reached via the header nav |
 | `/publications`          | List of publications                                           |
 | `/publications/<slug>`   | Publication article                                            |
 | `/posts`                 | List of posts                                                  |

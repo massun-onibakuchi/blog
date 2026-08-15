@@ -1,36 +1,21 @@
 ---
-// src/pages/index.astro — home. Short bio plus the latest few from every section,
-// each linking out (end-state §2). There is no /about page: this is it.
+// src/pages/index.astro — home. Avatar, name and a short bio, nothing else
+// (end-state §2). Every section is one click away via the header nav, so the
+// home page itself carries no excerpts. There is no /about page: this is it.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import EntryList from '../components/EntryList.astro';
-import ProjectList from '../components/ProjectList.astro';
-import { getSection } from '../lib/articles';
-import { getList } from '../lib/lists';
 import { SITE } from '../site';
-
-const EXCERPT_COUNT = 5;
-const publications = (await getSection('publications')).slice(0, EXCERPT_COUNT);
-const posts = (await getSection('posts')).slice(0, EXCERPT_COUNT);
-// Curated order, as authored in the JSON — not sorted by year.
-const openSource = await getList('openSource');
-const achievements = await getList('achievements');
 ---
 
 <BaseLayout>
-  <p>
-    {SITE.bio}{' '}
-    Earlier writing is at <a href={SITE.previousBlog} rel="noopener" target="_blank">mirror.xyz</a>.
-  </p>
-
-  <h2><a href="/publications/">Publications</a></h2>
-  <EntryList articles={publications} empty="No publications yet." />
-
-  <h2><a href="/open-source/">Open Source</a></h2>
-  <ProjectList entries={openSource.slice(0, EXCERPT_COUNT)} />
-
-  <h2><a href="/achievements/">Achievements</a></h2>
-  <ProjectList entries={achievements.slice(0, EXCERPT_COUNT)} />
-
-  <h2><a href="/posts/">Posts</a></h2>
-  <EntryList articles={posts} empty="No posts yet." />
+  <div class="profile">
+    <img class="avatar" src="/avatar.jpg" alt="" width="72" height="72" />
+    <div>
+      <h1 class="name">{SITE.name}</h1>
+      <p>
+        {SITE.bio}{' '}
+        Earlier writing is at{' '}
+        <a href={SITE.previousBlog} rel="noopener" target="_blank">mirror.xyz</a>.
+      </p>
+    </div>
+  </div>
 </BaseLayout>
