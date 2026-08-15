@@ -43,8 +43,9 @@ for (const section of SECTIONS) {
       expect(href).toBeTruthy();
       const url = new URL(href!);
       expect(url.hostname).toBe('chatgpt.com');
+      expect(url.searchParams.get('hints')).toBe('search');
 
-      const prompt = url.searchParams.get('q') ?? '';
+      const prompt = url.searchParams.get('prompt') ?? '';
       expect(prompt, 'expected the prefilled prompt to contain the article URL').toContain(
         page.url(),
       );
