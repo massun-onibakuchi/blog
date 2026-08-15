@@ -1,0 +1,98 @@
+---
+// src/components/WhoAmI.astro — a small terminal flourish on the home page:
+// types out "$ whoami" then answers with the site handle. No JS / reduced
+// motion shows the finished text immediately — nothing here is load-bearing.
+import { SITE } from '../site';
+---
+
+<div class="terminal">
+  <p class="prompt">
+    <span aria-hidden="true">$</span> <span data-typewriter="cmd">whoami</span><span
+      class="cursor"
+      data-typewriter="cursor"
+      aria-hidden="true"
+    ></span>
+  </p>
+  <p class="output" data-typewriter="output">{SITE.name}</p>
+</div>
+
+<script is:inline>
+  (() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const cmdEl = document.querySelector('[data-typewriter="cmd"]');
+    const outEl = document.querySelector('[data-typewriter="output"]');
+    const cursorEl = document.querySelector('[data-typewriter="cursor"]');
+    if (!cmdEl || !outEl || !cursorEl) return;
+
+    const cmd = cmdEl.textContent;
+    const out = outEl.textContent;
+    cmdEl.textContent = '';
+    outEl.textContent = '';
+    outEl.style.visibility = 'hidden';
+
+    const type = (el, text, speed, onDone) => {
+      let i = 0;
+      const tick = () => {
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) setTimeout(tick, speed);
+        else onDone?.();
+      };
+      tick();
+    };
+
+    type(cmdEl, cmd, 80, () => {
+      setTimeout(() => {
+        outEl.style.visibility = 'visible';
+        outEl.after(cursorEl);
+        type(outEl, out, 80);
+      }, 350);
+    });
+  })();
+</script>
+
+<style>
+  .terminal {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    margin: 0.35rem 0 0.7rem;
+  }
+
+  .prompt,
+  .output {
+    margin: 0;
+  }
+
+  .prompt span:first-child {
+    color: var(--link);
+    margin-right: 0.4em;
+  }
+
+  .output {
+    color: var(--muted);
+  }
+
+  /* A steady blink reads as "still typing" without being distracting. */
+  .cursor {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    margin-left: 0.2em;
+    background: var(--muted);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+</style>

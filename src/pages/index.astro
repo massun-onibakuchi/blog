@@ -3,6 +3,7 @@
 // (end-state §2). Every section is one click away via the header nav, so the
 // home page itself carries no excerpts. There is no /about page: this is it.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import WhoAmI from '../components/WhoAmI.astro';
 import { SITE } from '../site';
 ---
 
@@ -11,9 +12,7 @@ import { SITE } from '../site';
     <img class="avatar" src="/avatar.jpg" alt="" width="96" height="96" />
     <div>
       <h1 class="name">{SITE.name}</h1>
-      <p class="prompt">
-        <span aria-hidden="true">$</span> whoami<span class="cursor" aria-hidden="true"></span>
-      </p>
+      <WhoAmI />
       <p class="bio">{SITE.bio}</p>
     </div>
   </div>
