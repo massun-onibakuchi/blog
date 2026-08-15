@@ -23,7 +23,7 @@ const { entries } = Astro.props;
   {
     entries.map((entry) => (
       <li>
-        <a href={entry.url} rel="noopener">
+        <a href={entry.url} rel="noopener" target="_blank">
           {entry.name}
         </a>
         <span class="meta">{entry.year}</span>

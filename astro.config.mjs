@@ -11,6 +11,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { rehypeGithubAlerts } from 'rehype-github-alerts';
+import rehypeExternalLinks from 'rehype-external-links';
 
 export default defineConfig({
   site: process.env.SITE_URL ?? 'http://localhost:4321',
@@ -36,6 +37,9 @@ export default defineConfig({
       rehypeSlug,
       [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       rehypeGithubAlerts,
+      // Links out of an article body open in a new tab, so the reader keeps
+      // their place in what they were reading (end-state §2).
+      [rehypeExternalLinks, { target: '_blank', rel: ['noopener'] }],
     ],
   },
 });

@@ -18,7 +18,11 @@ const { articles, empty = 'Nothing here yet.' } = Astro.props;
   {
     articles.map((article) => (
       <li>
-        <a href={href(article)} rel={isExternal(article) ? 'noopener' : undefined}>
+        <a
+          href={href(article)}
+          rel={isExternal(article) ? 'noopener' : undefined}
+          target={isExternal(article) ? '_blank' : undefined}
+        >
           {article.data.title}
           {/* Older writing lives on Qiita, Medium and HackMD; say so before the click. */}
           {isExternal(article) && <span class="meta"> ↗</span>}

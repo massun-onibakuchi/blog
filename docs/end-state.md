@@ -42,6 +42,10 @@ URLs are permanent. No dates in URLs.
 
 List entries carry title, date, and tags only — no excerpt, no thumbnail.
 
+**Every link that leaves the site opens in a new tab** — header social links, the
+external entries in the lists, the translation button, and links inside article
+bodies. Internal navigation stays in the current tab.
+
 ### Navigation
 
 Minimal header, present on every page: the `bakuchi` wordmark linking to `/`,
