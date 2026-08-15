@@ -18,7 +18,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   webServer: {
-    command: 'pnpm build && pnpm preview',
+    // ASTRO_PREVIEW_BACKGROUND=1 forces `astro preview` to run in the
+    // foreground: Astro 7 auto-detects agent/CI-like shells (no TTY) and
+    // daemonizes `preview` by default, which makes Playwright's webServer
+    // process appear to "exit early" even though the server is actually up.
+    command: 'pnpm build && ASTRO_PREVIEW_BACKGROUND=1 pnpm preview',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
@@ -29,8 +33,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
     {
+      // devices['iPhone 14'] defaults to WebKit; only Chromium is installed
+      // (pnpm test:install), so pin the engine and keep the device's viewport/
+      // UA/touch emulation.
       name: 'mobile-chromium',
-      use: { ...devices['iPhone 14'] },
+      use: { ...devices['iPhone 14'], browserName: 'chromium' },
     },
   ],
 });

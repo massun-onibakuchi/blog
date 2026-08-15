@@ -175,7 +175,20 @@ code {
 }
 
 .entries li {
+  /* Flex rather than inline whitespace: the title, date and tags must keep a gap
+     even when they wrap onto separate lines on a phone. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
   margin: 0.6rem 0;
+}
+
+/* A project's description belongs on its own line under the name and year. */
+.entries li > div {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .entries time,
@@ -212,6 +225,30 @@ code {
 
 .prose :is(p, ul, ol) {
   overflow-wrap: break-word;
+}
+
+/* Callouts: a rule and a label, nothing tinted — the same restraint as blockquotes.
+   Markup comes from rehype-github-alerts (.markdown-alert*). */
+.markdown-alert {
+  margin: 1.25rem 0;
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 3px solid var(--rule);
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.markdown-alert-title .octicon {
+  fill: currentColor;
 }
 
 .neighbours {

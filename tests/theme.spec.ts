@@ -17,9 +17,15 @@ test('theme toggle flips data-theme, persists across reload, with no flash', asy
   await expect(toggle).toBeVisible();
   await toggle.click();
 
+  // The toggle may apply the theme inside a View Transition callback, which
+  // runs on the next rendering opportunity rather than synchronously with the
+  // click — so poll (toHaveAttribute auto-retries) instead of a single read.
+  const expectedAfter = initial === 'dark' ? 'light' : 'dark';
+  await expect(html, 'expected data-theme to flip on click').toHaveAttribute(
+    'data-theme',
+    expectedAfter,
+  );
   const after = await html.getAttribute('data-theme');
-  expect(after, 'expected data-theme to flip on click').not.toBe(initial);
-  expect(['light', 'dark']).toContain(after);
 
   await page.reload({ waitUntil: 'domcontentloaded' });
   const onReload = await html.getAttribute('data-theme');
