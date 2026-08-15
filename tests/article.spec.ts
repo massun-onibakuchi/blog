@@ -39,15 +39,25 @@ for (const section of SECTIONS) {
       const targetLang = await translate.getAttribute('hreflang');
       expect(['en', 'ja']).toContain(targetLang);
 
-      const href = await translate.getAttribute('href');
-      expect(href).toBeTruthy();
-      const url = new URL(href!);
+      // The href is rebuilt at click time from the browser's actual URL. Change
+      // the path without a navigation first so this test fails if the link is
+      // still using the build-time Astro.site origin/path.
+      await page.evaluate(() => history.replaceState({}, '', '/runtime-translation-url-check/'));
+      const runtimePageUrl = page.url();
+      const href = await translate.evaluate((element) => {
+        const link = element as HTMLAnchorElement;
+        link.addEventListener('click', (event) => event.preventDefault(), { once: true });
+        link.click();
+        return link.href;
+      });
+
+      const url = new URL(href);
       expect(url.hostname).toBe('chatgpt.com');
       expect(url.searchParams.get('hints')).toBe('search');
 
       const prompt = url.searchParams.get('prompt') ?? '';
-      expect(prompt, 'expected the prefilled prompt to contain the article URL').toContain(
-        page.url(),
+      expect(prompt, 'expected the prefilled prompt to contain the runtime article URL').toContain(
+        runtimePageUrl,
       );
 
       const expectedTarget = targetLang === 'ja' ? /japanese|日本語/i : /\benglish\b/i;
