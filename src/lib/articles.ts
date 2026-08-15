@@ -8,7 +8,10 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type Section = 'publications' | 'posts';
 export type Article = CollectionEntry<Section> & { section: Section };
 
-const byNewest = (a: Article, b: Article) => b.data.date.getTime() - a.data.date.getTime();
+// Undated entries exist only for externally hosted writing whose original shows
+// no date; they sit below everything dated rather than jumping to the top.
+const byNewest = (a: Article, b: Article) =>
+  (b.data.date?.getTime() ?? -Infinity) - (a.data.date?.getTime() ?? -Infinity);
 
 /** Published entries of one section, newest first. */
 export async function getSection(section: Section): Promise<Article[]> {

@@ -22,6 +22,6 @@ export const SITE = {
 export const SECTIONS = [
   { href: '/publications', label: 'Publications' },
   { href: '/open-source', label: 'Open Source' },
-  { href: '/hackathons', label: 'Hackathons' },
+  { href: '/achievements', label: 'Achievements' },
   { href: '/posts', label: 'Posts' },
 ] as const;

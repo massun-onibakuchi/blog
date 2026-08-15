@@ -35,7 +35,7 @@ would add nothing.
 | `/posts`                 | List of posts                                                  |
 | `/posts/<slug>`          | Post article                                                   |
 | `/open-source`           | Flat list of public work. No detail pages                      |
-| `/hackathons`            | Hackathon submissions and bounty work. No detail pages         |
+| `/achievements`          | Hackathon wins, bounties and other results. No detail pages    |
 | `/tags/<tag>`            | All articles carrying that tag                                 |
 
 URLs are permanent. No dates in URLs.
@@ -55,9 +55,9 @@ Split by **degree of finish**, not length or topic:
 - **Publication** — written to be read by others; revised. Research, analysis, design write-ups.
 - **Post** — unrevised working log, learning note, progress update.
 
-### Open Source and Hackathon entries
+### Open Source and Achievement entries
 
-Data only: title, 1–2 line description, external link, year (hackathon entries
+Data only: title, 1–2 line description, external link, year (achievement entries
 also credit team-mates). Security research — exploit reproductions, vulnerability
 collections, security challenges — sits in the Open Source list rather than a
 section of its own. Deeper commentary lives in a Publication that links to the entry.
@@ -67,9 +67,11 @@ site. They are curated, not chronological, so nothing sorts them by year.
 
 ### Writing hosted elsewhere
 
-Earlier articles live on Qiita, Medium and HackMD. They appear in the Publications
-list by title and date, marked as leaving the site, and link straight out — no
-copy of the text is kept here and no local page is built for them.
+Earlier articles live on Qiita, Medium, HackMD and mirror.xyz. They appear in the
+Publications list by title, marked as leaving the site, and link straight out — no
+copy of the text is kept here and no local page is built for them. Their date is
+optional, because some originals show none; undated entries sort to the bottom.
+An article hosted here always has a date.
 
 ## 3. Language
 
@@ -124,7 +126,7 @@ Responsive: desktop and mobile, including in-app browsers.
   ```yaml
   ---
   title:
-  date: '2025-12-14'
+  date: '2025-12-14' # required, except for externally hosted entries
   isPublished: true
   lang: en # en | ja — drives the badge and the translation button's target
   tags: []

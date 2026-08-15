@@ -18,9 +18,17 @@ for (const section of SECTIONS) {
       for (let i = 0; i < count; i++) {
         const item = items.nth(i);
 
-        // Title (a link) and a machine-readable date.
-        await expect(item.getByRole('link').first()).toBeVisible();
-        await expect(item.locator('time')).toHaveCount(1);
+        // Title (a link) and a machine-readable date. The only entries allowed
+        // to omit the date are externally hosted ones, whose original carries
+        // none — those link straight off the site.
+        const titleLink = item.getByRole('link').first();
+        await expect(titleLink).toBeVisible();
+        const dates = item.locator('time');
+        if ((await dates.count()) === 0) {
+          await expect(titleLink).toHaveAttribute('href', /^https?:\/\//);
+        } else {
+          await expect(dates).toHaveCount(1);
+        }
 
         // No standalone "en"/"ja" badge text anywhere in this entry.
         await expect(item.getByText(LANG_TEXT, { exact: true })).toHaveCount(0);

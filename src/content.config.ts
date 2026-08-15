@@ -5,19 +5,29 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
-const article = z.object({
-  title: z.string(),
-  date: z.coerce.date(),
-  isPublished: z.boolean(),
-  lang: z.enum(['en', 'ja']),
-  tags: z.array(z.string()).default([]),
-  // Path under /public, e.g. '/og/my-post.png'. Omit to use the generated card.
-  ogImage: z.string().optional(),
-  // Set when the writing lives elsewhere (Qiita, Medium, HackMD). The entry then
-  // appears in the list with its title and date, linking straight out — no local
-  // page is built, because there is no local text to show.
-  externalUrl: z.string().url().optional(),
-});
+const article = z
+  .object({
+    title: z.string(),
+    // Optional only for externally hosted writing, where the original may carry
+    // no date worth trusting; the refinement below enforces that. Undated
+    // entries sort to the bottom of the list.
+    date: z.coerce.date().optional(),
+    isPublished: z.boolean(),
+    lang: z.enum(['en', 'ja']),
+    tags: z.array(z.string()).default([]),
+    // Path under /public, e.g. '/og/my-post.png'. Omit to use the generated card.
+    ogImage: z.string().optional(),
+    // Set when the writing lives elsewhere (Qiita, Medium, HackMD). The entry then
+    // appears in the list with its title, linking straight out — no local page is
+    // built, because there is no local text to show.
+    externalUrl: z.string().url().optional(),
+  })
+  // An article hosted here is dated, always: it is written here, so the date is
+  // known and the lists depend on it.
+  .refine((data) => Boolean(data.date) || Boolean(data.externalUrl), {
+    message: 'date is required unless the entry is externally hosted',
+    path: ['date'],
+  });
 
 const publications = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/publications' }),
@@ -47,12 +57,12 @@ const openSource = defineCollection({
   schema: listEntry,
 });
 
-const hackathons = defineCollection({
-  loader: file('./src/content/hackathons.json'),
+const achievements = defineCollection({
+  loader: file('./src/content/achievements.json'),
   schema: listEntry.extend({
     /** Team-mates, where the work was not solo. */
     with: z.array(z.string()).default([]),
   }),
 });
 
-export const collections = { publications, posts, openSource, hackathons };
+export const collections = { publications, posts, openSource, achievements };

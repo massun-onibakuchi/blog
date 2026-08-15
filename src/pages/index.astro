@@ -13,7 +13,7 @@ const publications = (await getSection('publications')).slice(0, EXCERPT_COUNT);
 const posts = (await getSection('posts')).slice(0, EXCERPT_COUNT);
 // Curated order, as authored in the JSON — not sorted by year.
 const openSource = await getList('openSource');
-const hackathons = await getList('hackathons');
+const achievements = await getList('achievements');
 ---
 
 <BaseLayout>
@@ -28,8 +28,8 @@ const hackathons = await getList('hackathons');
   <h2><a href="/open-source/">Open Source</a></h2>
   <ProjectList entries={openSource.slice(0, EXCERPT_COUNT)} />
 
-  <h2><a href="/hackathons/">Hackathons and Bounties</a></h2>
-  <ProjectList entries={hackathons.slice(0, EXCERPT_COUNT)} />
+  <h2><a href="/achievements/">Achievements</a></h2>
+  <ProjectList entries={achievements.slice(0, EXCERPT_COUNT)} />
 
   <h2><a href="/posts/">Posts</a></h2>
   <EntryList articles={posts} empty="No posts yet." />

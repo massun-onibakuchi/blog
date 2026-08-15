@@ -24,7 +24,10 @@ const { articles, empty = 'Nothing here yet.' } = Astro.props;
           {isExternal(article) && <span class="meta"> ↗</span>}
         </a>
         {' '}
-        <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+        {/* Externally hosted writing may carry no date; then nothing is shown. */}
+        {article.data.date && (
+          <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+        )}
         {article.data.tags.length > 0 && (
           <span class="tag-list">
             {article.data.tags.map((tag) => (

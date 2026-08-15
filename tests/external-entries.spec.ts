@@ -20,8 +20,8 @@ test('external publications link out and have no page on this site', async ({ pa
   }
 });
 
-test('the hackathons list links out to each submission', async ({ page }) => {
-  await page.goto('/hackathons/');
+test('the achievements list links out to each entry', async ({ page }) => {
+  await page.goto('/achievements/');
   const links = page.getByRole('listitem').getByRole('link');
   const count = await links.count();
   expect(count).toBeGreaterThan(0);

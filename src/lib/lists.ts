@@ -1,10 +1,10 @@
 // src/lib/lists.ts — loading for the curated data sections (Open Source and
-// Hackathons). They share a shape and, more importantly, a rule:
+// Achievements). They share a shape and, more importantly, a rule:
 // entries appear in the author's chosen order, never sorted by year.
 
 import { getCollection } from 'astro:content';
 
-type ListCollection = 'openSource' | 'hackathons';
+type ListCollection = 'openSource' | 'achievements';
 
 export async function getList(name: ListCollection) {
   const entries = await getCollection(name);

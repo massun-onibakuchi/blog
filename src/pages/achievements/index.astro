@@ -1,0 +1,14 @@
+---
+// src/pages/achievements/index.astro — hackathon submissions, bounty work and
+// anything else won or shipped, with team-mates credited where it was not solo.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectList from '../../components/ProjectList.astro';
+import { getList } from '../../lib/lists';
+
+const entries = await getList('achievements');
+---
+
+<BaseLayout title="Achievements">
+  <h1>Achievements</h1>
+  <ProjectList entries={entries} />
+</BaseLayout>

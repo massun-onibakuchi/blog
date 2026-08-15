@@ -25,7 +25,8 @@ const url = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321').h
   <article class="prose">
     <h1>{title}</h1>
     <div class="article-meta">
-      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      {/* Only externally hosted entries may lack a date, and those have no page here. */}
+      {date && <time datetime={date.toISOString()}>{formatDate(date)}</time>}
       <span class="badge">{lang}</span>
       {
         tags.length > 0 && (
