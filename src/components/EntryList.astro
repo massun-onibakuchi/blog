@@ -2,7 +2,7 @@
 // src/components/EntryList.astro — the one way articles appear in a list.
 // Title, date and tags only: no excerpt, no thumbnail, and deliberately no
 // language badge (end-state §2 and §3 — the badge lives on the article page).
-import { formatDate, href, isExternal, tagKey, type Article } from '../lib/articles';
+import { dateAttr, formatDate, href, isExternal, tagKey, type Article } from '../lib/articles';
 
 interface Props {
   articles: Article[];
@@ -30,7 +30,9 @@ const { articles, empty = 'Nothing here yet.' } = Astro.props;
         {' '}
         {/* Externally hosted writing may carry no date; then nothing is shown. */}
         {article.data.date && (
-          <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+          <time datetime={dateAttr(article.data.date, article.data.datePrecision)}>
+            {formatDate(article.data.date, article.data.datePrecision)}
+          </time>
         )}
         {article.data.tags.length > 0 && (
           <span class="tag-list">

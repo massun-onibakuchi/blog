@@ -1,5 +1,7 @@
 ---
 title: 'Pendle V2 and Notional V2 AMM simulation'
+date: '2023-06-01'
+datePrecision: month
 isPublished: true
 lang: en
 tags: ['defi', 'amm']

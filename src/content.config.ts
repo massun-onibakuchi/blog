@@ -12,6 +12,10 @@ const article = z
     // no date worth trusting; the refinement below enforces that. Undated
     // entries sort to the bottom of the list.
     date: z.coerce.date().optional(),
+    // Externally hosted writing is sometimes only datable to the month. Recording
+    // it as the first of the month and marking it here keeps sorting simple while
+    // stopping the page from claiming a day it does not know.
+    datePrecision: z.enum(['day', 'month']).default('day'),
     isPublished: z.boolean(),
     lang: z.enum(['en', 'ja']),
     tags: z.array(z.string()).default([]),

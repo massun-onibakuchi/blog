@@ -8,11 +8,11 @@
     "order": 0
   },
   {
-    "id": "idle-tranches",
-    "name": "idle-tranches",
-    "description": "Idle Perpetual Yield Tranches contracts.",
-    "url": "https://github.com/Idle-Labs/idle-tranches",
-    "year": 2021,
+    "id": "sol-challenge",
+    "name": "sol-challenge",
+    "description": "Smart contract challenges built around security bugs.",
+    "url": "https://github.com/massun-onibakuchi/sol-challenge",
+    "year": 2022,
     "order": 1
   },
   {
@@ -24,36 +24,12 @@
     "order": 2
   },
   {
-    "id": "best-yield-yearn-strategy",
-    "name": "best-yield-yearn-strategy",
-    "description": "Yearn StrategyIdleV2. These strategies have held over $3.5M in assets under management.",
-    "url": "https://github.com/Idle-Finance/best-yield-yearn-strategy",
-    "year": 2022,
+    "id": "napier-v2-public",
+    "name": "napier-v2-public",
+    "description": "Napier V2 — fixed-yield protocol contracts.",
+    "url": "https://github.com/napierfi/napier-v2-public",
+    "year": 2025,
     "order": 3
-  },
-  {
-    "id": "0x-order-watcher",
-    "name": "0x-order-watcher",
-    "description": "Watcher for managing 0x orders tracked in a database.",
-    "url": "https://github.com/massun-onibakuchi/0x-order-watcher",
-    "year": 2022,
-    "order": 4
-  },
-  {
-    "id": "prometheasy-besu",
-    "name": "prometheasy-besu",
-    "description": "Monorepo template for Besu, Prometheus, Grafana and Solidity.",
-    "url": "https://github.com/massun-onibakuchi/prometheasy-besu",
-    "year": 2023,
-    "order": 5
-  },
-  {
-    "id": "sol-challenge",
-    "name": "sol-challenge",
-    "description": "Smart contract challenges built around security bugs.",
-    "url": "https://github.com/massun-onibakuchi/sol-challenge",
-    "year": 2022,
-    "order": 6
   },
   {
     "id": "smart-contracts-vulns-hacking",
@@ -61,7 +37,7 @@
     "description": "Reproductions of DeFi hack incidents and a collection of security issues.",
     "url": "https://github.com/massun-onibakuchi/smart-contracts-vulns-hacking",
     "year": 2022,
-    "order": 7
+    "order": 4
   },
   {
     "id": "nomad-bridge-exploit-poc",
@@ -69,6 +45,22 @@
     "description": "Replay of the Nomad bridge hack as a runnable proof of concept.",
     "url": "https://github.com/massun-onibakuchi/nomad-bridge-exploit-poc",
     "year": 2022,
-    "order": 8
+    "order": 5
+  },
+  {
+    "id": "best-yield-yearn-strategy",
+    "name": "best-yield-yearn-strategy",
+    "description": "Yearn StrategyIdleV2.",
+    "url": "https://github.com/Idle-Finance/best-yield-yearn-strategy",
+    "year": 2022,
+    "order": 6
+  },
+  {
+    "id": "idle-tranches",
+    "name": "idle-tranches",
+    "description": "Idle Perpetual Yield Tranches contracts.",
+    "url": "https://github.com/Idle-Labs/idle-tranches",
+    "year": 2021,
+    "order": 7
   }
 ]

@@ -66,8 +66,14 @@ also credit team-mates). Security research — exploit reproductions, vulnerabil
 collections, security challenges — sits in the Open Source list rather than a
 section of its own. Deeper commentary lives in a Publication that links to the entry.
 
-Both lists appear in the **author's chosen order**, carried over from the previous
-site. They are curated, not chronological, so nothing sorts them by year.
+Both lists appear in the **author's chosen order**, set by the author. They are
+curated, not chronological, so nothing sorts them by year. Curation also decides
+membership: a repository may be dropped from the list without being deleted or
+archived, and the list is not expected to mirror the GitHub profile.
+
+Descriptions state what the thing is. They do not carry figures that decay —
+assets under management, star counts, user numbers — because §1 forbids content
+that needs ongoing curation to avoid looking stale.
 
 ### Writing hosted elsewhere
 
@@ -76,6 +82,10 @@ Publications list by title, marked as leaving the site, and link straight out �
 copy of the text is kept here and no local page is built for them. Their date is
 optional, because some originals show none; undated entries sort to the bottom.
 An article hosted here always has a date.
+
+Where the original is datable only to the month, the entry carries that month
+rather than a guessed day: it is recorded as the first of the month, marked
+`datePrecision: month`, and displayed as `YYYY-MM`. Sorting is unaffected.
 
 ## 3. Language
 
@@ -131,6 +141,7 @@ Responsive: desktop and mobile, including in-app browsers.
   ---
   title:
   date: '2025-12-14' # required, except for externally hosted entries
+  datePrecision: day # day | month — month shows YYYY-MM (see §2)
   isPublished: true
   lang: en # en | ja — drives the badge and the translation button's target
   tags: []

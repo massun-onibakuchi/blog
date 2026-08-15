@@ -75,5 +75,12 @@ export const href = (article: Article) =>
  */
 export const hasMath = (body = '') => /\$\$[\s\S]+?\$\$|\$[^$\n]+\$/.test(body);
 
-export const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat('en-CA', { timeZone: 'UTC' }).format(date); // YYYY-MM-DD
+/** YYYY-MM-DD, or YYYY-MM where only the month is known. */
+export const formatDate = (date: Date, precision: 'day' | 'month' = 'day') => {
+  const iso = new Intl.DateTimeFormat('en-CA', { timeZone: 'UTC' }).format(date);
+  return precision === 'month' ? iso.slice(0, 7) : iso;
+};
+
+/** `datetime` attribute matching what `formatDate` shows — both are valid HTML. */
+export const dateAttr = (date: Date, precision: 'day' | 'month' = 'day') =>
+  precision === 'month' ? formatDate(date, 'month') : date.toISOString();
