@@ -31,3 +31,26 @@ test('theme toggle flips data-theme, persists across reload, with no flash', asy
   const onReload = await html.getAttribute('data-theme');
   expect(onReload, 'expected the toggled theme to persist across reload, pre-paint').toBe(after);
 });
+
+// Regression: the icon rule lived in a scoped <style>, and Astro scoped the
+// `[data-theme]` ancestor too — that attribute is on <html>, which carries no
+// scope attribute, so neither icon was ever hidden and sun and moon overlapped.
+test('exactly one theme icon is visible, in either theme', async ({ page }) => {
+  await page.goto('/');
+  const sun = page.locator('[data-theme-icon="light"]');
+  const moon = page.locator('[data-theme-icon="dark"]');
+
+  const shown = async () =>
+    [await sun.isVisible(), await moon.isVisible()].filter(Boolean).length;
+
+  expect(await shown(), 'expected one icon before toggling, not both or neither').toBe(1);
+
+  const initial = await page.locator('html').getAttribute('data-theme');
+  await page.getByRole('button', { name: /toggle dark mode/i }).click();
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-theme',
+    initial === 'dark' ? 'light' : 'dark',
+  );
+
+  expect(await shown(), 'expected one icon after toggling, not both or neither').toBe(1);
+});

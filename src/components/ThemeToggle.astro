@@ -17,9 +17,12 @@
 </button>
 
 <style>
-  /* One icon at a time: the sun means "you are in dark mode, click for light". */
-  [data-theme='light'] [data-theme-icon='light'],
-  [data-theme='dark'] [data-theme-icon='dark'] {
+  /* One icon at a time: the sun means "you are in dark mode, click for light".
+     `:global` on the ancestor is load-bearing — `data-theme` sits on <html>, which
+     carries no scope attribute, so a scoped selector there matches nothing and both
+     icons draw on top of each other. */
+  :global([data-theme='light']) [data-theme-icon='light'],
+  :global([data-theme='dark']) [data-theme-icon='dark'] {
     display: none;
   }
 </style>
