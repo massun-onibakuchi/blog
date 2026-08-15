@@ -1,0 +1,22 @@
+---
+// src/pages/publications/[...slug].astro — one publication.
+// Paths come from getSection, so unpublished drafts have no route at all.
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getSection, hasMath, neighbours } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const articles = await getSection('publications');
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article, ...neighbours(articles, article.id) },
+  }));
+}
+
+const { article, newer, older } = Astro.props;
+const { Content } = await render(article);
+---
+
+<ArticleLayout article={article} newer={newer} older={older} math={hasMath(article.body)}>
+  <Content />
+</ArticleLayout>

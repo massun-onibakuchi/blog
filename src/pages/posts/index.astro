@@ -1,0 +1,13 @@
+---
+// src/pages/posts/index.astro — the full post list, newest first.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getSection } from '../../lib/articles';
+
+const articles = await getSection('posts');
+---
+
+<BaseLayout title="Posts">
+  <h1>Posts</h1>
+  <EntryList articles={articles} empty="No posts yet." />
+</BaseLayout>

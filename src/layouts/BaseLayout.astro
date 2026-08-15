@@ -1,0 +1,55 @@
+---
+// src/layouts/BaseLayout.astro — the page shell: head, header, footer, theme.
+// Every page goes through here so the header, the no-FOUC theme boot and the
+// social metadata stay in exactly one place.
+import '../styles/global.css';
+import { SITE } from '../site';
+import Header from '../components/Header.astro';
+
+interface Props {
+  title?: string;
+  /** Absolute or root-relative OG image URL. Falls back to the generated card. */
+  ogImage?: string;
+  /** Load KaTeX styles only where math actually occurs (they cost ~320KB). */
+  math?: boolean;
+}
+
+const { title, ogImage, math = false } = Astro.props;
+const pageTitle = title ? `${title} — ${SITE.name}` : SITE.name;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const ogUrl = ogImage ? new URL(ogImage, Astro.site ?? SITE.url).href : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {ogUrl && <meta property="og:image" content={ogUrl} />}
+    {math && <link rel="stylesheet" href="/katex/katex.min.css" />}
+    <script is:inline>
+      // Blocking on purpose: the theme must be on <html> before first paint,
+      // otherwise dark-mode readers get a white flash on every navigation.
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = stored ?? (prefersDark ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">© {new Date().getFullYear()} {SITE.name}</footer>
+  </body>
+</html>

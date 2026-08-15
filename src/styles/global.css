@@ -1,0 +1,257 @@
+/*
+ * src/styles/global.css — the whole stylesheet.
+ * Bare minimal by intent (end-state §5): one column, plain background, no cards,
+ * borders, shadows or hero areas. Colour is carried by two theme blocks only, and
+ * every pair below was picked to clear WCAG AA against its own background, because
+ * the contrast gate runs over both themes.
+ */
+
+:root {
+  --measure: 42rem; /* ~70 characters at the body size */
+  --bg: #ffffff;
+  --fg: #1a1a1a; /* 15.9:1 on white */
+  --muted: #595959; /* 7.0:1 on white — dates, meta, counts */
+  --link: #0b5ed7; /* 6.0:1 on white */
+  --rule: #d9d9d9;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #14171a;
+  --fg: #e8e8e8; /* 13.6:1 on #14171a */
+  --muted: #a3a3a3; /* 7.2:1 */
+  --link: #79b8ff; /* 8.0:1 */
+  --rule: #333a41;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  background: var(--bg);
+  color: var(--fg);
+  /* Latin and CJK sit on the same baseline without per-language overrides. */
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--link);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+  margin: 2rem 0 0.5rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+h2 {
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1.05rem;
+}
+
+/* Heading anchors are wrapped links; they must not look like body links. */
+h1 a,
+h2 a,
+h3 a,
+h4 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--rule);
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto; /* wide tables scroll themselves, never the page */
+}
+
+th,
+td {
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.6rem;
+  text-align: left;
+}
+
+code {
+  font-size: 0.9em;
+}
+
+:not(pre) > code {
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  padding: 0.1em 0.3em;
+}
+
+/* Site chrome ------------------------------------------------------------- */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.wordmark {
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-header .spacer {
+  flex: 1 1 auto;
+}
+
+.icon-link {
+  color: var(--muted);
+  display: inline-flex;
+}
+
+.theme-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted);
+  font: inherit;
+  display: inline-flex;
+}
+
+.site-footer {
+  margin-top: 4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Listings ----------------------------------------------------------------- */
+
+.entries {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.entries li {
+  margin: 0.6rem 0;
+}
+
+.entries time,
+.meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Article ------------------------------------------------------------------ */
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding: 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.prose :is(p, ul, ol) {
+  overflow-wrap: break-word;
+}
+
+.neighbours {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9rem;
+}
+
+/* Math blocks are the one element that reliably overflows on phones. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.3rem;
+}
+
+/* Theme transition --------------------------------------------------------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* The circular reveal does the work; the default cross-fade fights it. */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}

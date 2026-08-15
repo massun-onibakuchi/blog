@@ -1,0 +1,9 @@
+// wrangler.jsonc — deploy target: a Workers project that serves static assets only.
+// No `main`: there is no server-side code, and there is not meant to be.
+{
+  "name": "blog",
+  "compatibility_date": "2026-08-14",
+  "assets": {
+    "directory": "./dist"
+  }
+}

@@ -1,0 +1,22 @@
+---
+// src/components/TranslateLink.astro — the language button (end-state §4).
+// Opens ChatGPT with a prefilled prompt: an instruction plus this article's URL.
+// The target language is always the opposite of what the article is written in,
+// because every article exists in exactly one language.
+
+interface Props {
+  lang: 'en' | 'ja';
+  url: string;
+}
+
+const { lang, url } = Astro.props;
+const target = lang === 'en' ? { code: 'ja', name: 'Japanese', label: '日本語で読む' }
+  : { code: 'en', name: 'English', label: 'Read in English' };
+
+const prompt = `Read this article and translate it into ${target.name}. Keep the technical terms, code blocks and math unchanged.\n${url}`;
+const href = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+---
+
+<a href={href} rel="noopener" target="_blank" hreflang={target.code} data-translate>
+  {target.label}
+</a>

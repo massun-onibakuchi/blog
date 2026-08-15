@@ -1,0 +1,52 @@
+---
+// src/layouts/ArticleLayout.astro — the reading page (end-state §4).
+// Contains exactly: title, date, tags, language badge, translation link, body,
+// and previous/next within the same section. Nothing else by design — no TOC,
+// no reading time, no share buttons.
+import BaseLayout from './BaseLayout.astro';
+import TranslateLink from '../components/TranslateLink.astro';
+import { formatDate, href, tagKey, type Article } from '../lib/articles';
+import { ogImageUrl } from '../lib/og';
+
+interface Props {
+  article: Article;
+  newer?: Article;
+  older?: Article;
+  /** Whether the body contains math, so KaTeX styles load only where needed. */
+  math: boolean;
+}
+
+const { article, newer, older, math } = Astro.props;
+const { title, date, tags, lang } = article.data;
+const url = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321').href;
+---
+
+<BaseLayout title={title} ogImage={ogImageUrl(article)} math={math}>
+  <article class="prose">
+    <h1>{title}</h1>
+    <div class="article-meta">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      <span class="badge">{lang}</span>
+      {
+        tags.length > 0 && (
+          <span class="tag-list">
+            {tags.map((tag) => (
+              <a class="meta" href={`/tags/${encodeURIComponent(tagKey(tag))}/`}>
+                #{tag}
+              </a>
+            ))}
+          </span>
+        )
+      }
+      <span class="spacer"></span>
+      <TranslateLink lang={lang} url={url} />
+    </div>
+
+    <slot />
+  </article>
+
+  <nav class="neighbours" aria-label="More in this section">
+    <span>{older && <a rel="prev" href={href(older)}>← {older.data.title}</a>}</span>
+    <span>{newer && <a rel="next" href={href(newer)}>{newer.data.title} →</a>}</span>
+  </nav>
+</BaseLayout>

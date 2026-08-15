@@ -1,0 +1,25 @@
+---
+// src/pages/open-source/index.astro — flat list of projects, no detail pages.
+// Anything worth saying at length becomes a Publication that links here.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('openSource')).sort((a, b) => b.data.year - a.data.year);
+---
+
+<BaseLayout title="Open Source">
+  <h1>Open Source</h1>
+  <ul class="entries">
+    {
+      projects.map(({ data }) => (
+        <li>
+          <a href={data.url} rel="noopener">
+            {data.name}
+          </a>{' '}
+          <span class="meta">{data.year}</span>
+          <div>{data.description}</div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

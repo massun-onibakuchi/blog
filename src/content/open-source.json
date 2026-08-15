@@ -1,0 +1,51 @@
+[
+  {
+    "id": "grim-reaper",
+    "name": "grim-reaper",
+    "description": "On-chain liquidation bot written in Huff.",
+    "url": "https://github.com/massun-onibakuchi/grim-reaper",
+    "year": 2022
+  },
+  {
+    "id": "sol-challenge",
+    "name": "sol-challenge",
+    "description": "CTF-like smart contract challenges.",
+    "url": "https://github.com/massun-onibakuchi/sol-challenge",
+    "year": 2022
+  },
+  {
+    "id": "nomad-bridge-exploit-poc",
+    "name": "nomad-bridge-exploit-poc",
+    "description": "Replay of the Nomad bridge hack as a runnable proof of concept.",
+    "url": "https://github.com/massun-onibakuchi/nomad-bridge-exploit-poc",
+    "year": 2022
+  },
+  {
+    "id": "smart-contracts-vulns-hacking",
+    "name": "smart-contracts-vulns-hacking",
+    "description": "Reproductions of DeFi hack incidents and a collection of security issues.",
+    "url": "https://github.com/massun-onibakuchi/smart-contracts-vulns-hacking",
+    "year": 2022
+  },
+  {
+    "id": "on-chain-nft",
+    "name": "on-chain-nft",
+    "description": "Fully on-chain NFT storing base64-encoded SVG, inspired by Uniswap V3 position NFTs.",
+    "url": "https://github.com/massun-onibakuchi/on-chain-nft",
+    "year": 2021
+  },
+  {
+    "id": "napier",
+    "name": "napier",
+    "description": "ETHOnline 2022 submission; four prizes.",
+    "url": "https://github.com/massun-onibakuchi/napier",
+    "year": 2022
+  },
+  {
+    "id": "immutable-array",
+    "name": "immutable-array",
+    "description": "Emulating an immutable array with SSTORE2.",
+    "url": "https://github.com/massun-onibakuchi/immutable-array",
+    "year": 2023
+  }
+]

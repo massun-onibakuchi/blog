@@ -1,0 +1,13 @@
+---
+// src/pages/publications/index.astro — the full publication list, newest first.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getSection } from '../../lib/articles';
+
+const articles = await getSection('publications');
+---
+
+<BaseLayout title="Publications">
+  <h1>Publications</h1>
+  <EntryList articles={articles} empty="No publications yet." />
+</BaseLayout>
