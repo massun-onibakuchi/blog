@@ -1,7 +1,7 @@
 ---
 // src/components/EntryList.astro — the one way articles appear in a list.
-// Title, date and tags only: no excerpt, no thumbnail, and deliberately no
-// language badge (end-state §2 and §3 — the badge lives on the article page).
+// Title, date and tags only: no excerpt, no thumbnail, and no language
+// marking (end-state §2 and §3 — lists mix languages with no indication).
 import { dateAttr, formatDate, href, isExternal, tagKey, type Article } from '../lib/articles';
 
 interface Props {

@@ -214,15 +214,6 @@ code {
   margin-bottom: 2rem;
 }
 
-.badge {
-  border: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  padding: 0 0.35rem;
-  text-transform: uppercase;
-}
-
 .prose :is(p, ul, ol) {
   overflow-wrap: break-word;
 }

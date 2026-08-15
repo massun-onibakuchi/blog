@@ -1,14 +1,13 @@
 // tests/lists.spec.ts — end-state §2/§3: /publications/ and /posts/ list
-// entries with title, date and tags — and, critically, NO language badge. The
-// badge belongs on the article page only (§3: "Lists mix languages ... with no
-// language marking. The badge appears on the article page itself.").
+// entries with title, date and tags, and no language marking (§3: "Lists mix
+// languages ... with no language marking").
 
 import { test, expect } from '@playwright/test';
-import { LANG_TEXT, SECTIONS } from './support';
+import { SECTIONS } from './support';
 
 for (const section of SECTIONS) {
   test.describe(`/${section}/ list`, () => {
-    test('entries show title and date, and never a language badge', async ({ page }) => {
+    test('entries show title and date', async ({ page }) => {
       await page.goto(`/${section}/`);
 
       const items = page.getByRole('listitem');
@@ -29,9 +28,6 @@ for (const section of SECTIONS) {
         } else {
           await expect(dates).toHaveCount(1);
         }
-
-        // No standalone "en"/"ja" badge text anywhere in this entry.
-        await expect(item.getByText(LANG_TEXT, { exact: true })).toHaveCount(0);
 
         // Any tag links present must resolve to the /tags/<tag>/ route shape.
         const tagLinks = item.locator('a[href^="/tags/"]');

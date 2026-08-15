@@ -1,14 +1,14 @@
 // tests/article.spec.ts — end-state §4: clicking a list entry lands on the
-// article. The article page contains title, date, tags, a JA/EN badge and a
-// translation button that opens ChatGPT in a new tab with a prefilled prompt
-// containing the article's own URL, targeting the opposite language.
+// article. The article page contains title, date, tags and a translation
+// button that opens ChatGPT in a new tab with a prefilled prompt containing
+// the article's own URL, targeting the opposite language.
 
 import { test, expect } from '@playwright/test';
-import { LANG_TEXT, SECTIONS, localEntryLinks } from './support';
+import { SECTIONS, localEntryLinks } from './support';
 
 for (const section of SECTIONS) {
   test.describe(`${section} article page`, () => {
-    test('a list entry opens an article with title, date, tags, badge and translation link', async ({
+    test('a list entry opens an article with title, date, tags and translation link', async ({
       page,
     }) => {
       // Locally hosted entries only: entries with an externalUrl link straight
@@ -30,17 +30,14 @@ for (const section of SECTIONS) {
         await expect(tagLinks.nth(t)).toHaveAttribute('href', /^\/tags\/[^/]+\/$/);
       }
 
-      // Language badge: exactly one, and it's en or ja.
-      const badge = page.locator('article').getByText(LANG_TEXT, { exact: true });
-      await expect(badge, 'expected exactly one JA/EN badge on the article page').toHaveCount(1);
-      const lang = ((await badge.textContent()) ?? '').trim().toLowerCase();
-      expect(['en', 'ja']).toContain(lang);
-
       // Translation link: opens chatgpt.com in a new tab, prefilled with a
       // prompt containing this article's own URL, targeting the opposite lang.
       const translate = page.locator('article a[href*="chatgpt.com"]');
       await expect(translate, 'expected exactly one translation link').toHaveCount(1);
       await expect(translate).toHaveAttribute('target', '_blank');
+
+      const targetLang = await translate.getAttribute('hreflang');
+      expect(['en', 'ja']).toContain(targetLang);
 
       const href = await translate.getAttribute('href');
       expect(href).toBeTruthy();
@@ -52,10 +49,10 @@ for (const section of SECTIONS) {
         page.url(),
       );
 
-      const expectedTarget = lang === 'en' ? /japanese|日本語/i : /\benglish\b/i;
+      const expectedTarget = targetLang === 'ja' ? /japanese|日本語/i : /\benglish\b/i;
       expect(
         prompt,
-        `expected the prompt to target the opposite language of "${lang}"`,
+        `expected the prompt to target ${targetLang}`,
       ).toMatch(expectedTarget);
     });
   });

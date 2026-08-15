@@ -92,15 +92,15 @@ rather than a guessed day: it is recorded as the first of the month, marked
 Articles are written in **either Japanese or English, per article** — never both.
 
 - Lists mix languages in one chronological stream, with no language marking.
-  The badge appears on the article page itself.
 - No language filter, no locale routing, no auto-detection, no translated duplicates.
-- Readers cross the language gap via the translation button (§4).
+- Readers cross the language gap via the translation button (§4), whose label
+  already names the language it offers — no separate lang badge is shown.
 
 ## 4. Article page
 
 Contains exactly:
 
-- Title, published date, tags (tags link to `/tags/<tag>`), `JA` / `EN` badge
+- Title, published date, tags (tags link to `/tags/<tag>`)
 - **Translation button** — opens ChatGPT in a new tab with a prefilled prompt
   containing an instruction plus the article's public URL. The target language is
   the opposite of the article's own language.

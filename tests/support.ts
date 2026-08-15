@@ -5,11 +5,6 @@
 
 import type { Page } from '@playwright/test';
 
-/** Matches the article-page language badge's exact text, either case (the DOM
- *  text is lowercase 'en'/'ja' per src/layouts/ArticleLayout.astro; end-state
- *  §4 describes it visually as "JA"/"EN"). */
-export const LANG_TEXT = /^(en|ja)$/i;
-
 export const SECTIONS = ['publications', 'posts'] as const;
 export type Section = (typeof SECTIONS)[number];
 

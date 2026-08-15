@@ -1,8 +1,9 @@
 ---
 // src/layouts/ArticleLayout.astro — the reading page (end-state §4).
-// Contains exactly: title, date, tags, language badge, translation link, body,
-// and previous/next within the same section. Nothing else by design — no TOC,
-// no reading time, no share buttons.
+// Contains exactly: title, date, tags, translation link, body, and
+// previous/next within the same section. Nothing else by design — no TOC,
+// no reading time, no share buttons, no separate lang badge (the translation
+// link's label already says which language it's offering).
 import BaseLayout from './BaseLayout.astro';
 import TranslateLink from '../components/TranslateLink.astro';
 import { dateAttr, formatDate, href, tagKey, type Article } from '../lib/articles';
@@ -31,7 +32,6 @@ const url = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321').h
           <time datetime={dateAttr(date, datePrecision)}>{formatDate(date, datePrecision)}</time>
         )
       }
-      <span class="badge">{lang}</span>
       {
         tags.length > 0 && (
           <span class="tag-list">
