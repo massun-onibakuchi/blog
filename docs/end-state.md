@@ -102,9 +102,10 @@ Articles are written in **either Japanese or English, per article** — never bo
 Contains exactly:
 
 - Title, published date, tags (tags link to `/tags/<tag>`)
-- **Translation button** — opens ChatGPT in a new tab with a prefilled prompt
-  containing an instruction plus the article's public URL. The target language is
-  the opposite of the article's own language.
+- **Translation button** — copies the article body to the clipboard, then opens
+  ChatGPT in a new tab with a prefilled prompt asking the reader to paste the
+  clipboard contents and translate them. The target language is the opposite of
+  the article's own language.
 - Article body
 - Previous / next links within the same section
 
