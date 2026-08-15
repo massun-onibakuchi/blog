@@ -2,50 +2,73 @@
   {
     "id": "grim-reaper",
     "name": "grim-reaper",
-    "description": "On-chain liquidation bot written in Huff.",
+    "description": "EVM on-chain liquidation bot written in Huff, optimized hard for gas.",
     "url": "https://github.com/massun-onibakuchi/grim-reaper",
-    "year": 2022
+    "year": 2022,
+    "order": 0
+  },
+  {
+    "id": "idle-tranches",
+    "name": "idle-tranches",
+    "description": "Idle Perpetual Yield Tranches contracts.",
+    "url": "https://github.com/Idle-Labs/idle-tranches",
+    "year": 2021,
+    "order": 1
+  },
+  {
+    "id": "the-merge-option",
+    "name": "the-merge-option",
+    "description": "Derivative for betting on whether the Ethereum Merge lands before a given block.",
+    "url": "https://github.com/massun-onibakuchi/the-merge-option",
+    "year": 2022,
+    "order": 2
+  },
+  {
+    "id": "best-yield-yearn-strategy",
+    "name": "best-yield-yearn-strategy",
+    "description": "Yearn StrategyIdleV2. These strategies have held over $3.5M in assets under management.",
+    "url": "https://github.com/Idle-Finance/best-yield-yearn-strategy",
+    "year": 2022,
+    "order": 3
+  },
+  {
+    "id": "0x-order-watcher",
+    "name": "0x-order-watcher",
+    "description": "Watcher for managing 0x orders tracked in a database.",
+    "url": "https://github.com/massun-onibakuchi/0x-order-watcher",
+    "year": 2022,
+    "order": 4
+  },
+  {
+    "id": "prometheasy-besu",
+    "name": "prometheasy-besu",
+    "description": "Monorepo template for Besu, Prometheus, Grafana and Solidity.",
+    "url": "https://github.com/massun-onibakuchi/prometheasy-besu",
+    "year": 2023,
+    "order": 5
   },
   {
     "id": "sol-challenge",
     "name": "sol-challenge",
-    "description": "CTF-like smart contract challenges.",
+    "description": "Smart contract challenges built around security bugs.",
     "url": "https://github.com/massun-onibakuchi/sol-challenge",
-    "year": 2022
-  },
-  {
-    "id": "nomad-bridge-exploit-poc",
-    "name": "nomad-bridge-exploit-poc",
-    "description": "Replay of the Nomad bridge hack as a runnable proof of concept.",
-    "url": "https://github.com/massun-onibakuchi/nomad-bridge-exploit-poc",
-    "year": 2022
+    "year": 2022,
+    "order": 6
   },
   {
     "id": "smart-contracts-vulns-hacking",
     "name": "smart-contracts-vulns-hacking",
     "description": "Reproductions of DeFi hack incidents and a collection of security issues.",
     "url": "https://github.com/massun-onibakuchi/smart-contracts-vulns-hacking",
-    "year": 2022
+    "year": 2022,
+    "order": 7
   },
   {
-    "id": "on-chain-nft",
-    "name": "on-chain-nft",
-    "description": "Fully on-chain NFT storing base64-encoded SVG, inspired by Uniswap V3 position NFTs.",
-    "url": "https://github.com/massun-onibakuchi/on-chain-nft",
-    "year": 2021
-  },
-  {
-    "id": "napier",
-    "name": "napier",
-    "description": "ETHOnline 2022 submission; four prizes.",
-    "url": "https://github.com/massun-onibakuchi/napier",
-    "year": 2022
-  },
-  {
-    "id": "immutable-array",
-    "name": "immutable-array",
-    "description": "Emulating an immutable array with SSTORE2.",
-    "url": "https://github.com/massun-onibakuchi/immutable-array",
-    "year": 2023
+    "id": "nomad-bridge-exploit-poc",
+    "name": "nomad-bridge-exploit-poc",
+    "description": "Replay of the Nomad bridge hack as a runnable proof of concept.",
+    "url": "https://github.com/massun-onibakuchi/nomad-bridge-exploit-poc",
+    "year": 2022,
+    "order": 8
   }
 ]

@@ -13,6 +13,10 @@ const article = z.object({
   tags: z.array(z.string()).default([]),
   // Path under /public, e.g. '/og/my-post.png'. Omit to use the generated card.
   ogImage: z.string().optional(),
+  // Set when the writing lives elsewhere (Qiita, Medium, HackMD). The entry then
+  // appears in the list with its title and date, linking straight out — no local
+  // page is built, because there is no local text to show.
+  externalUrl: z.string().url().optional(),
 });
 
 const publications = defineCollection({
@@ -25,16 +29,30 @@ const posts = defineCollection({
   schema: article,
 });
 
-// Data only — no detail pages, per end-state §2.
+// The three list sections below are data only — no detail pages, per end-state §2.
+const listEntry = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  url: z.string().url(),
+  year: z.number().int(),
+  // Display position. These lists are curated, not chronological — the order is
+  // the author's, carried over from the previous site — and the file loader does
+  // not preserve array order on its own.
+  order: z.number().int(),
+});
+
 const openSource = defineCollection({
   loader: file('./src/content/open-source.json'),
-  schema: z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    url: z.string().url(),
-    year: z.number().int(),
+  schema: listEntry,
+});
+
+const hackathons = defineCollection({
+  loader: file('./src/content/hackathons.json'),
+  schema: listEntry.extend({
+    /** Team-mates, where the work was not solo. */
+    with: z.array(z.string()).default([]),
   }),
 });
 
-export const collections = { publications, posts, openSource };
+export const collections = { publications, posts, openSource, hackathons };

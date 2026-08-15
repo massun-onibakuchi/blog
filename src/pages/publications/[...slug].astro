@@ -3,10 +3,11 @@
 // Paths come from getSection, so unpublished drafts have no route at all.
 import { render } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
-import { getSection, hasMath, neighbours } from '../../lib/articles';
+import { getSection, hasMath, localOnly, neighbours } from '../../lib/articles';
 
 export async function getStaticPaths() {
-  const articles = await getSection('publications');
+  // Externally hosted writing has no page here, so it is also not a neighbour.
+  const articles = localOnly(await getSection('publications'));
   return articles.map((article) => ({
     params: { slug: article.id },
     props: { article, ...neighbours(articles, article.id) },

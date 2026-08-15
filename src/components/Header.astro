@@ -21,6 +21,15 @@ const path = Astro.url.pathname;
   </nav>
   <span class="spacer"></span>
   {
+    SITE.links.x && (
+      <a class="icon-link" href={SITE.links.x} rel="me noopener" aria-label="X">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.9 2h3.4l-7.4 8.5L23.6 22h-6.8l-5.3-7-6.1 7H2l7.9-9.1L1.7 2h7l4.8 6.4L18.9 2Zm-1.2 18h1.9L7.4 3.9H5.4L17.7 20Z" />
+        </svg>
+      </a>
+    )
+  }
+  {
     SITE.links.github && (
       <a class="icon-link" href={SITE.links.github} rel="me noopener" aria-label="GitHub">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

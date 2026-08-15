@@ -3,10 +3,10 @@
 // the sections differ in editorial standard, not in presentation.
 import { render } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
-import { getSection, hasMath, neighbours } from '../../lib/articles';
+import { getSection, hasMath, localOnly, neighbours } from '../../lib/articles';
 
 export async function getStaticPaths() {
-  const articles = await getSection('posts');
+  const articles = localOnly(await getSection('posts'));
   return articles.map((article) => ({
     params: { slug: article.id },
     props: { article, ...neighbours(articles, article.id) },

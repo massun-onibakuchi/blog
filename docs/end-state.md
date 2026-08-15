@@ -15,12 +15,13 @@ Consequences that constrain everything below:
 - Nothing on the site may require ongoing curation to avoid looking stale.
 
 Identity: handle **bakuchi** (header wordmark and `<title>`).
-Header links to GitHub (<https://github.com/massun-onibakuchi>). The X link is
-withheld for now; the header must accommodate it being added later.
+Header links to X (<https://x.com/0xbakuchi>) and GitHub
+(<https://github.com/massun-onibakuchi>). The home page links to the earlier
+blog at mirror.xyz.
 
 ## 2. Site structure
 
-Three sections. `Showcases` from the original spec is **out of scope for v1**.
+Four sections.
 
 There is no `/about` page: the bio lives on `/` and stays short (3–5 lines).
 X and GitHub are always reachable from the header, so a separate About page
@@ -33,7 +34,8 @@ would add nothing.
 | `/publications/<slug>`   | Publication article                                            |
 | `/posts`                 | List of posts                                                  |
 | `/posts/<slug>`          | Post article                                                   |
-| `/open-source`           | Flat list of OSS entries. No detail pages                      |
+| `/open-source`           | Flat list of public work. No detail pages                      |
+| `/hackathons`            | Hackathon submissions and bounty work. No detail pages         |
 | `/tags/<tag>`            | All articles carrying that tag                                 |
 
 URLs are permanent. No dates in URLs.
@@ -43,8 +45,8 @@ List entries carry title, date, and tags only — no excerpt, no thumbnail.
 ### Navigation
 
 Minimal header, present on every page: the `bakuchi` wordmark linking to `/`,
-links to the three sections, and — in the top-right corner — GitHub and the
-theme toggle (X joins them later). No footer navigation beyond a copyright line.
+links to the four sections, and — in the top-right corner — X, GitHub and the
+theme toggle. No footer navigation beyond a copyright line.
 
 ### Publications vs Posts
 
@@ -53,10 +55,21 @@ Split by **degree of finish**, not length or topic:
 - **Publication** — written to be read by others; revised. Research, analysis, design write-ups.
 - **Post** — unrevised working log, learning note, progress update.
 
-### Open Source entries
+### Open Source and Hackathon entries
 
-Data only: title, 1–2 line description, external link (GitHub), year.
-Deeper commentary lives in a Publication that the entry links to.
+Data only: title, 1–2 line description, external link, year (hackathon entries
+also credit team-mates). Security research — exploit reproductions, vulnerability
+collections, security challenges — sits in the Open Source list rather than a
+section of its own. Deeper commentary lives in a Publication that links to the entry.
+
+Both lists appear in the **author's chosen order**, carried over from the previous
+site. They are curated, not chronological, so nothing sorts them by year.
+
+### Writing hosted elsewhere
+
+Earlier articles live on Qiita, Medium and HackMD. They appear in the Publications
+list by title and date, marked as leaving the site, and link straight out — no
+copy of the text is kept here and no local page is built for them.
 
 ## 3. Language
 
@@ -116,6 +129,7 @@ Responsive: desktop and mobile, including in-app browsers.
   lang: en # en | ja — drives the badge and the translation button's target
   tags: []
   ogImage: # optional; overrides the generated card
+  externalUrl: # optional; the text lives elsewhere, so the list links straight out
   ---
   ```
 
@@ -145,19 +159,16 @@ Quality gates, all measured before release:
 
 ## 8. Explicit non-goals (v1)
 
-Showcases section · Mermaid · RSS/Atom · comments · newsletter · full-text search ·
+Mermaid · RSS/Atom · comments · newsletter · full-text search ·
 analytics · custom domain · bilingual duplicates of any article · table of contents ·
 reading time · share buttons · per-project OSS detail pages · X in-app browser toast.
 
-RSS and Showcases are the cheapest additions later; the content model should not
-make them expensive.
+RSS is the cheapest addition later; the content model should not make it expensive.
 
 ## 9. Deferred to v2
 
 Intended, but out of scope until v1 ships:
 
-- **Showcases** — hackathons, bounties, and other accomplishments, as a list
-  section in the same shape as Open Source.
 - **Mermaid diagrams** in article bodies.
 - **X in-app browser toast** — when the user agent identifies an X in-app browser
   (e.g. contains `Twitter for iPhone`), a small toast fades in **once**, near the

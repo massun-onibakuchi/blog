@@ -1,0 +1,36 @@
+[
+  {
+    "id": "eth-tokyo-2023",
+    "name": "ETH Tokyo 2023 — BorrowFi",
+    "description": "A protocol aggregating borrow pools: 1inch, but for borrowing.",
+    "url": "https://ethglobal.com/showcase/borrowfi-ore25",
+    "year": 2023,
+    "with": [
+      "marmelo",
+      "Brian",
+      "J"
+    ],
+    "order": 0
+  },
+  {
+    "id": "ethonline-2022",
+    "name": "ETHOnline 2022 — Napier Finance",
+    "description": "Fixed-yield app. Won four prizes.",
+    "url": "https://ethglobal.com/showcase/napier-finance-suazx",
+    "year": 2022,
+    "with": [
+      "0xsoe",
+      "SeungJu Lee"
+    ],
+    "order": 1
+  },
+  {
+    "id": "gitcoin-bounties",
+    "name": "Gitcoin bounties",
+    "description": "15+ bounties since 2020.",
+    "url": "https://gitcoin.co/massun-onibakuchi",
+    "year": 2020,
+    "with": [],
+    "order": 2
+  }
+]

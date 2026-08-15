@@ -3,12 +3,12 @@
 // (src/lib/articles.ts `neighbours` only looks within one section's list).
 
 import { test, expect } from '@playwright/test';
-import { SECTIONS, entryLinks, escapeRegExp } from './support';
+import { SECTIONS, localEntryLinks, escapeRegExp } from './support';
 
 for (const section of SECTIONS) {
   test(`${section}: prev/next stay within the section`, async ({ page }) => {
-    const entries = await entryLinks(page, section);
-    test.skip(entries.length < 2, `need at least 2 published ${section} entries`);
+    const entries = await localEntryLinks(page, section);
+    test.skip(entries.length < 2, `need at least 2 locally hosted ${section} entries`);
 
     // Newest entry: expect an "older" link toward entries[1], staying in-section.
     await page.goto(entries[0].href);

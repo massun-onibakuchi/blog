@@ -4,21 +4,20 @@
 // containing the article's own URL, targeting the opposite language.
 
 import { test, expect } from '@playwright/test';
-import { LANG_TEXT, SECTIONS } from './support';
+import { LANG_TEXT, SECTIONS, localEntryLinks } from './support';
 
 for (const section of SECTIONS) {
   test.describe(`${section} article page`, () => {
     test('a list entry opens an article with title, date, tags, badge and translation link', async ({
       page,
     }) => {
-      await page.goto(`/${section}/`);
-      const items = page.getByRole('listitem');
-      const count = await items.count();
-      test.skip(count === 0, `no published ${section} entries to click into`);
+      // Locally hosted entries only: entries with an externalUrl link straight
+      // out and have no page here to assert against.
+      const entries = await localEntryLinks(page, section);
+      test.skip(entries.length === 0, `no locally hosted ${section} entries to open`);
 
-      const firstLink = items.first().getByRole('link').first();
-      const title = (await firstLink.textContent())?.trim() ?? '';
-      await firstLink.click();
+      const { title, href: articlePath } = entries[0];
+      await page.goto(articlePath);
 
       // Title, date.
       await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();

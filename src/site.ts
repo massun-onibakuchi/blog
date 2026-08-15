@@ -6,22 +6,22 @@
 export const SITE = {
   /** Display name: header wordmark and <title> suffix. */
   name: 'bakuchi',
-  /** 3-5 line bio shown on the home page. Kept short by design. */
-  bio: [
-    'Engineer. I write about the systems I build and take apart —',
-    'protocol design, performance work, and whatever I am currently learning.',
-  ].join(' '),
+  /** Short bio shown on the home page. Carried over from the previous site. */
+  bio: 'Research engineer, hunting bounties and building smart contracts, mainly focused on finance.',
   /** Absolute origin, no trailing slash. Overridden in CI via SITE_URL. */
   url: (import.meta.env.SITE_URL ?? 'http://localhost:4321').replace(/\/$/, ''),
   links: {
     github: 'https://github.com/massun-onibakuchi',
-    // x: 'https://x.com/...',  // withheld for now; the header renders links it has
+    x: 'https://x.com/0xbakuchi',
   },
+  /** Where the earlier writing lives; linked from the home page, not the header. */
+  previousBlog: 'https://mirror.xyz/bakuchi.eth',
 } as const;
 
 /** Sections that appear in the header, in order. */
 export const SECTIONS = [
   { href: '/publications', label: 'Publications' },
   { href: '/open-source', label: 'Open Source' },
+  { href: '/hackathons', label: 'Hackathons' },
   { href: '/posts', label: 'Posts' },
 ] as const;

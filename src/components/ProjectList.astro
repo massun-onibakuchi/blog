@@ -1,0 +1,37 @@
+---
+// src/components/ProjectList.astro — the shape shared by Open Source, Security
+// and Hackathons: name, year, external link, one line of description.
+// Order is the order written in the JSON file, not the year: these lists are
+// curated, and the newest item is not always the one worth seeing first.
+
+interface Entry {
+  name: string;
+  description: string;
+  url: string;
+  year: number;
+  with?: string[];
+}
+
+interface Props {
+  entries: Entry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ul class="entries">
+  {
+    entries.map((entry) => (
+      <li>
+        <a href={entry.url} rel="noopener">
+          {entry.name}
+        </a>
+        <span class="meta">{entry.year}</span>
+        <div>
+          {entry.description}
+          {entry.with && entry.with.length > 0 && <span class="meta"> with {entry.with.join(', ')}</span>}
+        </div>
+      </li>
+    ))
+  }
+</ul>

@@ -17,6 +17,14 @@ export function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/** Entries whose text is hosted here, i.e. those with a page of their own.
+ *  Entries carrying `externalUrl` link straight out and are excluded: they have
+ *  no local page, so they are not part of prev/next chains either. */
+export async function localEntryLinks(page: Page, section: Section) {
+  const entries = await entryLinks(page, section);
+  return entries.filter((entry) => entry.href.startsWith(`/${section}/`));
+}
+
 /** Title + href of every entry currently listed on a section's list page. */
 export async function entryLinks(
   page: Page,
@@ -42,7 +50,8 @@ export async function findArticleWithCodeAndMath(
   page: Page,
 ): Promise<{ title: string; href: string } | undefined> {
   for (const section of SECTIONS) {
-    const entries = await entryLinks(page, section);
+    // Local entries only: following an externalUrl would leave the site.
+    const entries = await localEntryLinks(page, section);
     for (const entry of entries) {
       await page.goto(entry.href);
       const hasCode = (await page.locator('article pre').count()) > 0;

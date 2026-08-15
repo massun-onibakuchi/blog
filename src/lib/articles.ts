@@ -56,7 +56,14 @@ export async function getTags(): Promise<{ tag: string; count: number }[]> {
   return [...seen.values()].sort((a, b) => a.tag.localeCompare(b.tag));
 }
 
-export const href = (article: Article) => `/${article.section}/${article.id}/`;
+/** Entries whose text lives elsewhere have no local page — the list links out. */
+export const isExternal = (article: Article) => Boolean(article.data.externalUrl);
+
+/** Only the entries that get a page of their own here. */
+export const localOnly = (articles: Article[]) => articles.filter((a) => !isExternal(a));
+
+export const href = (article: Article) =>
+  article.data.externalUrl ?? `/${article.section}/${article.id}/`;
 
 /**
  * Does the source contain math? KaTeX's stylesheet plus fonts is ~320KB, so it

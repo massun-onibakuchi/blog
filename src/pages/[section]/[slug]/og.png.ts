@@ -116,6 +116,7 @@ export async function getStaticPaths() {
   return lists
     .flat()
     .filter((article) => !article.data.ogImage) // frontmatter override wins; skip the card
+    .filter((article) => !article.data.externalUrl) // no local page, so no card to attach
     .map((article) => ({
       params: { section: article.section, slug: article.id },
       props: { article },

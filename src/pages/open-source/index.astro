@@ -1,25 +1,15 @@
 ---
-// src/pages/open-source/index.astro — flat list of projects, no detail pages.
-// Anything worth saying at length becomes a Publication that links here.
+// src/pages/open-source/index.astro — public work: contracts and tools, plus the
+// security research (exploit reproductions, vulnerability collections) that also
+// lives in the open. One list, in the author's order.
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import ProjectList from '../../components/ProjectList.astro';
+import { getList } from '../../lib/lists';
 
-const projects = (await getCollection('openSource')).sort((a, b) => b.data.year - a.data.year);
+const entries = await getList('openSource');
 ---
 
 <BaseLayout title="Open Source">
   <h1>Open Source</h1>
-  <ul class="entries">
-    {
-      projects.map(({ data }) => (
-        <li>
-          <a href={data.url} rel="noopener">
-            {data.name}
-          </a>{' '}
-          <span class="meta">{data.year}</span>
-          <div>{data.description}</div>
-        </li>
-      ))
-    }
-  </ul>
+  <ProjectList entries={entries} />
 </BaseLayout>

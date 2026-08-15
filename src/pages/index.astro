@@ -3,35 +3,33 @@
 // each linking out (end-state §2). There is no /about page: this is it.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EntryList from '../components/EntryList.astro';
+import ProjectList from '../components/ProjectList.astro';
 import { getSection } from '../lib/articles';
-import { getCollection } from 'astro:content';
+import { getList } from '../lib/lists';
 import { SITE } from '../site';
 
 const EXCERPT_COUNT = 5;
 const publications = (await getSection('publications')).slice(0, EXCERPT_COUNT);
 const posts = (await getSection('posts')).slice(0, EXCERPT_COUNT);
-const openSource = (await getCollection('openSource')).sort((a, b) => b.data.year - a.data.year);
+// Curated order, as authored in the JSON — not sorted by year.
+const openSource = await getList('openSource');
+const hackathons = await getList('hackathons');
 ---
 
 <BaseLayout>
-  <p>{SITE.bio}</p>
+  <p>
+    {SITE.bio}{' '}
+    Earlier writing is at <a href={SITE.previousBlog} rel="noopener">mirror.xyz</a>.
+  </p>
 
   <h2><a href="/publications/">Publications</a></h2>
   <EntryList articles={publications} empty="No publications yet." />
 
   <h2><a href="/open-source/">Open Source</a></h2>
-  <ul class="entries">
-    {
-      openSource.slice(0, EXCERPT_COUNT).map((project) => (
-        <li>
-          <a href={project.data.url} rel="noopener">
-            {project.data.name}
-          </a>{' '}
-          <span class="meta">{project.data.year}</span>
-        </li>
-      ))
-    }
-  </ul>
+  <ProjectList entries={openSource.slice(0, EXCERPT_COUNT)} />
+
+  <h2><a href="/hackathons/">Hackathons and Bounties</a></h2>
+  <ProjectList entries={hackathons.slice(0, EXCERPT_COUNT)} />
 
   <h2><a href="/posts/">Posts</a></h2>
   <EntryList articles={posts} empty="No posts yet." />
