@@ -122,8 +122,8 @@ Deferred to v2: Mermaid diagrams.
 
 ## 5. Appearance
 
-Bare minimal, in the manner of <https://vitalik.eth.limo/>: one column, plain
-background, unstyled-looking links, no cards, borders, shadows, or hero areas.
+Bare minimal: one column, plain background, unstyled-looking links, no cards,
+borders, shadows, or hero areas.
 Body face is a readable default at ~65–75 character measure. Code and figures are the only visual interest.
 
 Dark / light toggle. Switching plays a circular reveal expanding from the click
