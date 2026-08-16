@@ -14,7 +14,7 @@ tags: ["splendor", "machine-learning", "reinforcement-learning", "training"]
 
 結果から言うと、今度は2世代とも challenger が incumbent を越えられなかった。
 
-さらに「1 epochしか学習していないからでは」と考えて学習量を8倍まで増やしたが、改善するどころか明確に悪化した。
+さらに「1 epochしか学習していないからでは」と考えて学習量を増やしたが、改善するどころか明確に悪化した。
 
 今回は、最初の promotion の次に起きた停滞と、その原因をどう切り分けたかを書く。
 
@@ -89,7 +89,9 @@ Generation 1の challenger は、Generation 0 の replay に対する policy KL 
 
 この仮説は、新しい自己対局を追加せずに検証できる。
 
-Generation 1で実際に使ったデータをそのまま固定し、incumbent から warm startする同じ学習 recipe の `max_epochs` だけを1から8へ増やした。
+Generation 1で実際に使ったデータをそのまま固定し、incumbent から warm startする同じ学習 recipe の `max_epochs` を1から8へ増やした。
+
+ここで変わるのは optimizer step 数だけではない。cosine learning-rate schedule も8 epochの horizon に引き直される。つまり「固定した schedule のまま追加で7 epoch回す」実験ではなく、loop に `max_epochs: 8` を入れたとき実際に起きる recipe change を試している。
 
 元のGeneration 1 challengerを1-epoch armとして再利用し、8-epoch armだけを新しく学習した。
 
@@ -113,16 +115,18 @@ policy は3 epoch付近で少し良くなったあと悪化した。
 | 対局 | pair score |
 | --- | ---: |
 | 1 epoch vs incumbent | 0.5008 |
-| 8 epoch vs 1 epoch | 0.4150 |
-| 8 epoch vs incumbent | 0.4608 |
+| 8 epoch terminal vs 1 epoch | 0.4150 |
+| 8 epoch terminal vs incumbent | 0.4608 |
 
 1-epoch challenger と incumbent の比較は300 pairsまで増やしても0.5008で、ほぼ完全な五分だった。
 
-一方、8-epoch model は1-epoch modelに対して0.4150しか取れず、incumbentにも0.4608だった。
+一方、8-epoch run の terminal checkpoint は1-epoch modelに対して0.4150しか取れず、incumbentにも0.4608だった。
 
 つまり「本当は改善しているのに、1 epochでは学習し切れていなかった」という説明は支持されなかった。
 
-なお、実際の loop は validation loss が最も良い checkpoint を選ぶので、8 epochまで走らせても選ばれるのは epoch 1になる。単純に `max_epochs` を増やす変更は、計算量だけ増やして元の地点へ戻ることになる。
+なお、実際の loop は validation loss が最も良い checkpoint を選ぶので、8 epochまで走らせても選ばれるのは epoch 1になる。上の arena で測った terminal checkpoint は、loop がそのまま promote する checkpoint ではない。
+
+単純に `max_epochs` を増やす変更は、計算量を増やしたうえで、checkpoint selectionによって早い epoch へ戻ることになる。
 
 ## 長く学習するとvalue headが先に壊れた
 
@@ -150,7 +154,7 @@ $$
 
 実際、8 epoch学習では WDL accuracy が完全に崩れるより先に cross entropy と Brier score が悪化した。勝敗を識別する能力を全部失ったというより、間違っている局面に対して過剰に自信を持つ方向へ進んでいた。
 
-この結果から分かるのは、「長く学習すると value head が overfit する」ということまでである。
+この結果から分かるのは、「この recipe を長く学習すると value head が overfit する」ということまでである。
 
 これを、そのまま2世代の rejection の原因だとは言えない。
 
@@ -167,11 +171,11 @@ production loop で観測したのは、壊れた challenger ではなく「incu
     ↓
 1 epochでは足りない？
     ↓
-8 epochまで増やす
+8 epoch recipeを試す
     ↓
 policy はほとんど改善せず、value は overfit
     ↓
-学習量不足では説明できない
+単純な学習量不足では説明できない
 ```
 
 では、self-play targetには、そもそもどれくらい強い改善信号が入っているのか。
