@@ -121,12 +121,6 @@ Python / PyTorch
 
 学習した PyTorch model は ONNX に export し、対局や探索では C++ から ONNX Runtime で実行する。モデル構造を C++ と Python の両方に実装する必要はない。
 
-## 実験中も同じモデルを使っている
-
-最初の教師あり policy-value 学習で使った設定は、現在と同じ `entity width=128 / attention blocks=2 / state width=256 / state blocks=2` である。
-
-この後の記事で学習、PUCT 探索、自己対局の結果が変わっていても、少なくともこの期間はモデル構造を途中で交換していない。モデルを固定し、データ、学習方法、探索の違いを一つずつ見ている。
-
 ---
 
 この記事は、実装・実験記録をもとに筆者とAIが共同編集しています。
