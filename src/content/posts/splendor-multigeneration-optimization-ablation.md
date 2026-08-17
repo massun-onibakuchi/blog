@@ -1,6 +1,6 @@
 ---
 title: "Splendor AIを2世代回したが伸びなかったので、学習量不足を切り分けた"
-date: "2026-08-16"
+date: "2026-08-16T12:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "reinforcement-learning", "training"]
