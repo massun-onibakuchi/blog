@@ -8,10 +8,22 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type Section = 'publications' | 'posts';
 export type Article = CollectionEntry<Section> & { section: Section };
 
+// Some experiment notes were published on the same calendar day but have a real
+// dependency order. Keep that order explicit instead of depending on loader order.
+const sameDaySequence = new Map<string, number>([
+  ['splendor-first-self-play-generation', 1],
+  ['splendor-multigeneration-optimization-ablation', 2],
+  ['splendor-search-amplification', 3],
+]);
+
 // Undated entries exist only for externally hosted writing whose original shows
 // no date; they sit below everything dated rather than jumping to the top.
-const byNewest = (a: Article, b: Article) =>
-  (b.data.date?.getTime() ?? -Infinity) - (a.data.date?.getTime() ?? -Infinity);
+const byNewest = (a: Article, b: Article) => {
+  const dateDifference =
+    (b.data.date?.getTime() ?? -Infinity) - (a.data.date?.getTime() ?? -Infinity);
+  if (dateDifference !== 0) return dateDifference;
+  return (sameDaySequence.get(b.id) ?? 0) - (sameDaySequence.get(a.id) ?? 0);
+};
 
 /** Published entries of one section, newest first. */
 export async function getSection(section: Section): Promise<Article[]> {
