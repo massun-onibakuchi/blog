@@ -44,7 +44,7 @@ URLs are permanent. No dates in URLs.
 List entries carry title, date, and tags only — no excerpt, no thumbnail.
 
 **Every link that leaves the site opens in a new tab** — header social links, the
-external entries in the lists, the translation button, and links inside article
+external entries in the lists, the language-summary button, and links inside article
 bodies. Internal navigation stays in the current tab.
 
 ### Navigation
@@ -94,18 +94,18 @@ Articles are written in **either Japanese or English, per article** — never bo
 
 - Lists mix languages in one chronological stream, with no language marking.
 - No language filter, no locale routing, no auto-detection, no translated duplicates.
-- Readers cross the language gap via the translation button (§4), whose label
-  already names the language it offers — no separate lang badge is shown.
+- Readers cross the language gap via the ChatGPT summary button (§4). Its label
+  explicitly names the target language and action, so no separate lang badge is shown.
 
 ## 4. Article page
 
 Contains exactly:
 
 - Title, published date, tags (tags link to `/tags/<tag>`)
-- **Translation button** — copies the article body to the clipboard, then opens
-  ChatGPT in a new tab with a prefilled prompt asking the reader to paste the
-  clipboard contents and translate them. The target language is the opposite of
-  the article's own language.
+- **Language-summary button** — opens ChatGPT in a new tab with a prefilled prompt
+  containing the article URL and asking for a technically faithful summary in the
+  opposite language. The user-facing label describes the actual action, e.g.
+  `Summarize in English with ChatGPT` or `ChatGPTで日本語の要約を読む`.
 - Article body
 - Previous / next links within the same section
 
@@ -145,7 +145,7 @@ Responsive: desktop and mobile, including in-app browsers.
   date: '2025-12-14' # required, except for externally hosted entries
   datePrecision: day # day | month — month shows YYYY-MM (see §2)
   isPublished: true
-  lang: en # en | ja — drives the badge and the translation button's target
+  lang: en # en | ja — drives the summary button's target language
   tags: []
   ogImage: # optional; overrides the generated card
   externalUrl: # optional; the text lives elsewhere, so the list links straight out
