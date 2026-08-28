@@ -3,7 +3,7 @@ title: "Splendor AIでランダム補充の探索を工夫したが、単純なP
 date: "2026-08-19T23:00:00Z"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "search", "reinforcement-learning"]
+tags: ["splendor", "machine-learning", "search"]
 ---
 
 Splendor をプレイする policy-value model を、PUCT というゲーム木探索と組み合わせて強くしている。

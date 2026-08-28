@@ -3,7 +3,7 @@ title: "Splendor AIの128回探索を再検証したら、同じ局面でも22.5
 date: "2026-08-22"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "search"]
+tags: ["splendor", "machine-learning", "search"]
 ---
 
 Splendor をプレイする policy-value model を、PUCT というゲーム木探索と自己対局で改善している。

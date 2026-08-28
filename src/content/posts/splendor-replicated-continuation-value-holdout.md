@@ -3,7 +3,7 @@ title: "Splendor AIのvalue教師を継続対局で測ったが、8回平均は�
 date: "2026-08-20"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "value"]
+tags: ["splendor", "machine-learning", "value"]
 ---
 
 Splendor をプレイする policy-value model を、PUCT というゲーム木探索と自己対局で改善している。

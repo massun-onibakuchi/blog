@@ -3,7 +3,7 @@ title: "Splendor AIで探索値をvalue教師に混ぜたモデルを1,600局で
 date: "2026-08-18T23:40:00Z"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "search"]
+tags: ["splendor", "machine-learning", "search"]
 ---
 
 Splendor をプレイする policy-value model を、探索と自己対局で強くしている。

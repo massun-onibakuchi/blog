@@ -3,7 +3,7 @@ title: "Splendor AIでPUCT探索がどれだけ強さを増幅するか測った
 date: "2026-08-16T23:59:59Z"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "search", "reinforcement-learning"]
+tags: ["splendor", "machine-learning", "search"]
 ---
 
 Splendor をプレイするニューラルネットワークを作っている。
