@@ -16,7 +16,11 @@ restating it here.
 
 ## Design stance
 
-- Keep a module stay single-purpose; ~800 LOC is a guideline, not a hard cap.
+- **End-state-first.** Implement and document the target state as if it had always existed. No
+  compatibility shims, deprecation paths, or dual code paths unless explicitly requested.
+- **Small surfaces.** Modules are private by default behind an explicit export list and organized
+  around one business capability. No test-only helpers on a public API. Keep components modular,
+  concerns clearly separated, and modules single-purpose; ~800 LOC is a guideline, not a hard cap.
 - Static site.
 
 ## Working agreement
