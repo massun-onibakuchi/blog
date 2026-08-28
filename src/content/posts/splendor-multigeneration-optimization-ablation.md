@@ -3,7 +3,7 @@ title: "Splendor AIを2世代回したが伸びなかったので、学習量不
 date: "2026-08-16T12:00:00Z"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "training"]
+tags: ["splendor", "machine-learning", "training"]
 ---
 
 前回は、教師あり学習で作った policy-value model を PUCT に接続し、自己対局から challenger を学習して、最初の promotion が通るところまで進めた。
