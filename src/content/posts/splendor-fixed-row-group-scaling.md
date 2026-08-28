@@ -3,7 +3,7 @@ title: "Splendor AIで学習行数を増やさず、対局数を4倍にしたら
 date: "2026-08-24"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "game-ai", "training"]
+tags: ["splendor", "machine-learning", "training"]
 ---
 
 Splendor をプレイする policy-value model を作っている。
