@@ -3,7 +3,7 @@ title: "Splendor AIのモデル構造と特徴量"
 date: "2026-08-13"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "game-ai", "neural-network"]
+tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
 Splendor をプレイする AI を作っている。学習結果を書く前に、現在使っているニューラルネットワークが何を見て、何を予測しているかを整理しておく。
