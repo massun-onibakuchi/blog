@@ -104,8 +104,7 @@ Contains exactly:
 - Title, published date, tags (tags link to `/tags/<tag>`)
 - **Language-summary button** — opens ChatGPT in a new tab with a prefilled prompt
   containing the article URL and asking for a technically faithful summary in the
-  opposite language. The reader never has to copy or paste the article text or URL.
-  The user-facing label describes the actual action, e.g.
+  opposite language. The user-facing label describes the actual action, e.g.
   `Summarize in English with ChatGPT` or `ChatGPTで日本語の要約を読む`.
 - Article body
 - Previous / next links within the same section
