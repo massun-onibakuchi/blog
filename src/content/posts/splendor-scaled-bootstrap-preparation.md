@@ -3,7 +3,7 @@ title: "Splendor AIの次の大規模学習を58,800局・16,000 stepにスケ�
 date: "2026-08-27"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "game-ai", "training"]
+tags: ["splendor", "machine-learning", "training"]
 ---
 
 Splendor をプレイする policy-value model を作っている。
