@@ -19,7 +19,6 @@ interface Props {
 
 const { article, newer, older, math } = Astro.props;
 const { title, date, datePrecision, tags, lang } = article.data;
-const url = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321').href;
 ---
 
 <BaseLayout title={title} ogImage={ogImageUrl(article)} math={math}>
@@ -44,7 +43,7 @@ const url = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321').h
         )
       }
       <span class="spacer"></span>
-      <TranslateLink lang={lang} url={url} />
+      <TranslateLink lang={lang} body={article.body} />
     </div>
 
     <slot />
