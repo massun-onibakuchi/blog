@@ -3,7 +3,7 @@ title: "Splendor AIを自己対局に進めて、最初のモデル更新を通�
 date: "2026-08-16"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "search"]
+tags: ["splendor", "machine-learning", "reinforcement-learning"]
 ---
 
 前回は、ルールベースの教師から policy と value を同時に学習するところまで進めた。
