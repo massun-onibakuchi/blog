@@ -3,7 +3,7 @@ title: "Splendor AIで128回探索の自己対局を8,192局作り、value教師
 date: "2026-08-18"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning", "search"]
+tags: ["splendor", "machine-learning", "search"]
 ---
 
 Splendor をプレイする policy-value model を、探索と自己対局で強くしている。
