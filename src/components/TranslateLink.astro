@@ -1,23 +1,23 @@
 ---
-// src/components/TranslateLink.astro — the language button (end-state §4).
-// Opens ChatGPT with the full Markdown article body already included in the
-// prefilled prompt, so the reader does not need to copy either text or a URL.
+// src/components/TranslateLink.astro — the language helper (end-state §4).
+// Opens ChatGPT with the article URL already in a summary prompt. Summarizing a
+// linked article avoids the full-translation copyright restriction and removes
+// the old clipboard/paste step from the reader flow.
 //
 // The target language is always the opposite of what the article is written in,
 // because every article exists in exactly one language.
 
 interface Props {
   lang: 'en' | 'ja';
-  body: string;
+  url: string;
 }
 
-const { lang, body } = Astro.props;
+const { lang, url } = Astro.props;
 const target = lang === 'en'
-  ? { code: 'ja', name: 'Japanese', label: 'ChatGPTで日本語に翻訳' }
-  : { code: 'en', name: 'English', label: 'Translate to English with ChatGPT' };
+  ? { code: 'ja', name: 'Japanese', label: 'ChatGPTで日本語の要約を読む' }
+  : { code: 'en', name: 'English', label: 'Summarize in English with ChatGPT' };
 
-const instruction = `Translate the following article text into ${target.name}. Keep technical terms, Markdown formatting, links, code blocks and math unchanged.`;
-const prompt = `${instruction}\n\n${body.trim()}`;
+const prompt = `Summarize the article at ${url} in ${target.name}. Preserve the key technical details, experimental setup, results, numbers, caveats and conclusions.`;
 const href = `https://chatgpt.com/?prompt=${encodeURIComponent(prompt)}`;
 ---
 
