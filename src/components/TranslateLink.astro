@@ -1,23 +1,23 @@
 ---
 // src/components/TranslateLink.astro — the language button (end-state §4).
-// Copies the rendered article body to the clipboard and opens ChatGPT with a
-// prefilled prompt asking the reader to paste it. This avoids asking ChatGPT to
-// fetch and translate the article from a URL.
+// Opens ChatGPT with the full Markdown article body already included in the
+// prefilled prompt, so the reader does not need to copy either text or a URL.
 //
 // The target language is always the opposite of what the article is written in,
 // because every article exists in exactly one language.
 
 interface Props {
   lang: 'en' | 'ja';
-  url: string;
+  body: string;
 }
 
-const { lang } = Astro.props;
-const target = lang === 'en' ? { code: 'ja', name: 'Japanese', label: '日本語で読む' }
-  : { code: 'en', name: 'English', label: 'Read in English' };
+const { lang, body } = Astro.props;
+const target = lang === 'en'
+  ? { code: 'ja', name: 'Japanese', label: 'ChatGPTで日本語に翻訳' }
+  : { code: 'en', name: 'English', label: 'Translate to English with ChatGPT' };
 
-const instruction = `Translate the article text into ${target.name}. Keep the technical terms, code blocks and math unchanged.`;
-const prompt = `${instruction}\n\nPaste the article text from your clipboard and send it.`;
+const instruction = `Translate the following article text into ${target.name}. Keep technical terms, Markdown formatting, links, code blocks and math unchanged.`;
+const prompt = `${instruction}\n\n${body.trim()}`;
 const href = `https://chatgpt.com/?prompt=${encodeURIComponent(prompt)}`;
 ---
 
@@ -30,21 +30,3 @@ const href = `https://chatgpt.com/?prompt=${encodeURIComponent(prompt)}`;
 >
   {target.label}
 </a>
-
-<script>
-  document.querySelectorAll<HTMLAnchorElement>('a[data-translate]').forEach((link) => {
-    link.addEventListener('click', () => {
-      const article = link.closest('article');
-      if (!article) return;
-
-      const body = article.cloneNode(true) as HTMLElement;
-      body.querySelector('h1')?.remove();
-      body.querySelector('.article-meta')?.remove();
-
-      const articleText = body.innerText.trim();
-      if (!articleText) return;
-
-      void navigator.clipboard?.writeText(articleText);
-    });
-  });
-</script>
