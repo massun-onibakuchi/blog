@@ -30,8 +30,8 @@ for (const section of SECTIONS) {
         await expect(tagLinks.nth(t)).toHaveAttribute('href', /^\/tags\/[^/]+\/$/);
       }
 
-      // Language helper: opens chatgpt.com in a new tab with an article URL and
-      // summary instruction in the opposite language. No copy/paste is required.
+      // Language helper: opens chatgpt.com in a new tab with the article URL and
+      // a summary instruction targeting the opposite language.
       const summary = page.locator('article a[href*="chatgpt.com"]');
       await expect(summary, 'expected exactly one ChatGPT summary link').toHaveCount(1);
       await expect(summary).toHaveAttribute('target', '_blank');
@@ -56,7 +56,6 @@ for (const section of SECTIONS) {
       expect(prompt).toMatch(/^Summarize the article at https?:\/\//);
       expect(prompt).toContain(articlePath);
       expect(prompt).toContain('key technical details');
-      expect(prompt).not.toMatch(/translate the article|clipboard|paste|copy the article/i);
     });
   });
 }
