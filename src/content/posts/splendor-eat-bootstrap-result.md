@@ -30,9 +30,11 @@ EAT では、これらを semantic entity として扱う。
 
 例えばカードなら、単に card ID の位置だけを入力するのではなく、tier、bonus、prestige、cost など、そのカード自身の意味を表す feature を持たせる。
 
-各 entity を共通の hidden representation に変換し、その entity 集合に attention をかける。
+各 entity は hidden width 384 の representation に埋め込み、4層の self-attention block で相互作用させる。attention は8 head、feed-forward は1536幅にしている。
 
 これによって、盤面を1本の flat vector としてだけ扱うのではなく、盤面上に存在する object と object の関係を model が直接処理できるようにしている。
+
+山札に残っているカードは、そのまま90枚分を state attention に流すのではなく、tier ごとに learned query で集約してから state representation に入れる。
 
 ## actionもcandidateとして表現する
 
@@ -49,46 +51,60 @@ semantic entities
 legal action candidates
   -> candidate representation
   -> stateへのcross-attention
-  -> policy score
+  -> policy head
 ```
 
 policy は固定された action index だけを見て score を出すのではなく、現在の state と各 candidate action の関係から score を作る。
 
 Splendor では legal action の数や対象が局面ごとに変わるので、action 自体を model の入力 object として扱える形にしておく意味は大きい。
 
-## candidateからstateを見る
+## policy headはcandidateごとにscoreを出す
 
 EAT の policy head では、candidate 側から state entities へ cross-attention を行う。
 
-つまり、それぞれの legal action が「この行動を評価するためには盤面のどの情報を見るべきか」を candidate ごとに計算できる。
+それぞれの candidate embedding を query、state representation を key/value として使い、各 legal action が必要な state information を読み取る。
 
-カード購入を評価するときと、token を取る行動を評価するときでは、重要になる state information は同じとは限らない。
+その後、元の candidate embedding と cross-attention で得た representation を連結し、小さな MLP で1つの logit に落とす。
 
-一度作った共通 state vector だけから全 action を評価するのではなく、action ごとに state を読み直せるようにしている。
+```text
+candidate embedding
+      +
+state cross-attention result
+      |
+   concat
+      |
+     MLP
+      |
+ policy logit
+```
 
-## valueには専用のpathを持たせる
+このため、policy head は「局面全体を1つの vector に圧縮してから全 action をまとめて分類する」形ではない。legal action ごとに state を読み、その action 専用の score を出す。
+
+## value headは別のreadoutを持つ
 
 value は、現在の局面から最終的な loss / draw / win を予測する。
 
-policy と value は同じ state を見るが、必要な集約の仕方まで同一とは限らない。
+policy と value は同じ entity trunk を共有するが、head は分けている。
 
-そのため EAT では shared entity representation を利用しつつ、value 用の context を処理する専用 path を持たせている。
+value 側では learned value token を shared state representation に追加し、value 専用の Transformer block で state 全体を readout する。さらに、手番や終局状態などを持つ global context features を別の MLP で直接変換する経路も持つ。
 
-概念的には、
+最後に、
 
 ```text
-semantic entities
-  -> shared state representation
-
-shared state representation
-  -> candidate-conditioned policy path
-
-shared state representation
-  -> value-specific path
-  -> loss / draw / win
+value-token readout
+        +
+direct context representation
+        |
+      concat
+        |
+       MLP
+        |
+loss / draw / win logits
 ```
 
-という分離になる。
+として3クラスの WDL logits を出す。
+
+つまり EAT は、entity encoder までは policy/value で共有し、その先で policy は candidate-conditioned cross-attention、value は専用 readout + direct context という別の head architecture に分かれる。
 
 ## 固定slot中心の表現からsemanticな表現へ
 
@@ -102,11 +118,12 @@ EAT では、カードや貴族を entity として、legal action を candidate
 
 - entity feature の追加や整理
 - entity 間 attention の変更
+- deck pooling の変更
 - candidate-to-state cross-attention の変更
-- action representation の改善
-- value path の変更
+- policy scorer の変更
+- value readout / context path の変更
 
-といった改善を、ゲーム内の意味に対応した単位で行いやすくなる。
+といった改善を、ゲーム内の意味や model component に対応した単位で行いやすくなる。
 
 今回の進捗は、この Entity-Action Transformer を Splendor AI の新しい model family として導入したことになる。
 
