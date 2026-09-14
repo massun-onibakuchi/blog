@@ -8,21 +8,17 @@ tags: ["splendor", "machine-learning", "neural-network"]
 
 Splendor をプレイする policy-value model を作っている。
 
-これまでは、盤面を固定された tensor layout に変換し、その state representation から policy と value を出す比較的小さい model を使っていた。
+今回は、新しい model として EAT を導入した。
 
-今回はそこから構造を大きく変えて、EAT と呼んでいる新しい model を導入した。
+EAT は Entity-Action Transformer の略で、カードや貴族などの盤面要素を entity として表現し、legal action も candidate として明示的に表現して評価する model である。
 
-EAT は Entity-Action Transformer の略で、カードや貴族などの盤面要素を semantic entity として扱い、legal action も candidate entity として直接評価する model である。
+これまでの model は、ゲーム状態をあらかじめ決めた tensor layout に変換し、その fixed representation から policy と value を出していた。
 
-今回やったことは、この新しい architecture を実装し、学習、ONNX export、native evaluator、PUCT まで一通り接続して、実際に動かせる model path にしたところまでになる。
+EAT では、state と action の構造をもう少し直接 model に見せる。
 
-強さを確かめるための実験ではない。
+## 盤面をentityとして表現する
 
-## なぜ表現を変えたか
-
-従来の model では、ゲーム状態をあらかじめ決めた feature layout に押し込み、その固定表現を neural network に渡していた。
-
-これは軽量で扱いやすい。一方で、Splendor の状態には性質の異なる object が多い。
+Splendor の状態には、性質の異なる object がある。
 
 - 場に出ているカード
 - 山札に残っているカード
@@ -30,25 +26,19 @@ EAT は Entity-Action Transformer の略で、カードや貴族などの盤面�
 - 貴族
 - プレイヤー自身の状態
 
-行動側にも、カード購入、予約、token 操作など、異なる対象と意味がある。
+EAT では、これらを semantic entity として扱う。
 
-EAT ではこれらを「固定位置の数値」よりも「意味を持つ entity と action」として model に渡す方向へ寄せた。
+例えばカードなら、単に card ID の位置だけを入力するのではなく、tier、bonus、prestige、cost など、そのカード自身の意味を表す feature を持たせる。
 
-## semantic entityとして盤面を表す
+各 entity を共通の hidden representation に変換し、その entity 集合に attention をかける。
 
-EAT では、残っているカード、場のカード、予約カード、貴族などを entity として並べる。
+これによって、盤面を1本の flat vector としてだけ扱うのではなく、盤面上に存在する object と object の関係を model が直接処理できるようにしている。
 
-例えばカードなら、単に card ID の位置だけを使うのではなく、tier、bonus、prestige、cost など、そのカード自身の意味を表す feature を持たせる。
+## actionもcandidateとして表現する
 
-各 entity を共通の hidden representation に変換し、その集合に attention をかける。
+policy 側では、legal action ごとに candidate representation を作る。
 
-そのため、盤面上の object の関係を固定した flat vector の位置だけに依存せず扱える。
-
-## actionもcandidateとして扱う
-
-policy 側も変えた。
-
-legal action ごとに candidate representation を作り、その action が対象にしているカードや貴族などの情報を含める。
+カード購入なら購入対象のカード、予約なら予約対象、貴族を獲得する action ならその貴族など、action が参照している entity の情報を candidate 側へ持たせる。
 
 概念的には次のような構造になる。
 
@@ -57,82 +47,68 @@ semantic entities
   -> state attention
 
 legal action candidates
+  -> candidate representation
   -> stateへのcross-attention
   -> policy score
+```
 
-state/context
+policy は固定された action index だけを見て score を出すのではなく、現在の state と各 candidate action の関係から score を作る。
+
+Splendor では legal action の数や対象が局面ごとに変わるので、action 自体を model の入力 object として扱える形にしておく意味は大きい。
+
+## candidateからstateを見る
+
+EAT の policy head では、candidate 側から state entities へ cross-attention を行う。
+
+つまり、それぞれの legal action が「この行動を評価するためには盤面のどの情報を見るべきか」を candidate ごとに計算できる。
+
+カード購入を評価するときと、token を取る行動を評価するときでは、重要になる state information は同じとは限らない。
+
+一度作った共通 state vector だけから全 action を評価するのではなく、action ごとに state を読み直せるようにしている。
+
+## valueには専用のpathを持たせる
+
+value は、現在の局面から最終的な loss / draw / win を予測する。
+
+policy と value は同じ state を見るが、必要な集約の仕方まで同一とは限らない。
+
+そのため EAT では shared entity representation を利用しつつ、value 用の context を処理する専用 path を持たせている。
+
+概念的には、
+
+```text
+semantic entities
+  -> shared state representation
+
+shared state representation
+  -> candidate-conditioned policy path
+
+shared state representation
   -> value-specific path
   -> loss / draw / win
 ```
 
-policy は、固定された action index だけから score を出すのではなく、現在の state と各 candidate action の関係から score を作る。
+という分離になる。
 
-この candidate-to-state の経路は、今後 action representation を改善するときにも重要になる部分だと考えている。
+## 固定slot中心の表現からsemanticな表現へ
 
-## policyとvalueを同じtrunkに押し込まない
+今回の変更で一番大きいのは、network の層数や parameter 数ではなく、state と action をどう model に見せるかを変えたことだと思っている。
 
-value 側には専用の path を持たせた。
+従来の model では、feature engineering 側で盤面をかなり固定的な tensor layout に変換してから network に渡していた。
 
-policy が必要とする情報と、局面全体の勝敗を予測する value が必要とする情報は完全には同じではない。
+EAT では、カードや貴族を entity として、legal action を candidate として残したまま model に渡す。
 
-そのため、shared representation は持ちつつ、value 用の context を別に処理できる構造にしている。
+そのため今後は、
 
-今回導入した model は約1,102万 parameter になった。
+- entity feature の追加や整理
+- entity 間 attention の変更
+- candidate-to-state cross-attention の変更
+- action representation の改善
+- value path の変更
 
-以前の model よりかなり大きいが、今回の目的は parameter 数を増やすことそのものではなく、今後の model 改善を行える semantic な構造を作ることにある。
+といった改善を、ゲーム内の意味に対応した単位で行いやすくなる。
 
-## 学習まで通した
-
-architecture だけ実装して終わりにはせず、既存の teacher data を使って有限の supervised bootstrap も行った。
-
-1,024 groups、119,768 rows を使い、train / validation / test を group 単位で分割した。
-
-| split | groups | rows |
-| --- | ---: | ---: |
-| train | 768 | 89,868 |
-| validation | 128 | 14,982 |
-| test | 128 | 14,918 |
-| total | 1,024 | 119,768 |
-
-policy target は既存 teacher の分布、value target は最終的な loss / draw / win を使った。
-
-optimizer は AdamW、effective batch size は256、1,500 updates の固定 run にした。
-
-この run の目的は、EAT が実際の training pipeline で optimization でき、checkpoint を後続の inference path に渡せることを確認することだった。
-
-training loss は update 1 から update 1500 にかけて下がり、固定 test set の policy CE や WDL loss も初期値より改善した。
-
-これは model の強さを示す結果ではない。少なくとも、新しく作った architecture が teacher signal を受け取って学習できることを確認するための結果として使っている。
-
-## ONNXとnative evaluatorまでつないだ
-
-学習した PyTorch checkpoint は ONNX に export し、native 側の evaluator から呼べるようにした。
-
-さらに、その evaluator を既存の PUCT に接続した。
-
-ここまで通したことで、
-
-```text
-semantic feature generation
--> PyTorch training
--> checkpoint
--> ONNX export
--> native inference
--> PUCT
--> game execution
-```
-
-という一連の経路が成立した。
-
-これは今後 EAT を実際の self-play や search 改善に使うための土台になる。
-
-## 今回の到達点
-
-今回の進捗は、新しい EAT architecture の強さを評価したことではない。
-
-Entity-Action Transformer という新しい model family をコードベースへ導入し、semantic entity encoding、candidate-conditioned policy、value path、training、export、native inference、PUCT までを1本の実行可能な経路として成立させたことが到達点になる。
-
-今後はこの model を基準に、学習データ、objective、architecture、search との接続をそれぞれ改善していく。
+今回の進捗は、この Entity-Action Transformer を Splendor AI の新しい model family として導入したことになる。
 
 ---
 
