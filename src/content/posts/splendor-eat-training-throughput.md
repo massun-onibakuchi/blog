@@ -10,43 +10,27 @@ Splendor をプレイする policy-value model を作っている。
 
 現在使っている EAT（Entity-Action Transformer）は、局面に存在するカードやプレイヤーを entity、合法手を candidate として扱う model である。
 
-今回は model の構造や学習目標を変えず、教師あり学習の1 updateにかかる時間を見直した。
+今回は model の構造や学習目標を変えず、教師あり学習の1 updateにかかる時間をかなり短くできた。
 
-A100 上では、同じ512 rowsの update が 4,053 rows/s から 15,501 rows/s になった。約3.82倍で、同じ36,000 updatesを行う場合の training wall time は約74%減る。
+A100 上では、同じ512 rowsの update が 4,053 rows/s から 15,501 rows/s になった。約3.82倍である。
 
-精度や playing strength が上がったという話ではない。同じ学習を、余計な計算と GPU dispatch を減らして速くした。
+## 遅かった原因
 
-## legal actionの数は局面ごとに違う
+EAT の policy は、局面ごとの legal action を candidate として評価する。
 
-EAT の policy は、局面ごとの legal action を candidate として入力する。
+Splendor では legal action の数が局面ごとに違う。今回の学習データでは平均26.8個だったが、最大では195個あった。
 
-Splendor では candidate 数が一定ではない。今回使った60,082 decision rowsでは、candidate 数は平均26.8、中央値24、p95が46、最大195だった。
+普通に batch を作ると、candidate tensor は batch 内で一番多い局面に合わせて padding される。
 
-普通に batch を作ると、candidate tensor は batch 内で一番多い局面の幅に合わせて padding することになる。
+例えば、候補が20個しかない局面でも、同じ batch に100個の候補を持つ局面があれば、100個分の領域を確保する。存在しない80個は mask されるが、途中の計算ではその padding が無駄になる。
 
-例えば candidate が20個しかない局面でも、同じ batch に100個の局面があれば100個分の領域を持つ。存在しない80個は mask されるが、途中の neural network 計算ではその padding がコストになる。
+さらに従来は、512 rowsの1 updateを128 rowsずつ4回に分けて処理していた。
 
-128 rows の microbatch では、実際に存在する candidate に対して padded grid が平均で約4.8倍になっていた。
+この2つが組み合わさって、GPU は大きな行列演算をまとめて処理するより、小さい処理を何度も起動する時間にかなり使われていた。
 
-## GPUは計算量よりdispatchで詰まっていた
+## candidateを詰めて持つ
 
-最初は GPU の演算そのものが重いと考えやすいが、A100 の profile は違っていた。
-
-従来は effective batch 512 rows の1 updateを、128 rowsずつ4 microbatchesに分けて gradient accumulation していた。
-
-EAT では1 microbatchあたり約1,750 kernel launchesが発生しており、小さい kernel を大量に起動する overhead が支配的になっていた。GPU の演算能力を使い切る前に、host 側から何度も処理を dispatch する時間が効いていた。
-
-実際、padding をそのままにして microbatch を128から512へ大きくするだけでも、EAT は 4,053 rows/s から15,208 rows/sまで上がった。
-
-つまり最初の大きな bottleneck は、candidate の演算量そのものより microbatch を細かく分けすぎていたことだった。
-
-## candidateをpackedにした
-
-とはいえ microbatch を大きくすると、padding に使う GPU memory も増える。
-
-そこで training path では candidate を padded tensor のまま保持せず、存在する candidate row だけを連続して並べる packed layout にした。
-
-概念的には、
+そこで training では、candidate を padded grid のまま処理せず、実際に存在する candidate だけを連続して並べるようにした。
 
 ```text
 padded
@@ -58,68 +42,49 @@ packed
 A B C D E F G H I J
 ```
 
-という形になる。
+policy score を計算したあとだけ、各 candidate が元のどの局面・位置に属していたかを使って `[batch, width]` に戻す。
 
-batch 側で `candidate_pad_index` を作っておき、policy score を計算した後だけ元の `[batch, width]` の位置へ戻す。
+これで、存在しない candidate に対する計算をかなり減らせる。
 
-training と inference で別の policy 計算を持つのではなく、candidate scoring 自体は同じ実装を使う。ONNX/native inference は従来通り dense な interface を維持し、training だけ layout を変換する。
+同時に GPU memory の使用量も減り、512 rowsを4分割せず一度に処理できるようになった。
 
-また device 上で `nonzero` を使って candidate を探す経路もなくした。位置は batch preparation 時点で分かっているので、その index をそのまま GPU へ渡す。
+## 何が効いたのか
 
-## 512 rowsを1回で学習する
+結果は次の通りだった。
 
-packed layout にすると memory 使用量も下がった。
+```text
+before:  4,053 rows/s
+after:  15,501 rows/s
+speedup: 3.82x
+```
 
-A100 bf16 の EAT で512 rowsを処理した場合、peak device memory は約2,997 MiBから2,209 MiBへ26.3%減った。
+ただし、3.82倍を「paddingを消したから速くなった」とだけ解釈するのは正しくない。
 
-この余裕を使って、512 rowsの update を `128 x 4` ではなく `512 x 1` で処理するようにした。
+candidate を packed にするだけでは、従来と同じ小さい microbatch の条件ではほとんど速くならなかった。
 
-変えたのは microbatch の切り方だけである。
+大きかったのは、padding を減らして memory に余裕を作り、そのうえで512 rowsを一度に処理できるようにしたことだった。
 
-- effective batch: 512 rowsのまま
-- optimizer update数: 同じ
-- row order: 同じ
-- 学習で見る rows: 同じ
-- model / loss / optimizer hyperparameters: 同じ
+つまり今回の改善は、
 
-そのため、学習量を減らして速く見せているわけではない。
+```text
+可変長 candidate の無駄な paddingを減らす
+        +
+小さい microbatch を何度も回すのをやめる
+```
 
-## 結果
+という組み合わせで効いている。
 
-主な測定結果は次のようになった。
+## モデルは変えていない
 
-| device / workload | before | after | gain |
-| --- | ---: | ---: | ---: |
-| A100 bf16, EAT campaign update | 4,053 rows/s | 15,501 rows/s | 3.82x |
-| M2 MPS float32, EAT packed scoring | 0.9221 s/step | 0.7596 s/step | +17.6% |
-| M2 CPU float32, EAT packed scoring | 1.916 s/step | 1.545 s/step | +19.3% |
-| A100 bf16, EAT 1024-row packed scoring | 0.04975 s/step | 0.04054 s/step | +18.5% |
+今回変えたのは、同じ学習をGPUへどう載せるかである。
 
-ここで重要なのは、3.82倍のほとんどを「packedにしたこと」だけで説明しないことである。
+EAT の entity representation、candidate-conditioned policy、value head、loss、optimizer、学習する row の内容は変えていない。
 
-従来の `128 x 4` のまま A100 で candidate packing だけを入れると、むしろ約0.7%遅かった。小さい microbatch では dispatch overhead が大きすぎて、padding を減らした効果が見えない。
+そのため今回の3.82倍は model quality の改善ではなく、同じ supervised training をより短い時間で回せるようになったという進捗になる。
 
-packing の役割は、無駄な candidate 計算と host synchronization を減らし、peak memory を下げて大きい microbatch を使えるようにしたことにある。そこへ `512 x 1` を組み合わせた結果が3.82倍になった。
+大きめの EAT を今後何度も学習するなら、architecture の改善だけでなく、1回の学習に何時間かかるかも研究速度そのものに効く。
 
-## 計算結果が変わらないことも確認した
-
-training path だけ packed にすると、dense な inference path と計算がずれる可能性がある。
-
-そのため、candidate 数の異なる同じ rows を両方へ通し、policy logits、WDL output、全 parameter の gradient が一致することを test している。
-
-packed と padded の変換には事前計算した index の gather を使い、同じ位置へ複数 gradient を atomic accumulation する経路も避けた。
-
-microbatch の変更も、512 rowsを4分割して平均 loss を accumulate するか、一度に計算するかの違いで、学習する rows 自体は同じである。浮動小数点の reduction order による差以上の意味を持たせていない。
-
-## 分かったこと
-
-今回一番大きかったのは、GPU を使っているからといって GPU の演算能力が bottleneck とは限らないことだった。
-
-EAT の supervised training では、細かい microbatch と可変長 candidate の padding が組み合わさり、GPU dispatch と memory の使い方が先に効いていた。
-
-candidate を semantic object として扱う model 構造はそのままに、可変長であることを training layout 側でも維持することで、大きい batch を効率よく処理できるようになった。
-
-これで今後の supervised bootstrap では、同じ update 数に使う時間をかなり短くできる。モデルの強さを改善する実験とは分けて、まず学習そのものに必要な wall time を減らせたのが今回の進捗になる。
+今回の変更で、その反復コストをかなり下げられた。
 
 ---
 
