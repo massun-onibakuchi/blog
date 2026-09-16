@@ -10,9 +10,9 @@ Splendor をプレイする policy-value model を作っている。
 
 現在は EAT という model を使っている。
 
-EAT は Entity-Action Transformer の略で、カードや貴族などの盤面要素を entity として表現し、legal action も candidate として明示的に表現して評価する model である。
+EAT は Entity-Action Transformer の略で、カードや貴族、プレイヤーなどを entity として表現し、legal action も candidate として明示的に表現して評価する model である。
 
-state と action の意味をできるだけ保ったまま neural network に渡し、policy と value を別の readout で計算する構造にしている。
+state と action の意味をできるだけ残したまま neural network に渡し、policy と value を別の readout で計算する構造にしている。
 
 ## 盤面をentityとして表現する
 
@@ -27,129 +27,100 @@ Splendor の状態には、性質の異なる object がある。
 
 EAT では、これらを semantic entity として扱う。
 
-例えばカードなら、tier、bonus、prestige、cost など、そのカード自身の意味を表す feature を持たせる。player entity には prestige や購入カード枚数など、プレイヤー自身の状態を入れる。
+player entity には tokens、permanent bonuses、prestige、reserve count、starting-player relation を持たせる。card entity には tier、bonus、prestige、cost と、両プレイヤーの discount を適用した残り cost を持たせる。noble entity には requirements と、両プレイヤーにとって残っている requirement を持たせる。
+
+bank は別の独立した状態として二重管理せず、固定 supply から両プレイヤーの token を引いて復元して entity にする。ゲーム内の同じ事実を複数の入力で別々に持たせないためである。
 
 各 entity は hidden width 384 の representation に埋め込み、4層の self-attention block で相互作用させる。attention は8 head、feed-forward は1536幅にしている。
 
-これによって、盤面上に存在する object と object の関係を model が直接処理できる。
-
-山札に残っているカードは90枚分をそのまま state attention に流さず、tier ごとの learned query で semantic に pooling してから state representation に入れる。
-
-## contextは局面全体の情報だけを持つ
-
-entity とは別に、局面全体に属する小さな context input を持っている。
-
-現在の context は8個で、次の情報だけを入れている。
-
-| context | 意味 |
-| --- | --- |
-| endgame triggered | 終局ラウンドに入っているか |
-| actor is starting player | 手番側が starting player か |
-| actor triggered endgame | 手番側が終局条件を発火したか |
-| opponent triggered endgame | 相手が終局条件を発火したか |
-| reserve-without-gold filter | 予約ルールの設定 |
-| tier 1 deck size | tier 1 の残り枚数 |
-| tier 2 deck size | tier 2 の残り枚数 |
-| tier 3 deck size | tier 3 の残り枚数 |
-
-prestige、購入カード枚数など player entity に属する情報は entity 側を authoritative source にしている。そこから計算できる差分や距離を context として重複して渡さない。
-
-同様に、game ply や maximum plies のような episode execution 側の値も trainable input には含めていない。
-
-context は entity で表現しにくい局面全体の relation やルール状態を補うための入力、という役割に限定している。
+山札に残っているカードは tier ごとに pooling する。ただし、カード構成を平均的にまとめるだけでは「あと何枚残っているか」が消えるので、pooling した representation には tier ごとの残り枚数も持たせている。
 
 ## actionもcandidateとして表現する
 
 policy 側では、legal action ごとに candidate representation を作る。
 
-カード購入なら購入対象のカード、予約なら予約対象、貴族を獲得する action ならその貴族など、action が参照している情報を candidate 側に持たせる。
+candidate 自身が持つ数値はかなり小さい。
 
-概念的には次のような構造になる。
+- buy / reserve / resource-only の effect type
+- 6色の net token delta
+
+購入対象のカードや獲得する貴族の属性を candidate にコピーするのではなく、その card entity / noble entity を参照する。
+
+例えばカード購入なら、candidate は概念的に次のようになる。
 
 ```text
-semantic entities
-  -> state attention
-
-legal action candidates
-  -> candidate representation
-  -> stateへのcross-attention
-  -> policy head
+buy
+net token delta
+-> target card reference
+-> optional noble reference
 ```
 
-policy は固定された action index だけを見て score を出すのではなく、現在の state と各 candidate action の関係から score を作る。
+`net token delta` は token の取得と支払いを別々に持たせず、raw unit で差を取ってから1回だけ正規化する。
 
-Splendor では legal action の数や対象が局面ごとに変わるので、action 自体を model の入力 object として扱える形にしている。
+Splendor では同じカードでも支払い方法が複数あるため、同じ target card を参照する candidate でも net token delta が違えば別の行動として表現できる。
 
-## policy headはcandidateごとにscoreを出す
+## policy headは参照先を読んでから盤面を見る
 
-EAT の policy head では、candidate 側から state entities へ cross-attention を行う。
+policy head では、まず candidate が参照している card / noble の encoded representation を state から取り出す。
 
-それぞれの candidate embedding を query、state representation を key/value として使い、各 legal action が必要な state information を読み取る。
-
-その後、元の candidate embedding と cross-attention で得た representation を連結し、MLP で1つの logit に落とす。
+その情報で candidate query を条件付けしたあと、candidate から state 全体へ cross-attention を行う。
 
 ```text
-candidate embedding
+candidate semantics
       +
-state cross-attention result
+referenced card / noble
       |
-   concat
+ candidate query
       |
-     MLP
+state cross-attention
       |
  policy logit
 ```
 
-このため policy head は、legal action ごとに state を読み、その action 専用の score を出す。
+参照と cross-attention は役割が違う。
 
-## value headは専用のreadoutを持つ
+参照は「この行動がどのカードや貴族を対象にしているか」を伝える。cross-attention は、その行動を現在の盤面全体との関係で評価する。
+
+これによって target card の tier、cost、prestige などを candidate ごとに複製せず、state 側の entity representation をそのまま再利用できる。
+
+candidate 同士では self-attention を行わない。それぞれの legal action が独立に state を読み、1つの policy logit を出す。
+
+## value headはstateだけを読む
 
 value は、現在の局面から最終的な loss / draw / win を予測する。
 
-policy と value は entity trunk を共有するが、その後の head は分けている。
+policy と value は entity encoder を共有するが、その後の読み方は分けている。
 
-value 側では learned value token を shared state representation に追加し、value 専用の Transformer block で state 全体を readout する。
-
-それとは別に、8個の context features を小さな MLP で hidden representation に変換する direct context path を持つ。
-
-最後に、
+value 側では learned value token を encoded state に追加し、value 専用の Transformer block で局面全体を readout する。その出力を MLP に通して、actor-relative な loss / draw / win の3 logitsを出す。
 
 ```text
-value-token readout
-        +
-direct context representation
-        |
-      concat
-        |
-       MLP
-        |
-loss / draw / win logits
+semantic entities
+      |
+ state transformer
+      |
+      +-------------------------+
+      |                         |
+candidate-conditioned      value token
+policy head                readout
+      |                         |
+policy logits              WDL logits
 ```
 
-として3クラスの WDL logits を出す。
+局面全体を別の summary vector として直接 value head に渡す経路は持たせていない。value に必要な情報も state entities から読む構造にしている。
 
-つまり EAT は、entity encoder までは policy/value で共有し、その先で policy は candidate-conditioned cross-attention、value は専用 readout + compact context path という別の head architecture に分かれる。
+## 一次情報を中心にする
 
-## semanticな単位でmodelを組む
+EAT の入力では、元の semantic state から正確に計算できる summary は基本的に持たせない。
 
-EAT の中心は、state と action をゲーム内の意味に対応した単位で model に渡すことにある。
+例えば player の購入カード枚数は permanent bonuses の合計で分かり、total token count は6色の token vector の合計で分かる。得点差、15点までの距離、game ply、action 後の actor/bank state といった summary も model input にはしていない。
 
-カードや貴族、プレイヤーを entity として、legal action を candidate として残し、局面全体にだけ属する情報を小さい context に分離している。
+一方で、単純な線形和では作りにくい関係は残している。card cost から player bonus を色ごとに引いて0で下限を取る discounted cost や、noble requirement の不足量などである。
 
-そのため、
+正規化も、同じ意味の量には同じ unit を使う。prestige は player でも card でも15点を基準にし、token、cost、bonus、requirement、net token delta のように足し引きされる量は同じ `/7` scale を使っている。
 
-- entity feature
-- entity 間 attention
-- deck pooling
-- candidate representation
-- candidate-to-state cross-attention
-- policy scorer
-- value readout
-- context path
+この model で中心にしたいのは、手作業で summary を増やすことではなく、カード、プレイヤー、貴族、resource movement といったゲームの一次情報を relational model が組み合わせることである。
 
-を、それぞれ意味のある component として改善できる。
-
-現在の EAT は、この Entity-Action Transformer を Splendor AI の policy-value model family として実装したものになる。
+現在の EAT は、この semantic entity state と reference-based candidate を shared Transformer で処理し、candidate-conditioned policy と value-token readout に分岐する policy-value model になっている。
 
 ---
 
