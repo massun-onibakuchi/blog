@@ -8,11 +8,16 @@ restating it here.
 
 ## Environment
 
-- Build command: TBD
-- Test command: TBD
-- CI/CD production release on merge:
-- Free cloudflare workers or GitHub pages
-- Frameworks: computer use (or playwright, agent-browser), pnpm
+- Runtime: Node.js >=22.12.0
+- Package manager: pnpm 11.21.0
+- Build command: `pnpm build`
+- Check command: `pnpm check`
+- Test command: `pnpm test`
+- Lint command: `pnpm lint`
+- Browser test setup: `pnpm test:install`
+- Frameworks: Astro, TypeScript, Playwright
+- Production deploy: pushes to `main` run `.github/workflows/deploy.yml`, which builds the site and deploys it to Cloudflare Workers with Wrangler.
+- Browser/manual verification may use Playwright, agent-browser, or computer use.
 
 ## Design stance
 
