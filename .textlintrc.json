@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "preset-ai-words-ja": {
+      "no-ai-words": {
+        "dictionaryPath": "./.textlint/ai-style-advisory.json",
+        "dictionaryMode": "append"
+      }
+    }
+  }
+}
