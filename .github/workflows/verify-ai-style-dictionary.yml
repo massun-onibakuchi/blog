@@ -17,25 +17,26 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Verify advisory patterns
         run: |
-          cat >/tmp/textlint-positive.md <<'EOF'
-          これは期待した結果ではない。
-          これは期待した結果ではありません。
-          この差だけでは改善の結果とは言えない。
-          この差だけでは改善の結果とは言えません。
-          この差を改善の結果だとは判断できない。
-          この差を改善の結果だとは判断できません。
-          有意な改善とは判断できなかった。
-          EOF
+          check_positive() {
+            sentence="$1"
+            expected="$2"
+            printf '%s\n' "$sentence" >/tmp/textlint-case.md
+            set +e
+            output=$(pnpm dlx --package=textlint@15.8.0 --package=textlint-rule-preset-ai-words-ja@1.2.0 textlint /tmp/textlint-case.md 2>&1)
+            status=$?
+            set -e
+            printf '%s\n' "$output"
+            test "$status" -ne 0
+            printf '%s\n' "$output" | grep -q "$expected"
+          }
 
-          set +e
-          output=$(pnpm dlx --package=textlint@15.8.0 --package=textlint-rule-preset-ai-words-ja@1.2.0 textlint /tmp/textlint-positive.md 2>&1)
-          status=$?
-          set -e
-          printf '%s\n' "$output"
-          test "$status" -ne 0
-          printf '%s\n' "$output" | grep -q '結果ではない/ありません'
-          printf '%s\n' "$output" | grep -q '結果とは言えない'
-          printf '%s\n' "$output" | grep -q '〜とは判断できない'
+          check_positive 'これは期待した結果ではない。' '結果ではない/ありません'
+          check_positive 'これは期待した結果ではありません。' '結果ではない/ありません'
+          check_positive 'この差だけでは改善の結果とは言えない。' '結果とは言えない'
+          check_positive 'この差だけでは改善の結果とは言えません。' '結果とは言えない'
+          check_positive 'この差を改善の結果だとは判断できない。' '〜とは判断できない'
+          check_positive 'この差を改善の結果だとは判断できません。' '〜とは判断できない'
+          check_positive '有意な改善とは判断できなかった。' '〜とは判断できない'
 
       - name: Verify non-matches
         run: |
