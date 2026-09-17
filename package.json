@@ -12,6 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "lint": "pnpm dlx --package=textlint@15.8.0 --package=textlint-rule-preset-ai-words-ja@1.2.0 textlint \"src/content/{posts,publications}/**/*.md\"",
     "test": "playwright test",
     "test:install": "playwright install chromium"
   },
