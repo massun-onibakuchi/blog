@@ -1,0 +1,33 @@
+name: Verify textlint setup
+
+on:
+  push:
+    branches: [chore/setup-textlint-ai-words]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run repository lint
+        id: repo-lint
+        continue-on-error: true
+        run: pnpm lint
+      - name: Verify AI-word detection
+        run: |
+          printf '入口\n' > /tmp/textlint-smoke.md
+          set +e
+          output=$(pnpm dlx --package=textlint@15.8.0 --package=textlint-rule-preset-ai-words-ja@1.2.0 textlint /tmp/textlint-smoke.md 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q 'ai-words-ja/no-ai-words'
+      - name: Report repository lint outcome
+        run: echo "repository lint outcome=${{ steps.repo-lint.outcome }}"
