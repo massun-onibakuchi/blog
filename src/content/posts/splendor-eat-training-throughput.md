@@ -48,7 +48,7 @@ policy score を計算したあとだけ、各 candidate が元のどの局面�
 
 同時に GPU memory の使用量も減り、512 rowsを4分割せず一度に処理できるようになった。
 
-## 何が効いたのか
+## 高速化の要因
 
 結果は次の通りだった。
 
@@ -72,7 +72,7 @@ candidate を packed にするだけでは、従来と同じ小さい microbatch
 小さい microbatch を何度も回すのをやめる
 ```
 
-という組み合わせで効いている。
+という組み合わせで高速化している。
 
 ## モデルは変えていない
 
@@ -82,7 +82,7 @@ EAT の entity representation、candidate-conditioned policy、value head、loss
 
 そのため今回の3.82倍は model quality の改善ではなく、同じ supervised training をより短い時間で回せるようになったという進捗になる。
 
-大きめの EAT を今後何度も学習するなら、architecture の改善だけでなく、1回の学習に何時間かかるかも研究速度そのものに効く。
+大きめの EAT を今後何度も学習するなら、architecture の改善だけでなく、1回の学習に何時間かかるかも研究速度そのものを左右する。
 
 今回の変更で、その反復コストをかなり下げられた。
 
