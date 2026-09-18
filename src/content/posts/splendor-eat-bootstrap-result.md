@@ -12,6 +12,8 @@ EAT は Entity-Action Transformer の略で、カードや貴族、プレイヤ�
 
 盤面を1本の大きな vector に集約してから処理するのではなく、ゲーム内の object と action の意味をできるだけ残したまま Transformer に渡す。
 
+現在の EAT は 888,324 parameters で、shared state encoder と candidate-conditioned policy head、WDL value head から構成している。
+
 ## 盤面をentityとして表現する
 
 Splendor の state は、主に次の entity で表す。
@@ -31,7 +33,7 @@ bank は固定 supply と両 player の token から復元して entity にす�
 
 こうして、カードならカード、player なら player という単位でゲームの一次情報を置く。
 
-各 entity は hidden width 384 の representation に埋め込み、4層の Transformer block で相互作用させる。attention は8 head、feed-forward は1536幅にしている。
+各 entity は hidden width 128 の representation に埋め込み、3層の Transformer block で相互作用させる。attention は4 head、feed-forward は512幅にしている。
 
 ## 山札はtierごとにpoolingする
 
@@ -97,15 +99,13 @@ cross-attention は、その action を player、他の cards、nobles、bank �
 
 candidate 同士では self-attention を行わない。それぞれの action が独立に state を読み取る構造にしている。
 
-## value headはvalue tokenでstateを読む
+## value headはlearned queryでstateを読む
 
 value は、現在の局面から actor-relative な loss / draw / win を予測する。
 
 policy と value は entity encoder を共有するが、その後の readout は分けている。
 
-value 側では learned value token を encoded state に追加し、value 専用の Transformer block で局面全体を読む。
-
-その readout を MLP に通して、loss / draw / win の3 logitsを出す。
+value 側では1つの learned query が encoded state 全体へ cross-attention する。得られた representation を MLP に通して、loss / draw / win の3 logitsを出す。
 
 ```text
 semantic entities
@@ -114,13 +114,13 @@ semantic entities
       |
       +-------------------------+
       |                         |
-candidate-conditioned      value token
-policy head                readout
+candidate-conditioned      learned value query
+policy head                -> state cross-attention
       |                         |
 policy logits              WDL logits
 ```
 
-value 用に別の global summary vector を入力するのではなく、value に必要な情報も state entities から読む。
+value 専用の Transformer block や、別の global summary vector は持たせていない。value に必要な情報も shared state entities から読み取る。
 
 ## 一次情報を中心にする
 
@@ -146,7 +146,7 @@ token、cost、bonus、requirement、net token delta のようにゲーム中で
 
 shared embedding に入る前から単位を揃え、model が object type ごとに倍率の違いまで学習しなくてよい形にしている。
 
-EAT は、semantic entity state と reference-based candidate を shared Transformer で処理し、candidate-conditioned policy head と value-token readout に分岐する policy-value model である。
+EAT は、semantic entity state と reference-based candidate を shared Transformer で処理し、candidate-conditioned policy head と learned-query value readout に分岐する policy-value model である。
 
 ---
 
