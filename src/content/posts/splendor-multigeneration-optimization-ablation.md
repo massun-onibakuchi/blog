@@ -16,7 +16,7 @@ tags: ["splendor", "machine-learning", "training"]
 
 さらに「1 epochしか学習していないからでは」と考えて学習量を増やしたが、改善するどころか明確に悪化した。
 
-今回は、最初の promotion の次に起きた停滞と、その原因をどう切り分けたかを書く。
+今回は、最初の promotion の次に起きた停滞と、その原因をどう特定したかを書く。
 
 ## 小さい generation を2回つないだ
 
@@ -85,7 +85,7 @@ Generation 1の challenger は、Generation 0 の replay に対する policy KL 
 
 「1 epochでは、self-playから得た改善信号を十分に吸収できていないのではないか」
 
-## 1 epoch不足を疑って8 epochまで学習した
+## 1 epoch不足という仮説を8 epoch学習で検証した
 
 この仮説は、新しい自己対局を追加せずに検証できる。
 
@@ -106,7 +106,7 @@ Generation 1で実際に使ったデータをそのまま固定し、incumbent �
 
 policy は3 epoch付近で少し良くなったあと悪化した。
 
-それ以上に大きく壊れたのが value だった。
+それ以上に大きく悪化したのが value だった。
 
 8 epoch後には replay value loss が0.6706から2.2897まで増えた。training loss は下がっているのに validation loss は大きく上がっており、典型的な overfitting になっている。
 
@@ -124,11 +124,11 @@ policy は3 epoch付近で少し良くなったあと悪化した。
 
 つまり「本当は改善しているのに、1 epochでは学習し切れていなかった」という説明は支持されなかった。
 
-なお、実際の loop は validation loss が最も良い checkpoint を選ぶので、8 epochまで走らせても選ばれるのは epoch 1になる。上の arena で測った terminal checkpoint は、loop がそのまま promote する checkpoint ではない。
+なお、実際の loop は validation loss が最も良い checkpoint を選ぶので、8 epochまで学習しても選ばれるのは epoch 1になる。上の arena で測った terminal checkpoint は、loop がそのまま promote する checkpoint ではない。
 
 単純に `max_epochs` を増やす変更は、計算量を増やしたうえで、checkpoint selectionによって早い epoch へ戻ることになる。
 
-## 長く学習するとvalue headが先に壊れた
+## 長く学習するとvalue headが先に悪化した
 
 policy と value では教師信号の粒度が違う。
 
@@ -158,9 +158,9 @@ $$
 
 これを、そのまま2世代の rejection の原因だとは言えない。
 
-1 epoch時点の value はまだ大きく壊れていないし、実際の1-epoch challengerは held-out decisions の約90%で incumbent と同じ手を選んでいた。
+1 epoch時点の value 指標はまだ大きく悪化していないし、実際の1-epoch challengerは held-out decisions の約90%で incumbent と同じ手を選んでいた。
 
-production loop で観測したのは、壊れた challenger ではなく「incumbent とほとんど同じ challenger」ができる現象だった。
+production loop で観測したのは、性能が劣化した challenger ではなく「incumbent とほとんど同じ challenger」ができる現象だった。
 
 ## 次は「学習量」ではなく「改善信号そのもの」を測る
 

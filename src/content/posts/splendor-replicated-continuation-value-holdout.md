@@ -122,7 +122,7 @@ value logits の自信が強すぎるだけなら、temperature scaling で改�
 
 ## 実験用のstate読込にもバグが見つかった
 
-今回の exact-state experiment を作る途中で、Arrow の sliced struct を C++ へ戻すコードに offset の扱い漏れも見つかった。
+今回の exact-state experiment を作る途中で、Arrow の sliced struct を C++ へ戻すコードに offset を反映していない箇所も見つかった。
 
 非zero offset の slice を decode すると、本来の selected row ではなく先頭側の row を読む場合があった。修正前は512 statesを選んだはずなのに、model logits が4種類しか出ないという異常から発見した。
 

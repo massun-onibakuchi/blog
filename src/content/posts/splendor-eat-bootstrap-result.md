@@ -10,7 +10,7 @@ Splendor をプレイする policy-value model として、EAT を使ってい�
 
 EAT は Entity-Action Transformer の略で、カードや貴族、プレイヤーなどを entity として表現し、legal action も candidate として明示的に表現して評価する model である。
 
-盤面を1本の大きな vector に潰してから処理するのではなく、ゲーム内の object と action の意味をできるだけ残したまま Transformer に渡す。
+盤面を1本の大きな vector に集約してから処理するのではなく、ゲーム内の object と action の意味をできるだけ残したまま Transformer に渡す。
 
 ## 盤面をentityとして表現する
 
