@@ -56,6 +56,27 @@ for (const section of SECTIONS) {
       expect(prompt).toMatch(/^Summarize the article at https?:\/\//);
       expect(prompt).toContain(articlePath);
       expect(prompt).toContain('key technical details');
+
+      // Regression guard: the summary URL must follow the browser origin, not
+      // an origin baked into the static build. Re-serve the rendered document
+      // under a synthetic origin without making any network request.
+      const rendered = await page.content();
+      const runtimeOrigin = 'https://runtime-origin.invalid';
+      await page.route(`${runtimeOrigin}/**`, async (route) => {
+        if (route.request().resourceType() === 'document') {
+          await route.fulfill({ status: 200, contentType: 'text/html', body: rendered });
+        } else {
+          await route.abort();
+        }
+      });
+
+      await page.goto(`${runtimeOrigin}${articlePath}`);
+      const runtimeHref = await page
+        .locator('article a[href*="chatgpt.com"]')
+        .getAttribute('href');
+      expect(runtimeHref).not.toBeNull();
+      const runtimePrompt = new URL(runtimeHref!).searchParams.get('prompt') ?? '';
+      expect(runtimePrompt).toContain(`${runtimeOrigin}${articlePath}`);
     });
   });
 }
