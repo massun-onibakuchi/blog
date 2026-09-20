@@ -1,30 +1,45 @@
 ---
 // src/components/TranslateLink.astro — the language helper (end-state §4).
-// Opens ChatGPT with the article URL in a prompt requesting a technically
-// faithful summary in the opposite language.
+// Opens ChatGPT with the browser's current article URL in a prompt requesting a
+// technically faithful summary in the opposite language.
 //
 // The target language is always the opposite of what the article is written in,
 // because every article exists in exactly one language.
 
 interface Props {
   lang: 'en' | 'ja';
-  url: string;
 }
 
-const { lang, url } = Astro.props;
+const { lang } = Astro.props;
 const target = lang === 'en'
   ? { code: 'ja', name: 'Japanese', label: 'ChatGPTで日本語の要約を読む' }
   : { code: 'en', name: 'English', label: 'Summarize in English with ChatGPT' };
-
-const prompt = `Summarize the article at ${url} in ${target.name}. Preserve the key technical details, experimental setup, results, numbers, caveats and conclusions.`;
-const href = `https://chatgpt.com/?prompt=${encodeURIComponent(prompt)}`;
 ---
 
 <a
-  href={href}
+  href="https://chatgpt.com/"
   rel="noopener"
   target="_blank"
   hreflang={target.code}
+  data-chatgpt-summary
+  data-target-language={target.name}
 >
   {target.label}
 </a>
+
+<script is:inline>
+  for (const element of document.querySelectorAll('a[data-chatgpt-summary]')) {
+    if (!(element instanceof HTMLAnchorElement)) continue;
+
+    const targetLanguage = element.dataset.targetLanguage;
+    if (!targetLanguage) continue;
+
+    const articleUrl = new URL(window.location.href);
+    articleUrl.search = '';
+    articleUrl.hash = '';
+
+    const prompt =
+      `Summarize the article at ${articleUrl.href} in ${targetLanguage}. Preserve the key technical details, experimental setup, results, numbers, caveats and conclusions.`;
+    element.href = `https://chatgpt.com/?prompt=${encodeURIComponent(prompt)}`;
+  }
+</script>
