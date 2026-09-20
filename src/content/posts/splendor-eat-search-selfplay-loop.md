@@ -8,7 +8,7 @@ tags: ["splendor", "machine-learning", "self-play"]
 
 Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
 
-前回、教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy よりかなり強くなることを確認した。128 simulations の PUCT は raw policy に対して pair score 0.8438 だった。
+前回、教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy に対して対局成績が大きく改善することを確認した。128 simulations の PUCT は raw policy に対して pair score 0.8438 だった。
 
 次に知りたいのは、その探索結果を教師として network に戻したとき、network 自体も強くなるかである。
 
@@ -70,7 +70,7 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 3 seed の平均は +6.94 points だった。ただし replicate 間の 95% t interval は [-4.21, +18.10] で0をまたいでいる。
 
-初期の1世代で改善している可能性とは整合するが、3世代 self-play が継続的に model を強くするかは判断できない。もともとの判定対象は generation 3 なので、この generation 1 の数値を代わりの合格判定には使わない。
+初期の1世代で改善している可能性とは整合するが、3世代 self-play が継続的に model を強くするかは未確定である。もともとの判定対象は generation 3 なので、この generation 1 の数値を代わりの合格判定には使わない。
 
 ## 新しい学習をせずにqualificationだけ調べた
 
@@ -82,13 +82,13 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 一方で policy probability、WDL probability、value、argmax の条件は5 artifactすべて通っており、argmax disagreement は0だった。
 
-ここも単純に「3 model が壊れていた」とは解釈できない。新しい qualification は以前より広い real-state workload を使っており、実行 platform と PyTorch version も変わっている。今回の測定では、差が model の問題なのか backend arithmetic の違いなのかまでは分離していない。
+ここから3 model自体の不具合を結論する根拠はない。新しい qualification は以前より広い real-state workload を使っており、実行 platform と PyTorch version も変わっている。今回の測定では、差が model の問題なのか backend arithmetic の違いなのかまでは分離していない。
 
 新しい contract は family 全体では通らなかったので、追加 training は行わずに終了した。
 
 ## 今回分かったこと
 
-今回の search self-play では、最も知りたかった「探索で作った target を繰り返し学習すると、EAT は3世代後に強くなるか」にはまだ答えられていない。
+今回の search self-play では、最も知りたかった「探索で作った target を繰り返し学習すると、EAT は3世代後に強くなるか」にはまだ答えがない。
 
 一方で、self-play loop を評価する前提になる checkpoint の portability と inference parity を、どこまで要求するかが独立した問題として表面化した。
 
@@ -96,7 +96,7 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 次に整理すべきなのは、PyTorch、ONNX、native evaluator の間で search/self-play に本当に必要な同値性が何かである。そこを先に固定しない限り、追加の self-play を購入しても同じ場所で判定不能になる可能性がある。
 
-現時点では、search self-play が有効とも無効とも決めず、3世代の強さ比較は未解決のままにしている。
+現時点では、search self-play の有効性は未確定であり、3世代の強さ比較も未解決のままにしている。
 
 ---
 
