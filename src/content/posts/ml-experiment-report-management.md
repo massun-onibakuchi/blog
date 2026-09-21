@@ -1,150 +1,187 @@
 ---
-title: "機械学習の実験レポートを「履歴」と「索引」に分けた"
+title: "実験レポートが増えすぎたので、検索用catalogを作った"
 date: "2026-09-21"
 isPublished: true
 lang: ja
 tags: ["machine-learning", "research", "engineering"]
 ---
 
-Splendor の機械学習プロジェクトでは、モデル構造、特徴量、探索、学習データなどを頻繁に実験している。
+Splendor の機械学習プロジェクトでは、モデル構造、特徴量、探索、self-play などをかなり頻繁に試している。
 
-実験が増えてくると、結果そのものとは別に「過去に何を試したかをどう管理するか」が問題になってきた。
+実験そのものは増やせるようになったが、別のところで詰まり始めた。
 
-今回、実験レポートの管理方法を整理した。
+過去の report が増えすぎて、「この仮説はもう試したか」「似た失敗はなかったか」「今も読む価値がある report はどれか」を探すのに時間がかかる。
 
-ポイントは、レポート本文を履歴として保存し、検索や現在の意味づけだけを frontmatter に持たせることにした点である。
+そこで、実験レポート用の小さい catalog tool を入れた。
 
-## 実験レポートは後から現在の結論に合わせない
+大げさな experiment tracking system ではない。
 
-実験レポートには、その時点で観測した条件、結果、そこから言えることを書く。
+Markdown report の frontmatter を読んで、question、outcome、conclusion、relevance、scope だけを一覧できるようにしたものだ。
 
-数週間後に新しい実験が出て、昔は有力だった仮説が弱くなることもある。
+これが思ったより使いやすかった。
 
-そのたびに古いレポート本文を書き換えると、当時何が観測され、何を根拠に判断したのかが消えてしまう。
+## reportが増えると「検索」が研究コストになる
 
-そこで completed report の本文は historical evidence として扱う。
+実験が10本くらいなら、ファイル名を見て順番に開けばよい。
 
-後から考えが変わっても、過去の観測を現在の結論に合わせて書き直さない。複数の実験を踏まえた現在の考えは、別の synthesis として表現する。
+しかし数が増えると、それだけでは厳しい。
 
-## ただし古いレポートが今も重要とは限らない
+例えば新しい仮説を考えたときに知りたいのは、
 
-本文を保存するだけでは、別の問題が出る。
+- 似た問いを以前に検証していないか
+- そのときの結論は何だったか
+- その evidence は今も active なのか
+- 条件が違うだけで、まだ使える結果なのか
+- superseded されて読む必要が薄いのか
 
-レポートが増えると、検索結果に古い実験が大量に出てきても、どれを今の判断に使ってよいか分からない。
+といったことになる。
 
-そこで各 report の frontmatter に、本文とは別に小さい metadata を持たせる。
+ファイル名だけでは分からない。
 
-現在は kind、status、question、hypothesis、outcome、conclusion、relevance、scope、tags を持つ。
+全文 grep もできるが、exact wording を知らないと取りこぼすし、検索結果から何本も本文を開く必要がある。
 
-特に重要なのが relevance と scope である。
+LLM に全部読ませる方法もあるが、report が増えるほど context を無駄に使う。
 
-本文は「その実験で何が観測されたか」を保存する。
+つまり実験の実行速度が上がるほど、過去の evidence を探す時間が新しい bottleneck になってきた。
 
-relevance と scope は「その evidence を今どこまで使ってよいか」を表す。
+## 欲しかったのは重い管理画面ではなく「目次」だった
 
-historical evidence と current applicability を分離することで、過去を消さずに現在の検索結果を整理できる。
+必要だったのは、W&B や MLflow のように run metric を可視化する仕組みではなかった。
 
-## indexファイルは作らない
+training run や artifact の管理ではなく、研究上の問いと結論を探したかった。
 
-全レポートをまとめた INDEX.md のようなファイルを作る方法も考えられる。
+例えば最初に、
 
-しかし report を追加するたびに report 本体と index の両方を更新する必要がある。status や conclusion が変われば index 側も追従しなければならない。
+| report | question | outcome | conclusion | relevance |
+| --- | --- | --- | --- | --- |
+| ... | ... | ... | ... | ... |
 
-これでは同じ情報の owner が2つになる。
+のような一覧を見て、読むべき report を数本に絞れれば十分だった。
 
-LLM を使った開発では、この種の二重管理は特に避けたい。片方だけ更新されても文章として自然に見えるため、drift が見つけにくい。
+そこで各 report の frontmatter に、検索用の metadata を持たせることにした。
 
-そこで report ごとの frontmatter を唯一の catalog source にした。
+現在は kind、status、question、hypothesis、outcome、conclusion、relevance、scope、tags を持っている。
 
-catalog 自体は保存しない。必要なときに全 report の metadata を読んで、その場で生成する。
+本文を要約するための metadata というより、研究 corpus を navigate するための metadata である。
 
-report A / B / C の frontmatter から catalog view を導出するだけである。
+## catalog toolを入れた
 
-index は artifact ではなく view として扱う。
+catalog は repository 内の report frontmatter を読み、その場で一覧を生成する。
 
-## catalogは「読む前の索引」にする
+普段は Markdown table として見る。
 
-catalog はレポート本文の代わりではない。
+machine-readable に扱いたいときは JSON でも出せる。
 
-細かい条件や exact な記述を調べるなら、普通に全文検索や grep を使えばよい。
+使い方は単純で、catalog command を実行するだけである。
 
-catalog が便利なのは、研究 corpus 全体を浅く見るときである。
+これで例えば「value learning に関する過去の experiment をざっと見たい」ときに、各 report を開く前に question と conclusion を並べて見られる。
 
-例えば、過去にどんな実験をしたか、この仮説はすでに試したか、似た問いを扱う report はどれか、active な evidence はどれか、といったことを各ファイルを開かずに確認できる。
+そこから必要な report だけ本文を読む。
 
-question、outcome、conclusion、relevance、scope を一覧して、そこから必要な report に逆引きする。
+LLM に調査させる場合も同じで、最初に catalog を見せて候補を絞らせ、そのあと必要な report だけ読ませる。
 
-つまり catalog は mandatory な retrieval path ではなく、shallow corpus scan と index view である。
+全 corpus を毎回 context に入れる必要がなくなった。
 
-## metadata contractも二重管理しない
+## INDEX.mdは作らなかった
 
-次に問題になるのが frontmatter の schema である。
+最初に考えやすいのは、全 report をまとめた INDEX.md を手で更新する方法である。
 
-AGENTS.md に field の意味や enum を全部書き、lint の Python code にも同じ constraint を持たせると、また二重管理になる。
+これは採用しなかった。
 
-そこで schema の owner も parser / validator に一本化した。
+report を追加するたびに、
 
-field名、enum、文字数制約、cross-field rule、semantic rule は同じ定義から validation と human-readable contract の両方に使う。
+1. report 本体を書く
+2. INDEX.md に追記する
 
-report を編集する agent は report_catalog.py contract を実行して、その時点の canonical contract を読む。
+という2回の更新が必要になる。
 
-AGENTS.md は schema のコピーではなく、どの command を使うかだけを示す小さい router にした。
+さらに conclusion や relevance が変われば、両方を同期させなければならない。
 
-## lintは変更したreportだけを見る
+LLM を使った開発では、この種の二重管理はかなり危ない。
 
-repository に historical report が増えてくると、全 report を常に current schema で strict validation するのも扱いづらい。
+片方だけ古くても文章として自然なので、drift が発見しづらい。
 
-新しい contract を導入しただけで、今回触っていない昔の report が失敗して現在の作業を止める可能性がある。
+そこで frontmatter を唯一の source of truth にして、catalog は保存しないことにした。
 
-そこで lint は main との merge base から見て変更された active report だけを検証する。
+index は file ではなく view として毎回生成する。
 
-変更した report は current contract を満たす。一方、変更していない historical artifact を別件の作業で突然 migration 対象にはしない。
+この形なら report を直せば catalog も自動的に変わる。
 
-これは validation を弱くするというより、変更責任の境界を明確にするための設計である。
+## relevanceとscopeが特に効いた
 
-## reportの真実を3種類に分ける
+単に question と conclusion だけを一覧するだけでも便利だが、実際に効いたのは relevance と scope だった。
 
-現在は report 周りの情報をだいたい3種類に分けて考えている。
+実験結果は、その後の研究で意味が変わる。
 
-1. report body: その実験で実際に観測した evidence
-2. report metadata: その evidence の問い、結論、現在の relevance / scope
-3. synthesis: 複数の evidence を踏まえた現在の考え
+例えば当時は重要だった結果でも、モデル構造が大きく変われば直接は使えないことがある。
 
-この3つを混ぜない。
+逆に、古い report でも特定条件ではまだ有効なこともある。
 
-特に「現在はこう考えている」を昔の report 本文へ逆流させないことが重要だと思っている。
+そこで report body は当時の evidence として残し、現在の applicability だけ metadata 側で表現する。
 
-研究では結論が変わるのが普通なので、過去の evidence と現在の belief を同じ document に押し込むと、時間が経つほど provenance が分からなくなる。
+古い report 本文を現在の belief に合わせて書き換える必要がない。
 
-## LLMに全部読ませない
+過去の証拠は残しつつ、今読むべきものは catalog 上で分かる。
 
-この仕組みは LLM を coding / research agent として使うときにも効いている。
+## schemaまで手書きするとまた二重管理になる
 
-report が増えるほど、毎回全部読むのは context の無駄になる。一方、file name だけでは、その report が何を答えたのか分からない。
+frontmatter を入れると、次は schema の管理が必要になる。
 
-frontmatter を短い semantic index にしておけば、最初に catalog だけ見て関係する report を選び、そのあと必要な本文だけを読める。
+field名や enum を AGENTS.md に書き、その一方で lint code に同じルールを書くと、また2つの source of truth ができる。
 
-これは token 節約だけではなく、irrelevant な historical context を大量に入れて判断を濁らせないためでもある。
+そこで contract も tool 側から生成することにした。
 
-## 現在の形
+parser / validator が持っている field definition から、人間や coding agent が読む contract をその場で出す。
 
-最終的にはかなり単純な構成になった。
+report を作るときは、その command を先に読む。
 
-docs/reports の各 Markdown が source of truth で、frontmatter から catalog を都度導出する。
+AGENTS.md には schema 自体をコピーせず、「この command で contract を確認する」とだけ書く。
 
-report_metadata.py が parser、validator、changed-report selection、contract rendering を持つ。
+これで schema を変更しても、documentation と validator が別々に drift しない。
 
-report_catalog.py は table / JSON / contract の view を出し、report_frontmatter_lint.py は変更された report metadata だけを検証する。
+## lintで古いreport全部を直させない
 
-永続的な index database や ledger はない。
+もう1つ避けたかったのが、catalog schema を更新しただけで昔の report 全部を直すことだった。
 
-report そのものが source of truth で、catalog はそこから導出される。
+historical report は研究 evidence であって、repository の最新形式へ常に migration すること自体が目的ではない。
 
-ドキュメント側にも schema の複製は置かない。
+そのため lint は main との merge base から見て変更された active report だけを検証する。
 
-機械学習の実験では、モデルやデータだけでなく、過去の証拠を後からどう検索し、どう再解釈するかも研究速度に効く。
+今触った report は current contract を満たす。
 
-実験レポートを単なる Markdown の山にせず、かといって重い実験管理システムにもせず、historical evidence と lightweight metadata の間くらいに置くのが今のところ扱いやすい。
+触っていない昔の report は、別件の変更を block しない。
+
+これで metadata の品質は保ちつつ、管理のための migration work を増やさずに済む。
+
+## 導入して何が変わったか
+
+一番大きいのは、過去の experiment を探すときに「まず何を読むか」を決めやすくなったことである。
+
+以前は file tree と grep を見ながら複数 report を開いていた。
+
+今はまず catalog を見て、question / conclusion / relevance / scope から候補を絞る。
+
+新しい仮説を考えるときにも、過去に何を試したかを shallow scan してから設計に入れる。
+
+LLM agent にとっても、全 report を無差別に読むより、最初に metadata で routing できる方が扱いやすい。
+
+実験管理のために重いサービスを導入したわけではない。
+
+Markdown report はそのままで、frontmatter と数百行程度の小さい CLI を足しただけである。
+
+それでも、
+
+- evidence を探す
+- 重複実験を避ける
+- 古い結果の現在性を判断する
+- LLM に必要な report だけ読ませる
+- index や schema の二重管理を避ける
+
+という pain をかなりまとめて解消できた。
+
+研究コードでは実験そのものに目が行きやすいが、実験数が増えた後は「過去の知識へどうアクセスするか」も throughput の一部になる。
+
+今のところ、このくらい軽い catalog tool がちょうどよい。
 
 ---
 
