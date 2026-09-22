@@ -46,13 +46,13 @@ baseline では、これらをまとめて1つの MLP に入れて128次元の e
 
 62個の入力 feature をそのまま共通の2層 MLP に入れる。
 
-\`\`\`text
+```text
 entity features
     |
 shared MLP
     |
 128-d entity representation
-\`\`\`
+```
 
 ### F: factorized
 
@@ -60,7 +60,7 @@ type、role、location、tier の categorical metadata を numeric path から�
 
 残りの49 columns は共通 MLP で処理し、最後に4種類の embedding を加える。
 
-\`\`\`text
+```text
 49-column content -> shared MLP
                          +
 type embedding
@@ -69,16 +69,16 @@ location embedding
 tier embedding
                          |
                 entity representation
-\`\`\`
+```
 
 例えば actor の reserve card なら、
 
-\`\`\`text
+```text
 type     = CARD
 role     = SELF
 location = RESERVE
 tier     = T2
-\`\`\`
+```
 
 のように分解される。
 
@@ -96,7 +96,7 @@ bank、player、card、noble は持っている feature の意味がかなり違
 
 そこで、
 
-\`\`\`text
+```text
 BANK   -> bank projection
 PLAYER -> player projection
 CARD   -> card projection
@@ -105,7 +105,7 @@ NOBLE  -> noble projection
           GELU
              |
        shared second layer
-\`\`\`
+```
 
 とした。
 
@@ -159,9 +159,9 @@ validation joint cross entropy の平均は次のようになった。
 
 offline metric だけを見ると、
 
-\`\`\`text
+```text
 FT < F < B
-\`\`\`
+```
 
 で、structured encoder の方が少し良かった。
 
@@ -185,15 +185,15 @@ validation CE が下がるということは、教師の policy distribution を
 
 既存の search / heuristic から作った teacher distribution なので、
 
-\`\`\`text
+```text
 teacher をよく模倣する
-\`\`\`
+```
 
 ことと、
 
-\`\`\`text
+```text
 実際の対局でより良い手を選ぶ
-\`\`\`
+```
 
 ことは同じではない。
 
@@ -249,11 +249,11 @@ offline では FT、F、B の順だったが、その順位は playing strength 
 
 ただ、少なくとも現在の EAT に対しては、
 
-\`\`\`text
+```text
 categorical metadata を factor embedding に分ける
 +
 entity type ごとに最初の numeric projection を分ける
-\`\`\`
+```
 
 という変更だけでは、採用するほどの playing-strength advantage は確認できなかった。
 
