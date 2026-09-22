@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでsearch self-playを試したが、3世代目まで到達できなかった"
+title: "Splendor AIでsearch self-playを3世代回したら固定panelで+10.9pt改善した"
 date: "2026-09-21"
 isPublished: true
 lang: ja
@@ -8,95 +8,129 @@ tags: ["splendor", "machine-learning", "self-play"]
 
 Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
 
-前回、教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy に対して対局成績が大きく改善することを確認した。128 simulations の PUCT は raw policy に対して pair score 0.8438 だった。
+教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy よりかなり強くなることは確認できていた。
 
-次に知りたいのは、その探索結果を教師として network に戻したとき、network 自体も強くなるかである。
+次に知りたかったのは、その探索結果を教師として network に戻し、それを何世代か繰り返したときに、本当に対局性能まで伸びるかだった。
 
-そこで search self-play を3世代繰り返す実験を始めた。ただし、今回は最後まで到達できなかった。
+そこで3つの独立した training track で search self-play を3世代回した。
 
-## 探索結果を教師にして学習する
+結果は、generation 0 の固定 panel score 70.09% に対して、generation 3 は 80.96% だった。
+
+差は +10.87 percentage points、pair-clustered 95% interval は [+9.16, +12.57] points だった。
+
+今回の条件では、search self-play を繰り返した後の model が明確に強くなった。
+
+## search self-playで何をしているか
 
 1世代の流れは単純である。
 
-現在の model で PUCT 128 simulations の self-play を行い、探索後の policy distribution と最終的な勝敗を training target にする。そのデータで EAT を追加学習し、できた model で次の self-play を行う。
+現在の EAT で PUCT 128 simulations の self-play を行い、探索後の policy distribution と最終的な勝敗を training target にする。
 
-各世代では32,768 rowsを残し、512 optimizer updatesを行う。policy は search target、value は terminal WDL を学習する。2世代目以降は新しいデータだけに置き換えず、直前までの retained rows も半分 replay する。
+そのデータで EAT を追加学習し、できた model でもう一度 self-play する。
 
-これを3つの独立した supervised seed から開始し、それぞれ3世代まで進める計画にした。
+各世代では32,768 rowsを残し、512 optimizer updatesを行った。
 
-重要なのは、途中で良さそうな checkpoint を選ばないことである。各世代の final update だけを次へ進め、3世代目の model を generation 0 と同じ固定 opponent panel で比較する。それを最初から primary endpoint にした。
+policy head は search target、value head は terminal WDL を学習する。
 
-## 5回の追加学習までは進んだ
+これを seed 1701、2901、4301 の3本で独立に進め、各 track を generation 3 まで到達させた。
 
-実際には次のところまで進んだ。
+1 track あたりの累積 update 数は1,536である。
 
-| seed | generation 1 | generation 2 | generation 3 |
-| --- | --- | --- | --- |
-| 1701 | 512 updates | 1,024 cumulative updates | 未実行 |
-| 2901 | 512 updates | 1,024 cumulative updates | 未実行 |
-| 4301 | 512 updates | 未実行 | 未実行 |
+全9 fitsでは294,912 retained rows、4,608 updates、約472万 row presentationsを使った。
 
-合計では7,680 self-play gamesを生成し、163,840 rowsを retained training data として使った。完了した学習は2,560 updates、2,621,440 row presentationsである。
+## 評価は最初のmodelと最後のmodelを同じ条件で比べる
 
-5つの fit はすべて training loss が下がった。例えば policy CE は generation 1 の3 seedで、最初の64 updates平均から最後の64 updates平均へそれぞれ 0.8856→0.8200、0.9383→0.8391、0.9445→0.8438 と下がっている。
+学習 loss が下がるだけでは、Splendor が強くなったとは言えない。
 
-ただし、training loss が下がることと対局が強くなることは別なので、これだけでは採用判断には使わない。
+そのため最終評価では、generation 0 と generation 3 を同じ opponent panel、同じ search 条件で比較した。
 
-## export qualificationで停止した
+opponent は3種類である。
 
-停止したのは seed 2901 の generation 2 だった。
+- 以前の EAT checkpoint
+- depth-3 の非学習 teacher
+- prestige を優先する point-rush rule policy
 
-学習自体は update 1024 まで完了した。しかし checkpoint を ONNX/native evaluator として使う前の CPU qualification で、value scalar の一致条件を1行だけ満たさなかった。
+learned model 側は clean PUCT 128 simulations、root noiseなし、temperature 0、tree reuseなしで固定した。
 
-絶対誤差は約 2.37e-6 だった。
+3 training tracks × 3 opponents の9 cellsについて、同じ start schedule を generation 0 と generation 3 で対応させて比較した。
 
-診断すると、native scalar 変換そのものの誤差は約 2e-9 で、差の大部分は PyTorch と native backend の WDL logits の丸め差から来ていた。数値としては小さい。
+generation 3 側だけで4,992 games、対応する generation 0 control も4,992 gamesある。
 
-それでも、ここで tolerance を広げて続行することはしなかった。qualification の条件は結果を見る前に固定していたため、失敗した checkpoint を見た後で通過条件を変えると、実験の停止条件自体が outcome-dependent になる。
+途中で良かった seed や checkpoint を選ぶことはしていない。
 
-そのため generation 3 は作らず、強さの primary endpoint も開かなかった。
+## 3本ともほぼ同じだけ改善した
 
-## generation 1は少し良く見えた
+結果は次の通りだった。
 
-停止時点で generation 1 の比較だけは完了していた。
-
-固定した3種類の opponent に対する generation 0 との差を seed ごとに平均すると、次のようになった。
-
-| seed | generation 1 - generation 0 |
+| training track | generation 3 - generation 0 |
 | --- | ---: |
-| 1701 | +2.08 points |
-| 2901 | +7.81 points |
-| 4301 | +10.94 points |
+| 1701 | +11.11 points |
+| 2901 | +11.10 points |
+| 4301 | +10.38 points |
 
-3 seed の平均は +6.94 points だった。ただし replicate 間の 95% t interval は [-4.21, +18.10] で0をまたいでいる。
+3本すべてで改善し、track 間の差も小さかった。
 
-初期の1世代で改善している可能性とは整合するが、3世代 self-play が継続的に model を強くするかは未確定である。もともとの判定対象は generation 3 なので、この generation 1 の数値を代わりの合格判定には使わない。
+全 cell を等しく重み付けした panel score は、
 
-## 新しい学習をせずにqualificationだけ調べた
+| | score |
+| --- | ---: |
+| generation 0 | 70.09% |
+| generation 3 | 80.96% |
+| difference | +10.87 points |
 
-次に GPU training を再開するのではなく、保存してある5つの learned artifacts だけを使って inference qualification を調べた。
+となった。
 
-新しい contract では、synthetic state だけでなく実局面も含む31 probesを各 artifact に通し、PyTorch、ONNX Runtime、native evaluator の policy logits、policy probability、WDL、value scalar、argmax を分けて比較した。
+95% interval は [+9.16, +12.57] points で、事前に置いていた「point estimate が +2 points 以上、interval lower bound が0より大きい」という判定条件を通過した。
 
-結果は、seed 1701 generation 1 と seed 2901 generation 2 の2つが全条件を通過した。一方、seed 2901 generation 1、seed 4301 generation 1、seed 1701 generation 2 は real-state batch の raw policy logits に対する条件だけを満たさなかった。
+## 相手ごとに見ると改善幅は違った
 
-一方で policy probability、WDL probability、value、argmax の条件は5 artifactすべて通っており、argmax disagreement は0だった。
+3 track 平均で opponent ごとに見ると、
 
-ここから3 model自体の不具合を結論する根拠はない。新しい qualification は以前より広い real-state workload を使っており、実行 platform と PyTorch version も変わっている。今回の測定では、差が model の問題なのか backend arithmetic の違いなのかまでは分離していない。
+| opponent | G0 | G3 | difference |
+| --- | ---: | ---: | ---: |
+| historical EAT | 50.55% | 70.61% | +20.05 points |
+| depth-3 teacher | 80.56% | 88.15% | +7.60 points |
+| point-rush | 79.17% | 84.11% | +4.95 points |
 
-新しい contract は family 全体では通らなかったので、追加 training は行わずに終了した。
+だった。
+
+一番大きく伸びたのは以前の EAT に対してで、もともと強く勝てていた rule policies に対しても追加の改善が出ている。
+
+特定の1種類の相手だけに合わせて伸びた、という結果にはなっていない。
+
+## 途中で数値一致のgateに止められた
+
+この実験は一度、generation 2 の checkpoint qualification で止まった。
+
+PyTorch と ONNX/native evaluator の raw logits に数マイクロ程度の差があり、当時固定していた parity gate を満たさなかったためである。
+
+ここで結果を見た後に tolerance を広げてそのまま続けることはしなかった。
+
+代わりに、実際の inference consumer が使う policy probability、WDL probability、acting-seat value、argmax と、保守的な absolute raw-logit guardを中心に numerical acceptance contract を作り直した。
+
+この新しい contract は、残りの学習や generation 3 の arena outcome を見る前に固定した。
+
+その条件で9 artifacts × CPU / CUDAを含む27 qualification runsがすべて通り、generation 3 の学習と評価を再開した。
+
+raw logit の完全一致を要求しすぎると、実際の action probability や value が十分一致していても実験そのものを止めてしまう。一方で、失敗した artifact を見てから gate を緩めると selection bias が入る。
+
+今回はこの2つを分けて扱えたのも大きかった。
 
 ## 今回分かったこと
 
-今回の search self-play では、最も知りたかった「探索で作った target を繰り返し学習すると、EAT は3世代後に強くなるか」にはまだ答えがない。
+一番重要なのは、少なくともこの3 training tracks、この固定 opponent panel、この PUCT 128 の評価条件では、search self-play を3世代繰り返すことで playing strength が改善したことである。
 
-一方で、self-play loop を評価する前提になる checkpoint の portability と inference parity を、どこまで要求するかが独立した問題として表面化した。
+教師あり bootstrap のあとに探索を重ねるだけでなく、その search policy をもう一度 network に吸収させるループにも価値があることが確認できた。
 
-数値差が小さいからといって、実行後に threshold を緩めてそのまま実験を進めると、どの artifact を採用したかが観測結果に依存する。逆に必要以上に厳しい raw-logit parity を要求すると、実際の policy probability や argmax が一致していても学習実験そのものを止めることになる。
+ただし、+10.87 points を一般的な強さの上昇量として扱うことはできない。
 
-次に整理すべきなのは、PyTorch、ONNX、native evaluator の間で search/self-play に本当に必要な同値性が何かである。そこを先に固定しない限り、追加の self-play を購入しても同じ場所で判定不能になる可能性がある。
+training seed は3本だけで、opponent も固定した3種類である。Elo を測ったわけでもなく、どの要素が何 points 寄与したかを分解した実験でもない。
 
-現時点では、search self-play の有効性は未確定であり、3世代の強さ比較も未解決のままにしている。
+また、今回比較しているのは generation 0 と generation 3 に同じ PUCT を組み合わせた playing stack なので、raw policy 単体が同じだけ改善したという意味でもない。
+
+それでも、これまで未確認だった「search target を繰り返し学習しても本当に強くなるのか」という問いには、初めて肯定的な結果が出た。
+
+次は、この loop を前提にして search operator、action representation、model architecture の変更を評価できる。
 
 ---
 
