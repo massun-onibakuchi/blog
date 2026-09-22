@@ -34,7 +34,7 @@ EAT の entity には、性質の違う情報が同じ row に入っている。
 
 baseline では、これらをまとめて1つの MLP に入れて128次元の entity representation を作る。
 
-これでも Transformer は学習できるが、type や location のような categorical metadata と、cost や prestige のような数値を最初から同じ経路で処理している。
+これでも Transformer は学習できるが、type や location のような categorical metadata と、cost や prestige のような数値を最初から同じ MLP で処理している。
 
 そこで、意味の違う成分を少し分離してから足し合わせた方が、entity の構造を学びやすいのではないかと考えた。
 
