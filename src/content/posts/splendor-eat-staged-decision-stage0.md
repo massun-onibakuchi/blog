@@ -3,7 +3,7 @@ title: "Splendor AIの手を段階化してみたら、補充後の追加判断�
 date: "2026-09-22"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "reinforcement-learning"]
+tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
 Splendor をプレイする EAT（Entity-Action Transformer）では、これまで1手をかなり大きな単位で選んでいた。
