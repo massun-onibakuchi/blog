@@ -97,7 +97,7 @@ Treatment train → test divergence: 0.0194
 
 しかし test set の policy KL は Treatment − Control で `-0.04271` だった。少なくとも policy imitation は悪化せず、point estimate ではむしろ Treatment の方が良かった。
 
-したがって今回は、value を改善するために policy を犠牲にした、という結果ではなかった。
+したがって今回は、value の改善と引き換えに policy imitation が悪化する trade-off は観測されなかった。
 
 ## 最後はモデル同士を対局させた
 

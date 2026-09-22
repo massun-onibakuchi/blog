@@ -119,7 +119,7 @@ value targetの方が怪しい
 
 だった。
 
-今回、policy 側にも root noise と有限budgetという問題が実測された。
+今回、policy 側にも root noise と有限budgetによる問題が確認された。
 
 次はまず root noise の強さを変える ablation を arena 付きで行う。その後、同じ総計算量で「1局面を深く探索する」のと「局面数を増やす」のどちらが学習性能を改善するかを比較する。
 

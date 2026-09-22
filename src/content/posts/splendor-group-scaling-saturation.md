@@ -40,13 +40,13 @@ checkpoint は validation data に対する既存の joint loss が最小のも�
 
 ## 学習曲線とcheckpoint選択
 
-まず training loss の推移を見ると、24モデルの学習がどのように進んだかを確認できる。ただし、これは学習に使ったデータ上の最適化を確認するための診断であり、G29の汎化性能が高いことを示す結果ではない。
+まず training loss の推移を見ると、24モデルの学習がどのように進んだかを確認できる。ただし、これは学習データ上の最適化を追うための診断であり、G29の汎化性能は評価していない。
 
 ![G14とG29のtraining lossの推移。学習過程を確認するための診断で、held-out testの結果ではない。](/images/posts/splendor-group-scaling-saturation/training-losses.png)
 
 各モデルは1,000 stepごとに8個のcheckpointを作り、同じ validation data で評価した。通常採用する joint-loss checkpoint はかなり終盤に集中し、G14では7,000 stepが5個、8,000 stepが7個、G29では7,000 stepが2個、8,000 stepが10個選ばれた。
 
-次の図は、そのcheckpointごとの validation 指標を見るためのものだ。今回の8,000 stepという学習予算の端に選択が集中していることは、より長く学習した場合に結果が変わる余地を考える材料になる。一方で、この図だけからG29の方が強いとは判断できない。
+次の図は、そのcheckpointごとの validation 指標を見るためのものだ。今回の8,000 stepという学習予算の端に選択が集中していることは、より長く学習した場合に結果が変わる余地を考える材料になる。この図が示すのは validation 指標までで、対局の強さは比較していない。
 
 ![1,000 stepごとのcheckpointをvalidation dataで評価した指標。最終checkpointの選択過程を見るための図。](/images/posts/splendor-group-scaling-saturation/validation-per-checkpoint.png)
 

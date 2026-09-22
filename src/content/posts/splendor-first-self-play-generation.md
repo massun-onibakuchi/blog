@@ -119,7 +119,7 @@ challenger は incumbent の checkpoint から warm start し、混ぜたデー�
 
 ループ本体には2時間39分ほどかかった。
 
-興味深かったのは、L4でCUDAを使える状態だったにもかかわらず、自己対局の実測 throughput が約873 games/hourだったことだ。
+興味深かったのは、L4でCUDAを使える状態だったにもかかわらず、自己対局で計測した throughput が約873 games/hourだったことだ。
 
 Apple M2で行った小さい calibration の約2,618 games/hourより遅い。
 

@@ -107,9 +107,9 @@ index は file ではなく view として毎回生成する。
 
 この形なら report を直せば catalog も自動的に変わる。
 
-## relevanceとscopeが特に効いた
+## relevanceとscopeが判断を支えた
 
-単に question と conclusion だけを一覧するだけでも便利だが、実際に効いたのは relevance と scope だった。
+単に question と conclusion だけを一覧するだけでも便利だが、実際の判断材料になったのは relevance と scope だった。
 
 実験結果は、その後の研究で意味が変わる。
 
