@@ -128,9 +128,9 @@ secondary test では G3-2901 に対して +10.3 points、95% interval [+3.8, +1
 
 ## 512 simulationsでは差を確認できなかった
 
-同じ finalist を512 simulationsでも試した。
+同じ finalist setting と default setting を512 simulationsにして、G3-1701 の512-simulation referenceを相手に比較した。
 
-G3-1701 の control PUCT-512 に対する差は +0.5 points、95% interval [-9.4, +10.4] pointsだった。
+両 setting の差は +0.5 points、95% interval [-9.4, +10.4] pointsだった。
 
 この test は384 gamesだけの secondary diagnostic で、interval も広い。
 
