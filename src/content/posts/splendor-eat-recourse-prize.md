@@ -38,9 +38,9 @@ Splendor をプレイする EAT（Entity-Action Transformer）では、1ター�
 - C+P: refill を見る前に、最善の cleanup を選ぶ
 - C+R: refill を見たあとで、最善の cleanup を選ぶ
 
-$\mathrm{C+R}-\mathrm{C+P}$ が純粋な「新しい情報を見る価値」になる。
+$\mathrm{C{+}R}-\mathrm{C{+}P}$ が純粋な「新しい情報を見る価値」になる。
 
-$\mathrm{C+P}-C$ は、refill がなくても cleanup の選び方を改善するだけで得られる価値である。
+$\mathrm{C{+}P}-\mathrm{C}$ は、refill がなくても cleanup の選び方を改善するだけで得られる価値である。
 
 この2つを分けるのが今回のポイントだった。
 
@@ -55,13 +55,7 @@ recourse event が起きた局面について、
 
 cleanup を $b$、refill card を $z$ とすると、情報価値は次になる。
 
-$$
-\mathrm{VOI}
-=
-\mathbb{E}_{z}\left[\max_b Q(z,b)\right]
--
-\max_b \mathbb{E}_{z}\left[Q(z,b)\right]
-$$
+$\operatorname{VOI}=\mathbb{E}_{z}\!\left[\max_b Q(z,b)\right]-\max_b\mathbb{E}_{z}\!\left[Q(z,b)\right]$
 
 左側は refill を見てから cleanup を選ぶ場合。
 
@@ -144,9 +138,7 @@ PUCT-512 − PUCT-128 の VOI 差は +0.00021、区間は [-0.00032, +0.00075] �
 
 実測 occupancy を $\lambda$、1 event あたりの情報価値を $\mu$ とすると、game-level prize は
 
-$$
-\mathrm{prize}=\lambda\mu
-$$
+$\operatorname{prize}=\lambda\mu$
 
 と書ける。実測の $\lambda \approx 0.2$ と $\mu \approx 0.00329$ を掛けると、全体の prize は約0.0007 score / game、つまり約0.07 percentage point / game になる。
 
@@ -158,7 +150,7 @@ $$
 
 ## むしろcleanupそのものを上手く選ぶ価値の方が大きかった
 
-もう1つ面白かったのが $\mathrm{C+P}-C$ だった。
+もう1つ面白かったのが $\mathrm{C{+}P}-\mathrm{C}$ だった。
 
 refill を見なくても、generator が選んだ cleanup より良い cleanup を選ぶだけで得られる correction は平均 0.0178 score / event だった。
 
