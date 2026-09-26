@@ -38,9 +38,9 @@ Splendor をプレイする EAT（Entity-Action Transformer）では、1ター�
 - C+P: refill を見る前に、最善の cleanup を選ぶ
 - C+R: refill を見たあとで、最善の cleanup を選ぶ
 
-C+R − C+P が純粋な「新しい情報を見る価値」になる。
+$\mathrm{C+R}-\mathrm{C+P}$ が純粋な「新しい情報を見る価値」になる。
 
-C+P − C は、refill がなくても cleanup の選び方を改善するだけで得られる価値である。
+$\mathrm{C+P}-C$ は、refill がなくても cleanup の選び方を改善するだけで得られる価値である。
 
 この2つを分けるのが今回のポイントだった。
 
@@ -53,11 +53,15 @@ recourse event が起きた局面について、
 
 の組み合わせを全部作り、その successor state を評価した。
 
-cleanup を b、refill card を z とすると、情報価値は概念的には次になる。
+cleanup を $b$、refill card を $z$ とすると、情報価値は次になる。
 
-```text
-VOI = E_z [max_b Q(z, b)] - max_b E_z [Q(z, b)]
-```
+$
+\mathrm{VOI}
+=
+\mathbb{E}_{z}\left[\max_b Q(z,b)\right]
+-
+\max_b \mathbb{E}_{z}\left[Q(z,b)\right]
+$
 
 左側は refill を見てから cleanup を選ぶ場合。
 
@@ -138,27 +142,23 @@ PUCT-512 − PUCT-128 の VOI 差は +0.00021、区間は [-0.00032, +0.00075] �
 
 1 event あたりの値は threshold を超えたが、event 自体は rare である。
 
-実測 occupancy の約0.2 events / game を掛けると、全体の prize は約0.0007 score / game、つまり約0.07 percentage point / game になる。
+実測 occupancy を $\lambda$、1 event あたりの情報価値を $\mu$ とすると、game-level prize は
+
+$
+\mathrm{prize}=\lambda\mu
+$
+
+と書ける。実測の $\lambda \approx 0.2$ と $\mu \approx 0.00329$ を掛けると、全体の prize は約0.0007 score / game、つまり約0.07 percentage point / game になる。
 
 実験の frozen rule では stress case として 2 events / game も見ており、その場合は約0.66 percentage point / game になる。
 
 ここはかなり重要で、
 
-```text
-per-event value が material
-```
-
-と
-
-```text
-finished player が大きく強くなる
-```
-
-は同じではない。
+「per-event value が material」であることと、「finished player が大きく強くなる」ことは同じではない。
 
 ## むしろcleanupそのものを上手く選ぶ価値の方が大きかった
 
-もう1つ面白かったのが C+P − C だった。
+もう1つ面白かったのが $\mathrm{C+P}-C$ だった。
 
 refill を見なくても、generator が選んだ cleanup より良い cleanup を選ぶだけで得られる correction は平均 0.0178 score / event だった。
 
@@ -166,17 +166,7 @@ refill を見なくても、generator が選んだ cleanup より良い cleanup 
 
 つまり今回の局面では、
 
-```text
-refill を見られること
-```
-
-よりも、
-
-```text
-cleanup choice 自体をもっと正確に選ぶこと
-```
-
-の方が大きな改善余地だった。
+「refill を見られること」よりも、「cleanup choice 自体をもっと正確に選ぶこと」の方が大きな改善余地だった。
 
 staged representation を採用するかどうかとは別に、RETURN の policy quality を上げる価値があることが分かった。
 
