@@ -55,7 +55,7 @@ recourse event が起きた局面について、
 
 cleanup を $b$、refill card を $z$ とすると、情報価値は次になる。
 
-$\operatorname{VOI}=\mathbb{E}_{z}\!\left[\max_b Q(z,b)\right]-\max_b\mathbb{E}_{z}\!\left[Q(z,b)\right]$
+$$\operatorname{VOI}=\mathbb{E}_{z}\!\left[\max_b Q(z,b)\right]-\max_b\mathbb{E}_{z}\!\left[Q(z,b)\right]$$
 
 左側は refill を見てから cleanup を選ぶ場合。
 
@@ -138,7 +138,7 @@ PUCT-512 − PUCT-128 の VOI 差は +0.00021、区間は [-0.00032, +0.00075] �
 
 実測 occupancy を $\lambda$、1 event あたりの情報価値を $\mu$ とすると、game-level prize は
 
-$\operatorname{prize}=\lambda\mu$
+$$\operatorname{prize}=\lambda\mu$$
 
 と書ける。実測の $\lambda \approx 0.2$ と $\mu \approx 0.00329$ を掛けると、全体の prize は約0.0007 score / game、つまり約0.07 percentage point / game になる。
 
