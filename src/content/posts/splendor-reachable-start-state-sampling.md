@@ -59,13 +59,13 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 通常の初期配置、または既存の supplied state からゲームを開始し、native engine が生成した合法手だけを使って rollout する。
 
-seat の behavior には、
+seat の behavior には、ニューラルネットワークを使わない手作りの rule-based policy を使う。
 
-- uniform random
-- engine-builder teacher
-- point rush
+- uniform random: 合法手から一様ランダムに選ぶ
+- engine-builder teacher: token と development card を積み上げて engine を作る既存の heuristic agent
+- point rush: engine の完成度よりも、短い手数で prestige を伸ばして15点到達を急ぐ heuristic agent
 
-を使える。
+つまり、ここでいう teacher や point rush は学習済みモデルの名前ではなく、ルールと手作りの評価関数で行動を選ぶ baseline agent である。
 
 さらに trajectory ごとに一定確率で uniform choice を混ぜられる。
 
@@ -164,7 +164,7 @@ G3 self-play は0.42なので、sampled distribution は明らかに reserve-hea
 
 この sampler の直後に、もう1つ model-free policy として reserve anchor を追加した。
 
-reserve anchor は、reserve したカードを anchor として保持し、そのカードを買える状態へ近づく action を優先する rule policy である。
+reserve anchor は、ニューラルネットワークを使わない rule-based agent である。reserve したカードを anchor として保持し、そのカードを買える状態へ近づく action を優先する。
 
 既存の teacher や point rush と違う trajectory を安価に作るために追加した。
 
