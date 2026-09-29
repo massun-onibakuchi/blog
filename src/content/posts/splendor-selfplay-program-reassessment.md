@@ -134,7 +134,7 @@ PUCT の `c_puct` / `fpu_reduction` についても、128 simulations の operat
 
 同じ budget の周辺 grid をさらに細かく掘る優先度は下げる。
 
-## action stagingもstrength研究としては一度止める
+## action stagingはstrength研究の主軸から外す
 
 もう一つ長く調べていたのが staged action だった。
 
@@ -162,7 +162,7 @@ blind reserve では非公開 card を引いた本人だけが identity を知�
 
 しかし、現時点の no-blind playing strength を伸ばす投資としては、measured prize が小さい。
 
-そのため staged / coarse-primary / recourse は「今すぐ strength を伸ばす研究」から外し、blind-play capability のための技術として残すことにした。
+そのため staged / coarse-primary / recourse は継続するが、現時点では no-blind の finished-player strength を伸ばす研究の主軸には置かない。post-refill information を使える action contract や blind-play capability を作る研究として進めつつ、strength 改善の主要な計算資源は self-play loop、target construction、data / update allocation へ振る。
 
 ## model capacityよりtraining targetの方が未検証だった
 
@@ -276,7 +276,7 @@ recipe が固まってから、同じ compute を game breadth と search depth 
 
 `sml-puct-v5` のような追加の endgame exactness、enabling-move / noble-order heuristic、128 simulations 周辺の追加 PUCT grid は止める。
 
-staged / coarse-primary / recourse は no-blind strength 改善としては優先しない。
+staged / coarse-primary / recourse は継続するが、no-blind strength 改善の主経路としては優先度を下げる。
 
 CPU throughput の micro-optimization も、現在の bottleneck ではない。
 
