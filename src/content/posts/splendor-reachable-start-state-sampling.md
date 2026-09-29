@@ -200,13 +200,11 @@ leader prestige 5–9 かつ candidates ≥ 100 の state は point rush の115�
 
 という経路ができた。
 
-これは単体で playing strength が上がったという結果ではない。
-
-ただ、現在の policy distribution の外側にある局面を、再現可能な artifact として意図的に作れるようになった。
+現在の policy distribution の外側にある局面を、再現可能な artifact として意図的に作れるようになった。
 
 今後、終盤の value calibration、rare action の学習、Go-Exploit 型 restart、特定の弱点を狙った評価を行うときに、self-play の自然発生を待たなくてよくなる。
 
-学習ループそのものを強くする前に、「どの局面を学習・評価できるか」の自由度を増やした進捗だと考えている。
+「どの局面を学習・評価できるか」の自由度を増やす基盤ができた。
 
 ---
 
