@@ -1,6 +1,6 @@
 ---
 title: "Splendor AIの25本の実験を横断して、研究計画を組み直した"
-date: "2026-09-29"
+date: "2026-09-29T09:58:19Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
