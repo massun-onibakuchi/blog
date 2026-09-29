@@ -26,7 +26,6 @@ restating it here.
 - **Small surfaces.** Modules are private by default behind an explicit export list and organized
   around one business capability. No test-only helpers on a public API. Keep components modular,
   concerns clearly separated, and modules single-purpose; ~800 LOC is a guideline, not a hard cap.
-- **Relevance-first writing.** Include only context, caveats, and comparisons that serve the article's actual purpose; do not introduce unrelated evaluation axes merely to disclaim conclusions the article is not trying to make.
 - Static site.
 
 ## Working agreement
