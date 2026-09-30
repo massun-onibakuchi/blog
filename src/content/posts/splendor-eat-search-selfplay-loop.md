@@ -94,7 +94,7 @@ generation 3 側だけで4,992 games、対応する generation 0 control も4,99
 
 だった。
 
-一番大きく伸びたのは以前の EAT に対してで、もともと強く勝てていた rule policies に対しても追加の改善が出ている。
+3種類すべてで改善したが、幅は historical EAT に対する +20.05 points が最大だった。
 
 特定の1種類の相手だけに合わせて伸びた、という結果にはなっていない。
 
@@ -114,11 +114,11 @@ PyTorch と ONNX/native evaluator の raw logits に数マイクロ程度の差�
 
 raw logit の完全一致を要求しすぎると、実際の action probability や value が十分一致していても実験そのものを止めてしまう。一方で、失敗した artifact を見てから gate を緩めると selection bias が入る。
 
-今回はこの2つを分けて扱えたのも大きかった。
+acceptance contract は arena outcome を見る前に固定し、parity failure と post-hoc selection を分離した。
 
-## 今回分かったこと
+## 3世代後のplaying strengthが改善した
 
-一番重要なのは、少なくともこの3 training tracks、この固定 opponent panel、この PUCT 128 の評価条件では、search self-play を3世代繰り返すことで playing strength が改善したことである。
+3 training tracks × fixed opponent panel × PUCT 128 の条件では、G3 は G0 より平均 +10.87 points 改善した。
 
 教師あり bootstrap のあとに探索を重ねるだけでなく、その search policy をもう一度 network に吸収させるループにも価値があることが確認できた。
 
@@ -128,7 +128,7 @@ training seed は3本だけで、opponent も固定した3種類である。Elo 
 
 また、今回比較しているのは generation 0 と generation 3 に同じ PUCT を組み合わせた playing stack なので、raw policy 単体が同じだけ改善したという意味でもない。
 
-それでも、これまで未確認だった「search target を繰り返し学習しても本当に強くなるのか」という問いには、初めて肯定的な結果が出た。
+この実験では、search target を3世代反復学習した後の playing strength 改善を確認した。
 
 次は、この loop を前提にして search operator、action representation、model architecture の変更を評価できる。
 

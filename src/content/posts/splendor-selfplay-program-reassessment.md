@@ -30,7 +30,7 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 ## self-play loop自体は機能している
 
-まず確認できたのは、現在の self-play loop が何も学べていないわけではないことだった。
+現在の self-play loop では playing strength の改善を確認できている。
 
 教師あり学習直後の G0 から、PUCT self-play と再学習を3世代進めた G3 までを同じ fixed opponent panel で比較すると、平均 score は +10.87 percentage points 改善している。
 
@@ -48,9 +48,7 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 この変更だけでも、次世代 network は primary composite で +3.26 points、fixed-network 95% interval [+2.06, +4.45]、collection replicate level [+1.40, +5.12] だった。
 
-つまり、search self-play から次世代 policy-value model へ強さが transfer する経路は実際に動いている。
-
-ここは重要だった。
+G0→G3 と G3→G4 の結果から、search self-play で生成した target は次世代 policy-value model の playing strength に transfer している。
 
 「もっと良い model architecture を作らないと先へ進まない」という状態ではない。
 
@@ -72,9 +70,9 @@ G1 の gain、G3 の endpoint、G4 の learner-transfer をそのまま一本の
 
 そこで今後は、G5、G6、G7……と lineage を継続し、数世代にわたる傾向を見ること自体を主要な実験にする。
 
-## いちばん弱いのは強さの測定だった
+## 強さの測定精度が不足していた
 
-25本を横断したとき、最も大きな問題は evaluation だった。
+25本を横断すると、evaluation の感度不足が共通していた。
 
 現在よく使っている外部 opponent は、depth-3 teacher、point rush、reserve anchor などである。
 
@@ -98,13 +96,9 @@ G3 parents や historical checkpoint に対する改善は、同じ model family
 
 さらに、現在の score と BGA の leaderboard percentile を接続する anchor はまだない。
 
-つまり今は、
+現状は、内部比較では改善を測れても、その改善が最終目標にどの程度近づいたかを評価できていない。
 
-「内部では改善を測れるが、その改善が最終目標にどの程度近づいたか分からない」
-
-という状態になっている。
-
-そのため次の最優先は、model を変えることではなく、同じ条件で歴代 checkpoint を比較し続けられる frozen strength ladder を作ることにした。
+次に、同じ条件で歴代 checkpoint を比較し続けられる frozen strength ladder を作る。
 
 G0、G3、固定した G4 models、rule-based agents、さらに current network を大きめの search budget で動かした challenger を並べ、今後の generation を常に同じ ladder へ当てる。
 
@@ -188,7 +182,7 @@ policy target には、root noise の影響を補正した visit counts を使�
 
 これは古い network 上の fixed-state diagnostic なので、そのまま「raw visits の方が強い」とは言えない。
 
-重要なのは、今使っている corrected visits と raw visits を、同じ corpus から model を再学習して downstream strength まで比較した実験がまだないことだ。
+corrected visits と raw visits については、同じ corpus から model を再学習し、downstream strength まで比較した実験がまだない。
 
 value target も同じで、現在の generation recipe は terminal win/draw/loss だけを使っている。
 
@@ -218,7 +212,7 @@ value:
 
 しかも warm-start なので、同じ新規 row は平均すると複数回 presentation される。
 
-次に見るべきは、model width を増やすことではなく、
+model width は固定したまま、次は以下を順に比較する。
 
 - 同じ data に対して updates を増やす
 - updates が足りているなら fresh rows を32,768から65,536へ増やす

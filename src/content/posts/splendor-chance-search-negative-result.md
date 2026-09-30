@@ -43,11 +43,11 @@ Splendor は宝石を集めてカードを買い、買ったカードを次の�
 
 ただし、同じ512回を使って普通の IID sampling をした場合も96.09%だった。しかも普通の IID の方が平均探索深度は17.73 ply、重複なし sampling は16.09 plyと深く読めていた。
 
-つまり、このテストで改善要因になっていたのは補充 sampling の工夫ではなく、単純に探索回数を増やしたことだった。
+このテストの改善は sampling method ではなく simulation count の増加で説明できた。
 
 実際の対局でも、新しい探索は固定128回の探索に対して89勝2分109敗だった。pair score は0.450で、強くなったとは言えなかった。
 
-## 重要そうなカード購入だけ丁寧に読む
+## policy上位のカード購入だけ補充枝を広げる
 
 次に、全部の chance branch を広げるのではなく、policy が高く評価しているカード購入・予約だけを丁寧に読む方法を試した。
 
@@ -81,7 +81,7 @@ pair score = 0.4425
 
 ## なぜ推定精度が上がっても弱くなったのか
 
-今回の結果で面白いのは、chance value の推定を改善することと、探索全体を強くすることが同じではなかった点である。
+chance value の推定精度改善は playing strength の改善につながらなかった。
 
 PUCT の simulation 数は有限なので、ある補充枝を広く均等に読むほど、その分だけ他の候補手との比較や、同じ有望手をさらに深く読む回数が減る。
 
@@ -113,7 +113,7 @@ chance value の variance は下がる
 
 将来、1 simulation の中で複数 leaf をまとめて batch 評価できるようになれば、複数の補充結果を同時に読むコストは変わる。その時には exact expectation や部分的な chance evaluation を再検討する余地がある。
 
-今の実装では、推定器を賢くするより、限られた simulation をどこへ配るかの方が重要だった。
+今回の budget では、sampling estimator の精度より simulation allocation が playing strength に強く効いた。
 
 ---
 

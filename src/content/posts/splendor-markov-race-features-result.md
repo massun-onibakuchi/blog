@@ -74,7 +74,7 @@ adoption threshold: mean <= -0.0027
 
 policy の模倣精度が悪化していないかも確認した。policy KL の one-sided 95% upper bound は 0.003634 で、許容上限の 0.01 を下回った。
 
-つまり今回の変更では、value を改善する代わりに policy を壊したという結果にはならなかった。
+policy KL も悪化せず、value 改善との trade-off は観測されなかった。
 
 ## 終盤ほど改善が大きかった
 
@@ -91,7 +91,7 @@ remaining decisions 33+:   -0.0065
 
 手番側が先手かどうかは、15点へ到達したあとに相手へもう一度手番が回るかという終局条件に直接関係する。ゲーム終了が近い局面ほど、その情報が value prediction に与える影響も大きくなりやすい。
 
-もちろん horizon 別の結果は探索的な分析であり、この差だけを独立した発見として確定したわけではない。それでも、改善した場所が想定していた場所と一致しているのは興味深い結果だった。
+horizon 別の結果は探索的な分析だが、改善幅は想定していた終盤で最大だった。
 
 ## 実際の対局でも強くなった
 
@@ -128,15 +128,15 @@ replicate ごとの pair score は次の通りだった。
 
 それでも全体では、未知の局面での value 改善だけでなく、探索を通した playing strength まで改善した。
 
-## 今回分かったこと
+## 欠けていたstate情報の追加はvalueと対局性能を改善した
 
 今回の実験では、モデルを大きくしたわけでも、教師データを増やしたわけでも、探索回数を増やしたわけでもない。
 
 足りていなかったゲーム状態を value へ渡した。
 
-以前の group-scaling 実験では、教師データの group 数を 14,700 から 29,400 へ倍増しても、offline value は少し改善した一方で playing strength は伸びなかった。今回はデータ量ではなく、状態表現の欠落を直したことで前進した。
+以前の group-scaling 実験では、教師データの group 数を 14,700 から 29,400 へ倍増しても、offline value は少し改善した一方で playing strength は伸びなかった。今回は training data 量を増やさず、欠けていた状態情報を追加した treatment が playing strength も改善した。
 
-value model では、ネットワークの容量や学習量だけでなく、「同じ入力として扱っている2つの局面が、本当に同じ価値を持つのか」を確認することが重要だと分かった。
+value model では、同じ input representation に集約される states が本当に同じ value を持つかを確認する必要がある。
 
 今回の条件では、global feature 9個の新しい feature contract と model を採用する。
 

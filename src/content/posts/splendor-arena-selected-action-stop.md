@@ -77,7 +77,7 @@ worker の負荷分散も調べたが、200 pairs の8 partitionsは254.5〜261.
 
 合法手が1つだけなら neural network を呼ばない shortcut も調べたが、G3 self-play の89,378 decisionsで該当したのは3回だけだった。
 
-## 大きかったのは不要な推論をしないことだった
+## early stopで不要なnetwork evaluationを削減した
 
 arena の profile では worker time の96%が EAT の ONNX inference に入っていた。tree search や candidate generation 自体は約4%しかない。
 

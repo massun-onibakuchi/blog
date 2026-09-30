@@ -56,7 +56,7 @@ network の weight、feature、action representation はすべて固定した。
 
 search も clean PUCT に固定し、128 simulations、root noiseなし、temperature 0、tree reuseなしにした。
 
-つまり違うのは `c_puct` と `fpu_reduction` だけである。
+比較間で変えたのは `c_puct` と `fpu_reduction` だけである。
 
 ## まず9 settingsから1つ選んだ
 
@@ -138,9 +138,9 @@ secondary test では G3-2901 に対して +10.3 points、95% interval [+3.8, +1
 
 search parameter の良し悪しは simulation budget に依存する可能性がある。
 
-## 何が分かったか
+## PUCT defaultには128-simulation条件で改善余地があった
 
-今回分かったのは、現在の G3 EAT に対して、128 simulations の clean PUCT は inherited default のまま使うより改善できる余地がかなりあったことである。
+G3 EAT + clean PUCT 128 では、selected setting が inherited default を confirmation で +8.55 points 上回った。
 
 しかも model を再学習せず、search の2つの parameter を変えただけで +8.55 points の差が出た。
 
@@ -150,7 +150,7 @@ search parameter の良し悪しは simulation budget に依存する可能性�
 
 今回はこの setting を production default に変更していない。self-play actor の設定も変えていない。
 
-次に重要なのは、良かった search parameter を評価時に使うだけでなく、その search から作った target を学習した次世代 model も強くなるかである。
+次は、その setting を self-play target の生成に使い、次世代 model の playing strength まで比較する。
 
 そのため、`c_puct=0.75, fpu_reduction=0.0` を treatment にした G4 learner-transfer A/B を別に行う予定である。
 

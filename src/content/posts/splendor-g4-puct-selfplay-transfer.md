@@ -135,17 +135,17 @@ primary endpoint は fixed-network level と replicate level の両方で interv
 
 ## 改善はleague側から来ていた
 
-一方で、結果を「全部の相手に強くなった」と解釈すると間違う。
+改善は league half に集中した。
 
 league half は +5.30 pointsで、fixed-network interval も replicate-level interval も0より上だった。
 
 しかし rule half は +1.22 pointsで、fixed-network 95% interval が [-0.17, +2.60]、replicate level が [-1.57, +4.00] だった。
 
-つまり point rush と reserve anchor に対して良くなったとは確認できていない。
+point rush / reserve anchor に対する改善は確認できなかった。
 
 今回の事前ルールでは、primary が改善し、league / rule のどちらかが -2 points より悪化している証拠がなければ採用できる設計だった。
 
-rule half はその安全 margin 内には入っていたが、改善を示したわけではない。
+rule half は safety margin 内だったが、95% interval は0を含んだ。
 
 今回の +3.26 points は league-driven な改善として扱う必要がある。
 
@@ -171,17 +171,15 @@ treatment がこの問題を解消したとは言えない。
 
 rule opponent が作る threat state では、小さい engine のまま reserve した勝ち札を抱える形が多く、self-play で出る threat state とは分布がかなり違っている。
 
-そのため、今回の A/B で探索パラメータを変えただけでは、この value error が直らなかったという解釈が一番整合的だった。
+この結果は、rule-opponent threat states の distribution coverage が残っていることと整合する。
 
 self-play setting の改善と、training distribution coverage の問題は分けて扱う必要がある。
 
-## treatmentのpolicy targetはむしろ広くなった
+## treatmentのpolicy targetは広くなった
 
 training record も確認した。
 
 treatment の visit target entropy は0.805 nats、control は0.723 natsだった。
-
-つまり `c_puct=0.75, fpu_reduction=0.0` の方が、今回の self-play では target distribution が少し広かった。
 
 policy cross-entropy は treatment 1.195、control 1.023だった。
 
@@ -191,7 +189,7 @@ target が広くなれば、完全に同じ fitting qualityでも cross-entropy 
 
 そのため、この差だけを見て treatment の policy fitting が悪化したとは判断できない。
 
-今回重要なのは、offline loss の大小ではなく、その target で学習した network が実際の arena でどうなったかだった。
+offline CE だけでは fitting の良否を比較できないため、採否は arena result で判定した。
 
 ## G5以降のself-play設定を変更した
 
@@ -205,11 +203,11 @@ target が広くなれば、完全に同じ fitting qualityでも cross-entropy 
 
 continuation network は各 track の treatment replicate 0 を使う。
 
-これは結果を見て9 siblingの中から一番強いものを選んだわけではない。
+continuation に replicate 0 を使うことは実験前に指定しており、post-hoc selection はしていない。
 
 replicate 0 は実験前から通常 loop の continuation として指定していたものなので、そのまま lineage を進める。
 
-## 今回分かったこと
+## search設定の改善は1世代後のnetworkへ移った
 
 前回は、「同じ G3 network でも PUCT parameter を変えると探索強度がかなり変わる」と分かった。
 

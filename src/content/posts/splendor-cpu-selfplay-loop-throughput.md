@@ -30,7 +30,7 @@ Splendor をプレイする policy-value model として EAT（Entity-Action Tra
 
 候補生成やゲーム状態の更新、探索木そのものの処理は2%未満だった。
 
-つまり、探索コードを細かく最適化するより、
+profiler 上では、探索コードより次の evaluator workload を減らす余地が大きかった。
 
 - ONNX Runtime に何行渡すか
 - どれだけ padding を計算させるか
@@ -83,7 +83,7 @@ SMT sibling 同士が同じ core の演算資源を取り合い、worker を倍�
 
 した。
 
-探索アルゴリズムそのものを変えず、同じ関数を同じ入力に対して再計算する部分だけを削った形になる。
+evaluation memo は search node の visit count や Q を共有せず、network forward の結果だけを再利用する。
 
 ## paddingの少ないbatchに分け直した
 
@@ -112,7 +112,7 @@ calls × call_cost + padded_cells
 
 まで減った。
 
-大きな batch を作ること自体より、不要な padding を計算させないことの方が重要だった。
+この workload では、batch を大きくすることより padding ratio の削減が throughput に効いた。
 
 ## GELUを1 nodeで出力する
 
@@ -156,7 +156,7 @@ training は実際の loop が使う full training path ではなく、別の up
 
 follow-up では、前の最適化を baseline とし、その上で ONNX と training の無駄をさらに削った。
 
-特に大きかったのは、ONNX graph 内でも存在する entity と合法候補だけを packed representation で処理する変更だった。
+follow-up では、ONNX graph 内の未使用 entity / candidate row を packed representation から除外した。
 
 G3 の self-play では、dense tensor に用意している entity slot のうち約29%、state row の約21%が実際には存在しない row だった。
 
@@ -213,7 +213,7 @@ baseline の real loop を分解すると、
 
 self-play と training をかなり速くしても、arena が大きいため loop 全体の改善率はそこで制限される。
 
-この結果から、個別 kernel の高速化だけでなく、どの stage が end-to-end wall time を支配しているかを見る必要があると分かった。
+baseline では arena が generation wall time の約69%を占めたため、end-to-end の改善率は arena の短縮に強く制約される。
 
 ## 速かったが採用しなかった方法もある
 
@@ -247,9 +247,9 @@ tree、memo、ORT activation の working set が増え、CPU側では悪化し�
 
 そのため product default は32のままにした。
 
-## 何が分かったか
+## 計算するrow数を減らす変更が効いた
 
-今回の高速化で一番大きかった発見は、888k parameter程度の EAT を CPU で探索に使う場合、単純な「batchを大きくする」「threadを増やす」ではなく、実際に計算する row を減らすことが重要だった点である。
+888k parameter 程度の EAT を CPU search で使う今回の workload では、throughput 改善は batch / thread 数の増加より、実際に計算する row 数の削減から得られた。
 
 特に効いたのは、
 
@@ -261,7 +261,7 @@ tree、memo、ORT activation の working set が増え、CPU側では悪化し�
 
 という変更だった。
 
-一方で、25.2%という最初の stage-level 推定を end-to-end の結果として扱わず、実 product loop を再計測したことで16.6%へ修正できたのも重要だった。
+stage-level extrapolation は25.2%だったが、end-to-end loop の再計測では16.6%だった。
 
 高速化では microbenchmark が良くても、最終的に使う workflow 全体で同じ改善率になるとは限らない。
 

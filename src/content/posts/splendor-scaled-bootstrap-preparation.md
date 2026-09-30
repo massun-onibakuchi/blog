@@ -30,21 +30,7 @@ Splendor は、宝石トークンを集めてカードを買い、カードの�
 
 ゲーム数、学習行数、optimizer steps を全部2倍にする一方、1ゲームから取る局面数と、学習データを何周するかはほぼ同じに保つ。
 
-つまり今回は、
-
-```text
-同じデータを長く学習する
-```
-
-のではなく、
-
-```text
-独立したゲームを増やす
-+ retained rows も増やす
-+ それに合わせて optimizer budget も増やす
-```
-
-という joint scaling になる。
+同じデータへの追加学習ではなく、独立した game、retained rows、optimizer budget を同時に増やす joint scaling である。
 
 このため、結果が良くても、改善要因をデータ量だけ、あるいは step 数だけに帰属させることはできない。狙っているのは、現在のrecipeをそのまま1段大きくしたときに、実際により良いモデルを作れるかである。
 
@@ -66,7 +52,7 @@ scaled experiment 用には、独立した training source を24本、さらに�
 
 ただし現在の実験で実際に学習へ使うのは、そのうち `train-r00` という1本だけである。
 
-24モデルをもう一度比較して scale effect を推定するのではなく、1つの scaled model を作って deployment 判断をする実験に狭めたためだ。
+今回は `train-r00` だけで1つの scaled model を学習し、deployment 判定を行う。24モデルを使った scale effect の replicate 推定は行わない。
 
 ここまでで、次の大規模学習に必要な教師データと実験条件は揃った。学習結果と、現在のモデルを実際に上回れたかどうかは次の記事で書く。
 

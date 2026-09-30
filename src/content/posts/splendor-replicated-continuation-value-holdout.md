@@ -56,7 +56,7 @@ $D(s)>0$ なら、8回の continuation mean の方が現在のモデルより、
 
 結果は `mean(D) = -0.00808`、one-sided 95% lower bound は `-0.02052` で、事前に決めていた「0より大きい」という条件を満たさなかった。
 
-ただし、実験後の監査でさらに重要な問題が見つかった。
+実験後の監査で、state population overlap の問題も見つかった。
 
 512 states のうち459 statesが、現在のモデルを学習した train split に含まれていた。
 
@@ -142,7 +142,7 @@ replication は target variance を下げる。しかし cross-entropy の期待
 
 一方で、「1 episode の結果を多数の decision に複製している」という依存構造そのものは残っている。今回の結果は terminal WDL が常に最良だという意味ではなく、この actor、この state distribution、この replication 数では continuation mean を優先する根拠がなかった、という範囲に限定している。
 
-今回一番大きかったのは、value target を変更する前に simulator で state-conditional outcome を直接測れたことと、fresh seed の数ではなく state-level holdout が必要だと実験で確認できたことだった。
+simulator で state-conditional outcome を直接測った結果、fresh seed 数ではなく state-level holdout が必要だった。
 
 ---
 
