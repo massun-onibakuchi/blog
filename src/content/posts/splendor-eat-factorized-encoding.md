@@ -82,7 +82,7 @@ tier     = T2
 
 のように分解される。
 
-重要なのは、入力情報を増やしていないことである。
+3案とも入力情報は同じである。
 
 元の one-hot metadata を別の learned lookup として表現し直しただけで、同じ観測から同じ情報を使っている。
 
@@ -121,7 +121,7 @@ NOBLE  -> noble projection
 
 で、FT でも baseline より約0.2%大きいだけである。
 
-つまり「モデルを大きくした実験」というより、同じくらいの capacity で inductive bias を変える実験になる。
+parameter count をほぼ揃えたまま inductive bias を変える比較にした。
 
 ## 仮説
 
@@ -177,7 +177,7 @@ baseline 自体の seed 間の幅も約0.0275 natsあり、平均差より大き
 
 ## 教師への当てはまりと、良い手を選ぶことは同じではない
 
-この experiment で一番見たかったのはここだった。
+ここでは validation CE と playing strength が一致するかを確認した。
 
 validation CE が下がるということは、教師の policy distribution をよりよく再現しているということである。
 
@@ -241,7 +241,7 @@ raw policy の比較でも同様だった。
 
 offline では FT、F、B の順だったが、その順位は playing strength には移らなかった。
 
-## 何が分かったか
+## validation CEの改善は対局性能に移らなかった
 
 今回の結果から factorized encoding 全般が無意味だとは言えない。
 
@@ -257,7 +257,7 @@ entity type ごとに最初の numeric projection を分ける
 
 という変更だけでは、採用するほどの playing-strength advantage は確認できなかった。
 
-むしろ重要だったのは、validation CE の小さな改善が、そのまま対局性能の改善を意味しなかったことである。
+validation CE の小さな改善は、playing strength の改善にはつながらなかった。
 
 教師あり bootstrap では offline metric は必要だが、最終的に欲しいものは teacher imitation accuracy ではなく、強い policy-value model である。
 
