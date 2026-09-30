@@ -93,8 +93,6 @@ Treatment train → test divergence: 0.0194
 
 ゲームを薄く sampling すると、policy 学習に必要な局面まで減ってしまう可能性がある。
 
-ここは重要な trade-off だった。
-
 しかし test set の policy KL は Treatment − Control で `-0.04271` だった。少なくとも policy imitation は悪化せず、point estimate ではむしろ Treatment の方が良かった。
 
 したがって今回は、value の改善と引き換えに policy imitation が悪化する trade-off は観測されなかった。
@@ -121,7 +119,7 @@ one-sided 95% lower bound = 0.5408
 
 ## 「データを増やす」より「独立したゲームを増やす」
 
-今回面白いのは、学習行数も optimizer step も増えていないことだ。
+Treatment は学習行数と optimizer step を増やさずに改善した。
 
 ```text
 Before
@@ -143,7 +141,7 @@ from 29,400 games
 
 それでも、少なくとも現在の Splendor AI では「1局からほぼ全部の局面を取る」より「多くの局から少しずつ取る」方が、同じ学習予算で良いモデルになった。
 
-次にデータ量を増やすときは、単純な row 数だけでなく、何個の独立した game trajectory から来ているかも重要な軸として見ることになる。
+次の scaling では row 数に加えて、独立した game trajectory 数を別の軸として扱う。
 
 ---
 
