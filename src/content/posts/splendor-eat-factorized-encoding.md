@@ -6,9 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を使っている。
-
-EAT では、プレイヤー、カード、貴族、bank などを entity として表現し、それぞれを同じ Transformer へ入れて局面を読む。
+Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を使っている。EAT では、プレイヤー、カード、貴族、bank などを entity として表現し、それぞれを同じ Transformer へ入れて局面を読む。
 
 今回は、この entity を最初に neural network へ埋め込む部分を factorize すると学習しやすくなるかを試した。
 
@@ -18,9 +16,7 @@ EAT では、プレイヤー、カード、貴族、bank などを entity とし
 
 ## 何をfactorizeしたかったか
 
-EAT の entity には、性質の違う情報が同じ row に入っている。
-
-例えば card entity には、
+EAT の entity には、性質の違う情報が同じ row に入っている。例えば card entity には、
 
 - entity の種類が card であること
 - market / reserve / deck のどこにあるか
@@ -30,9 +26,7 @@ EAT の entity には、性質の違う情報が同じ row に入っている。
 - cost
 - プレイヤーごとの discounted cost
 
-などが入る。
-
-baseline では、これらをまとめて1つの MLP に入れて128次元の entity representation を作る。
+などが入る。baseline では、これらをまとめて1つの MLP に入れて128次元の entity representation を作る。
 
 これでも Transformer は学習できるが、type や location のような categorical metadata と、cost や prestige のような数値を最初から同じ MLP で処理している。
 
@@ -56,9 +50,7 @@ shared MLP
 
 ### F: factorized
 
-type、role、location、tier の categorical metadata を numeric path から分け、それぞれを learned embedding にする。
-
-残りの49 columns は共通 MLP で処理し、最後に4種類の embedding を加える。
+type、role、location、tier の categorical metadata を numeric path から分け、それぞれを learned embedding にする。残りの49 columns は共通 MLP で処理し、最後に4種類の embedding を加える。
 
 ```text
 49-column content -> shared MLP
@@ -80,17 +72,13 @@ location = RESERVE
 tier     = T2
 ```
 
-のように分解される。
-
-3案とも入力情報は同じである。
+のように分解される。3案とも入力情報は同じである。
 
 元の one-hot metadata を別の learned lookup として表現し直しただけで、同じ観測から同じ情報を使っている。
 
 ### FT: factorized typed
 
-FT は F に加えて、数値 feature の最初の projection も entity type ごとに分ける。
-
-bank、player、card、noble は持っている feature の意味がかなり違う。
+FT は F に加えて、数値 feature の最初の projection も entity type ごとに分ける。bank、player、card、noble は持っている feature の意味がかなり違う。
 
 例えば player の token と card の cost を、最初の linear layer から完全に同じ weight で読む必要はない。
 
@@ -107,9 +95,7 @@ NOBLE  -> noble projection
        shared second layer
 ```
 
-とした。
-
-その後に type / role / location / tier embedding を加える。
+とした。その後に type / role / location / tier embedding を加える。
 
 モデル全体の parameter 数は、
 
@@ -119,35 +105,25 @@ NOBLE  -> noble projection
 | F | 888,836 |
 | FT | 890,116 |
 
-で、FT でも baseline より約0.2%大きいだけである。
-
-parameter count をほぼ揃えたまま inductive bias を変える比較にした。
+で、FT でも baseline より約0.2%大きいだけである。parameter count をほぼ揃えたまま inductive bias を変える比較にした。
 
 ## 仮説
 
-期待していたのは、entity の意味を architecture 側で少し整理しておくことで、限られた教師データから有用な representation を学びやすくすることだった。
-
-特に、
+期待していたのは、entity の意味を architecture 側で少し整理しておくことで、限られた教師データから有用な representation を学びやすくすることだった。特に、
 
 - card と player で数値 feature の意味が違う
 - SELF / OPPONENT という role は player と reserve card の両方に現れる
 - MARKET / RESERVE / DRAW_PILE のような location は独立した semantic factor として扱える
 
-という構造がある。
-
-これらを flat feature として MLP に解釈させるより、最初から factor として与えた方が学習効率が上がる可能性がある。
+という構造がある。これらを flat feature として MLP に解釈させるより、最初から factor として与えた方が学習効率が上がる可能性がある。
 
 ただし、これは表現上もっともらしいというだけで、対局が強くなることを保証するものではない。
 
 ## 同じ条件で9回学習した
 
-B / F / FT をそれぞれ3 seed、合計9 fits 学習した。
+B / F / FT をそれぞれ3 seed、合計9 fits 学習した。すべて同じ training cache と同じ16-epoch budgetを使っている。
 
-すべて同じ training cache と同じ16-epoch budgetを使っている。
-
-train data は約105万 decision rows、validation は約13万 rowsである。
-
-同じ replicate の B / F / FT では parameter seed と sample order を対応させ、architecture 以外の差をできるだけ小さくした。
+train data は約105万 decision rows、validation は約13万 rowsである。同じ replicate の B / F / FT では parameter seed と sample order を対応させ、architecture 以外の差をできるだけ小さくした。
 
 validation joint cross entropy の平均は次のようになった。
 
@@ -163,13 +139,9 @@ offline metric だけを見ると、
 FT < F < B
 ```
 
-で、structured encoder の方が少し良かった。
+で、structured encoder の方が少し良かった。特に FT は baseline より約0.0148 nats低い。
 
-特に FT は baseline より約0.0148 nats低い。
-
-しかし replicate ごとに見ると結果は安定していなかった。
-
-1つの seed では明確に良かった一方、別の seed では F / FT の両方が baseline より悪くなった。
+しかし replicate ごとに見ると結果は安定していなかった。1つの seed では明確に良かった一方、別の seed では F / FT の両方が baseline より悪くなった。
 
 baseline 自体の seed 間の幅も約0.0275 natsあり、平均差より大きい。
 
@@ -177,13 +149,9 @@ baseline 自体の seed 間の幅も約0.0275 natsあり、平均差より大き
 
 ## 教師への当てはまりと、良い手を選ぶことは同じではない
 
-ここでは validation CE と playing strength が一致するかを確認した。
+ここでは validation CE と playing strength が一致するかを確認した。validation CE が下がるということは、教師の policy distribution をよりよく再現しているということである。
 
-validation CE が下がるということは、教師の policy distribution をよりよく再現しているということである。
-
-しかし今回の教師は、ゲームの真の最適 policy ではない。
-
-既存の search / heuristic から作った teacher distribution なので、
+しかし今回の教師は、ゲームの真の最適 policy ではない。既存の search / heuristic から作った teacher distribution なので、
 
 ```text
 teacher をよく模倣する
@@ -195,17 +163,13 @@ teacher をよく模倣する
 実際の対局でより良い手を選ぶ
 ```
 
-ことは同じではない。
-
-小さい offline loss の差だけで architecture を採用すると、この2つを混同する可能性がある。
+ことは同じではない。小さい offline loss の差だけで architecture を採用すると、この2つを混同する可能性がある。
 
 そこで最終的には実際に対局させた。
 
 ## 対局では差が消えた
 
-EAT は PUCT search と組み合わせて使うため、deployment cost も含めた条件で比較した。
-
-まず同じ128 simulationsで測ると、新しい encoder は少し遅かった。
+EAT は PUCT search と組み合わせて使うため、deployment cost も含めた条件で比較した。まず同じ128 simulationsで測ると、新しい encoder は少し遅かった。
 
 - F: 約5.3% slower
 - FT: 約11.9% slower
@@ -215,18 +179,14 @@ EAT は PUCT search と組み合わせて使うため、deployment cost も含�
 - F: 121 simulations
 - FT: 114 simulations
 
-に調整した matched-time 条件を事前に決めた。
-
-各 structured encoder を、同じ seed の baseline と256 seat-swapped pairsずつ対局させた結果は、
+に調整した matched-time 条件を事前に決めた。各 structured encoder を、同じ seed の baseline と256 seat-swapped pairsずつ対局させた結果は、
 
 | encoder | matched-time score vs B |
 | --- | ---: |
 | F | 0.4958 |
 | FT | 0.4661 |
 
-だった。
-
-0.5が互角なので、Fはほぼ互角、FTはむしろ下である。
+だった。0.5が互角なので、Fはほぼ互角、FTはむしろ下である。
 
 同じ128 simulationsで比較しても、
 
@@ -235,17 +195,13 @@ EAT は PUCT search と組み合わせて使うため、deployment cost も含�
 | F | 0.5049 |
 | FT | 0.4808 |
 
-で、明確な優位は出なかった。
-
-raw policy の比較でも同様だった。
+で、明確な優位は出なかった。raw policy の比較でも同様だった。
 
 offline では FT、F、B の順だったが、その順位は playing strength には移らなかった。
 
 ## validation CEの改善は対局性能に移らなかった
 
-今回の結果から factorized encoding 全般が無意味だとは言えない。
-
-検証したのは、この特定の factorization と、このデータ量・training budgetである。
+今回の結果から factorized encoding 全般が無意味だとは言えない。検証したのは、この特定の factorization と、このデータ量・training budgetである。
 
 ただ、少なくとも現在の EAT に対しては、
 
@@ -255,13 +211,9 @@ categorical metadata を factor embedding に分ける
 entity type ごとに最初の numeric projection を分ける
 ```
 
-という変更だけでは、採用するほどの playing-strength advantage は確認できなかった。
+という変更だけでは、採用するほどの playing-strength advantage は確認できなかった。validation CE の小さな改善は、playing strength の改善にはつながらなかった。
 
-validation CE の小さな改善は、playing strength の改善にはつながらなかった。
-
-教師あり bootstrap では offline metric は必要だが、最終的に欲しいものは teacher imitation accuracy ではなく、強い policy-value model である。
-
-architecture の inductive bias を評価するときも、loss が少し下がっただけで結論を出さず、実際の decision quality まで確認する必要がある。
+教師あり bootstrap では offline metric は必要だが、最終的に欲しいものは teacher imitation accuracy ではなく、強い policy-value model である。architecture の inductive bias を評価するときも、loss が少し下がっただけで結論を出さず、実際の decision quality まで確認する必要がある。
 
 今回は structured encoder を採用せず、baseline を残すことにした。
 
