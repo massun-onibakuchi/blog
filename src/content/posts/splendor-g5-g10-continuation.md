@@ -52,7 +52,7 @@ G4 から6世代続けた結果として、少なくともこの3本の lineage 
 
 ## ただし後半3世代の追加改善は解決できなかった
 
-今回もっと重要だったのは、G4より強くなったかだけではない。G5〜G7 で得た改善のあとも G8〜G10 でさらに伸び続けたかを、結果を見る前に判定できるようにしていた。
+事前に、G8〜G10 が G5〜G7 を追加で上回るかを判定する rule も固定した。
 
 そのために common network rungs 上で、
 
@@ -104,7 +104,7 @@ policy loss の上昇だけを見て fitting が悪化したとは言えない�
 
 今回の実験では、結果を見る前に decision rule を固定していた。G10 が G4 より強いだけでは G11〜G13 をさらに回す条件にせず、late block が early block より明確に伸びていることも要求した。
 
-今回はそこが解決しなかったため、判定は `unresolved (not a plateau)` になった。plain continuation は G10 でいったん止め、次は同じ self-play をただ追加で回すのではなく、現在の G5〜G10 corpus を使って training recipe の違いを比較する。
+今回はそこが解決しなかったため、判定は `unresolved (not a plateau)` になった。plain continuation は G10 で止め、次は G5〜G10 corpus を使って training recipe を比較する。
 
 候補は policy target の作り方、value target、1世代あたりの optimizer updates、data quantity である。今回の6世代継続で、その比較の基準ができた。今の fixed recipe を6世代続けると G4 に対して約6 pointsの gainが得られるので、次は同じデータと計算量を使って recipe を変えたとき、この基準を超えられるかを見る。
 
