@@ -114,7 +114,7 @@ token return は threshold の約2倍だった。
 
 一方、noble choice は upper bound まで含めて threshold を下回った。
 
-つまり今回観測した post-refill information の価値は、主に reserve-at-ten でどの token を返すかから来ている。
+観測した post-refill information の価値の大半は、reserve-at-ten で返す token の選択に由来した。
 
 「複数 noble を見て refill に応じて選び分ける」ことは、少なくともこの evaluator と corpus では大きな項ではなかった。
 
@@ -144,23 +144,19 @@ $$\operatorname{prize}=\lambda\mu$$
 
 実験の frozen rule では stress case として 2 events / game も見ており、その場合は約0.66 percentage point / game になる。
 
-ここはかなり重要で、
+per-event value が material でも、finished player への寄与は event occupancy に制約される。
 
-「per-event value が material」であることと、「finished player が大きく強くなる」ことは同じではない。
+## cleanup choiceの補正はpost-refill information valueより大きかった
 
-## むしろcleanupそのものを上手く選ぶ価値の方が大きかった
-
-もう1つ面白かったのが $\mathrm{C{+}P}-\mathrm{C}$ だった。
+同じ局面で $\mathrm{C{+}P}-\mathrm{C}$ も測定した。
 
 refill を見なくても、generator が選んだ cleanup より良い cleanup を選ぶだけで得られる correction は平均 0.0178 score / event だった。
 
 これは post-refill information value の約5.4倍である。
 
-つまり今回の局面では、
+今回の局面では、refill を見られることより cleanup choice 自体を正確に選ぶ方が改善余地が大きかった。
 
-「refill を見られること」よりも、「cleanup choice 自体をもっと正確に選ぶこと」の方が大きな改善余地だった。
-
-staged representation を採用するかどうかとは別に、RETURN の policy quality を上げる価値があることが分かった。
+staged representation の採否とは別に、RETURN policy には改善余地が残っている。
 
 ## 平均値は少数の大きなeventに支えられている
 
@@ -172,7 +168,7 @@ median event の VOI は 0.00006 とかなり小さい。
 
 最大13 eventsを除くと lower bound は 0.00247 まで下がり、frozen threshold をわずかに割る。
 
-つまり「多くの局面で少しずつ効く」というより、一部の局面で大きく効く tail-heavy な効果だった。
+VOI は多くの局面に一様に現れず、少数の大きな event に集中していた。
 
 最大 event では VOI が約0.217あり、PUCT-128 と PUCT-512 の両方で大きかった。
 
@@ -182,7 +178,7 @@ median event の VOI は 0.00006 とかなり小さい。
 
 ## staged actionを採用する結論ではない
 
-今回分かったのは、post-refill recourse の情報価値の符号と大きさである。
+この実験では post-refill recourse の情報価値の符号と大きさを測った。
 
 staged action surface の方が atomic surface より強い、という比較ではない。
 
@@ -192,9 +188,9 @@ staging で情報を増やしても、その representation が学習しづら�
 
 逆に atomic policy を維持したまま、必要な局面だけ post-refill cleanup を上書きする設計も考えられる。
 
-今回の実験は、その設計判断に必要だった「情報を後から見ること自体に価値があるか」を切り出して測ったものになる。
+この実験は、設計判断に必要な「情報を後から見ること自体の価値」だけを切り出して測った。
 
-結論としては、価値はある。
+post-refill information の価値は正だった。
 
 ただし主に token return にあり、自然な occupancy ではゲーム全体への寄与は小さい。そして cleanup policy 自体を良くする余地の方がさらに大きい。
 
