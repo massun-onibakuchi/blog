@@ -36,9 +36,7 @@ Splendor では同じ prestige でゲームが終了した場合、購入した 
 
 購入カード枚数も model input から復元でき、value label も engine が決めた winner から作られていた。
 
-つまり「ルールを知らない」わけではなかった。
-
-問題は、その terminal state まで search が到達していなかったことだった。
+terminal rule と必要な feature / label は実装されていたが、PUCT がその terminal state まで到達していなかった。
 
 ## 低priorの即勝ちreplyが128 simulationsでも訪問されない
 
@@ -146,9 +144,9 @@ v3 では相手側の即勝ちを engine で認識するため、card 56 の Q �
 
 v2 はその手を選ばなかったが、v3 は15 prestige、購入カード19枚対21枚という terminal win を厳密判定し、その手へ128/128 visitsを集めた。
 
-「もっと search すれば見つかるかもしれない」という問題を、search budget ではなく terminal rule の exactness で解消した形になる。
+search budget を増やさず、terminal rule の exact adjudication でこの failure を解消した。
 
-## 全部の終盤ミスが直ったわけではない
+## 修正対象外の終盤ミスは残った
 
 前回調べた652敗の ply 40以降、5,825 turnsを v2 / v3 の両方で再検索すると、selection が変わったのは97 turnsだった。
 
@@ -168,9 +166,9 @@ equal-prestige の最終戦績も、point rush / reserve anchor 合計で v2 の
 
 ## searchの仕事とnetworkの仕事を分けた
 
-今回の修正で一番重要だったのは、終盤の弱点を全部 training data の問題として扱わなかったことだった。
+終盤の弱点を training data だけに帰属させず、engine / feature / label / search を切り分けた。
 
-tie-break の engine 実装、feature、label を確認した結果、少なくとも一部は network がルールを学べていないのではなく、PUCT が exact terminal reply を訪問できていない問題だった。
+engine / feature / label を確認した後、残った failure の一部は PUCT が exact terminal reply を訪問しないことに起因すると切り分けた。
 
 terminal outcome は model に近似させる必要がない。
 
