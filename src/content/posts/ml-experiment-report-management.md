@@ -42,13 +42,13 @@ Markdown report の frontmatter を読んで、question、outcome、conclusion�
 
 LLM に全部読ませる方法もあるが、report が増えるほど context を無駄に使う。
 
-つまり実験の実行速度が上がるほど、過去の evidence を探す時間が新しい bottleneck になってきた。
+実験数が増えるにつれ、過去の evidence を探す時間が新しい bottleneck になった。
 
-## 欲しかったのは重い管理画面ではなく「目次」だった
+## 研究上の問いと結論を一覧できる目次が必要だった
 
 必要だったのは、W&B や MLflow のように run metric を可視化する仕組みではなかった。
 
-training run や artifact の管理ではなく、研究上の問いと結論を探したかった。
+必要だったのは run / artifact 管理より、研究上の問いと結論を横断検索する仕組みだった。
 
 例えば最初に、
 
@@ -155,7 +155,7 @@ historical report は研究 evidence であって、repository の最新形式�
 
 ## 導入して何が変わったか
 
-一番大きいのは、過去の experiment を探すときに「まず何を読むか」を決めやすくなったことである。
+導入後は、question / conclusion / relevance / scope から読む report を先に絞れるようになった。
 
 以前は file tree と grep を見ながら複数 report を開いていた。
 
@@ -165,7 +165,7 @@ historical report は研究 evidence であって、repository の最新形式�
 
 LLM agent にとっても、全 report を無差別に読むより、最初に metadata で routing できる方が扱いやすい。
 
-実験管理のために重いサービスを導入したわけではない。
+変更は Markdown frontmatter と数百行程度の小さい CLI に限られる。
 
 Markdown report はそのままで、frontmatter と数百行程度の小さい CLI を足しただけである。
 
