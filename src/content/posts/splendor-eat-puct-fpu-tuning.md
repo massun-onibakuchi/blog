@@ -6,40 +6,24 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
+Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。前回までに、PUCT を使った search self-play を3世代回し、固定した opponent panel では generation 0 から generation 3 まで +10.9 points 改善した。
 
-前回までに、PUCT を使った search self-play を3世代回し、固定した opponent panel では generation 0 から generation 3 まで +10.9 points 改善した。
+ただし、そのとき使っていた PUCT の設定自体は、以前から使っていた値をそのまま引き継いでいた。`c_puct=1.5`、`fpu_reduction=0.25` である。model をさらに学習する前に、まず search の設定だけでも改善余地がないか調べることにした。
 
-ただし、そのとき使っていた PUCT の設定自体は、以前から使っていた値をそのまま引き継いでいた。
-
-`c_puct=1.5`、`fpu_reduction=0.25` である。
-
-model をさらに学習する前に、まず search の設定だけでも改善余地がないか調べることにした。
-
-結果から書くと、128 simulations では `c_puct=0.75`、`fpu_reduction=0.0` が control より +8.55 points 良かった。
-
-95% interval は [+6.66, +10.44] points で、3つの model と3つの opponent を組み合わせた9 cellsすべてで差は正だった。
+結果から書くと、128 simulations では `c_puct=0.75`、`fpu_reduction=0.0` が control より +8.55 points 良かった。95% interval は [+6.66, +10.44] points で、3つの model と3つの opponent を組み合わせた9 cellsすべてで差は正だった。
 
 ## PUCTの2つのparameterを変える
 
-PUCT は、network が出した policy prior と search 中に得た value を使って、次に調べる手を選ぶ。
+PUCT は、network が出した policy prior と search 中に得た value を使って、次に調べる手を選ぶ。今回変えたのは `c_puct` と `fpu_reduction` である。`c_puct` は prior を使った exploration bonus の強さを調整する。値を大きくすると、まだ十分調べていない候補を prior に従って広く見やすくなる。
 
-今回変えたのは `c_puct` と `fpu_reduction` である。
-
-`c_puct` は prior を使った exploration bonus の強さを調整する。値を大きくすると、まだ十分調べていない候補を prior に従って広く見やすくなる。
-
-`fpu_reduction` は、まだ一度も探索していない候補の初期 value をどれだけ低く置くかを決める。今回の実装では、未探索候補の value は root value から `fpu_reduction` を引いた値から始まる。
-
-control は、
+`fpu_reduction` は、まだ一度も探索していない候補の初期 value をどれだけ低く置くかを決める。今回の実装では、未探索候補の value は root value から `fpu_reduction` を引いた値から始まる。control は、
 
 | parameter | value |
 | --- | ---: |
 | `c_puct` | 1.5 |
 | `fpu_reduction` | 0.25 |
 
-だった。
-
-これに対して、
+だった。これに対して、
 
 - `c_puct`: 0.75 / 1.5 / 3.0
 - `fpu_reduction`: 0.0 / 0.25 / 0.5
@@ -48,44 +32,26 @@ control は、
 
 ## networkは固定した
 
-search parameter の効果だけを見たかったので、今回は追加学習をしていない。
+search parameter の効果だけを見たかったので、今回は追加学習をしていない。使ったのは search self-play を3世代回した後の3つの EAT、seed 1701、2901、4301 の generation 3 checkpoint である。network の weight、feature、action representation はすべて固定した。
 
-使ったのは search self-play を3世代回した後の3つの EAT、seed 1701、2901、4301 の generation 3 checkpoint である。
-
-network の weight、feature、action representation はすべて固定した。
-
-search も clean PUCT に固定し、128 simulations、root noiseなし、temperature 0、tree reuseなしにした。
-
-比較間で変えたのは `c_puct` と `fpu_reduction` だけである。
+search も clean PUCT に固定し、128 simulations、root noiseなし、temperature 0、tree reuseなしにした。比較間で変えたのは `c_puct` と `fpu_reduction` だけである。
 
 ## まず9 settingsから1つ選んだ
 
-最初の discovery では seed 1701 の G3 model を challenger にして、残りの G3 models を opponent にした。
-
-9 settingsで合計1,152 gamesを行った。
-
-最も良かったのは、
+最初の discovery では seed 1701 の G3 model を challenger にして、残りの G3 models を opponent にした。9 settingsで合計1,152 gamesを行った。最も良かったのは、
 
 | parameter | selected |
 | --- | ---: |
 | `c_puct` | 0.75 |
 | `fpu_reduction` | 0.0 |
 
-だった。
+だった。control に対する平均差は discovery 上では +17.2 points だった。
 
-control に対する平均差は discovery 上では +17.2 points だった。
-
-ただし、この数字は9 settingsの中から一番良いものを選んだ後の値なので、そのまま効果量としては使えない。
-
-そこで、この setting だけを fresh な schedule で確認した。
+ただし、この数字は9 settingsの中から一番良いものを選んだ後の値なので、そのまま効果量としては使えない。そこで、この setting だけを fresh な schedule で確認した。
 
 ## confirmationでは+8.55 pointsだった
 
-confirmation では3つの G3 model を challenger とし、それぞれを3つの G3 opponent と対局させた。
-
-3 challenger × 3 opponent の9 cellsで、各 cell 256 paired starts、合計9,216 gamesである。
-
-control と finalist は同じ start と seat orientation に対応させて比較した。
+confirmation では3つの G3 model を challenger とし、それぞれを3つの G3 opponent と対局させた。3 challenger × 3 opponent の9 cellsで、各 cell 256 paired starts、合計9,216 gamesである。control と finalist は同じ start と seat orientation に対応させて比較した。
 
 結果は、
 
@@ -94,13 +60,9 @@ control と finalist は同じ start と seat orientation に対応させて比�
 | `c_puct=0.75, fpu_reduction=0.0` | +8.55 points |
 | 95% interval | [+6.66, +10.44] points |
 
-となった。
+となった。事前に決めていた条件は、point estimate が +2 points 以上で、95% interval の下限が0より大きいことだった。
 
-事前に決めていた条件は、point estimate が +2 points 以上で、95% interval の下限が0より大きいことだった。
-
-今回は両方を満たした。
-
-3つの challenger lineage ごとの平均差は、
+今回は両方を満たした。3つの challenger lineage ごとの平均差は、
 
 | lineage | difference |
 | --- | ---: |
@@ -108,53 +70,29 @@ control と finalist は同じ start と seat orientation に対応させて比�
 | 2901 | +4.85 points |
 | 4301 | +12.53 points |
 
-で、すべて正だった。
-
-9 cellsもすべて正だったので、特定の1 modelや1 opponentだけで出た改善ではなかった。
+で、すべて正だった。9 cellsもすべて正だったので、特定の1 modelや1 opponentだけで出た改善ではなかった。
 
 ## searchを遅くして勝っているわけではなかった
 
-同じ128 simulationsでも parameterによって evaluator の使われ方や実行時間が変わる可能性がある。
+同じ128 simulationsでも parameterによって evaluator の使われ方や実行時間が変わる可能性がある。そこで別の固定局面 corpus で timing を測った。finalist と control の aggregate call-time ratio は 1.004 だった。
 
-そこで別の固定局面 corpus で timing を測った。
-
-finalist と control の aggregate call-time ratio は 1.004 だった。
-
-事前に決めていた ±5% の範囲に入ったため、time-matched comparisonでも両方128 simulationsのまま比較した。
-
-secondary test では G3-2901 に対して +10.3 points、95% interval [+3.8, +16.8] pointsだった。
-
-少なくとも今回の M2 CPU と runtime では、単純に多くの時間を使ったから強くなったという結果ではない。
+事前に決めていた ±5% の範囲に入ったため、time-matched comparisonでも両方128 simulationsのまま比較した。secondary test では G3-2901 に対して +10.3 points、95% interval [+3.8, +16.8] pointsだった。少なくとも今回の M2 CPU と runtime では、単純に多くの時間を使ったから強くなったという結果ではない。
 
 ## 512 simulationsでは差を確認できなかった
 
-同じ finalist setting と default setting を512 simulationsにして、G3-1701 の512-simulation referenceを相手に比較した。
+同じ finalist setting と default setting を512 simulationsにして、G3-1701 の512-simulation referenceを相手に比較した。両 setting の差は +0.5 points、95% interval [-9.4, +10.4] pointsだった。この test は384 gamesだけの secondary diagnostic で、interval も広い。
 
-両 setting の差は +0.5 points、95% interval [-9.4, +10.4] pointsだった。
-
-この test は384 gamesだけの secondary diagnostic で、interval も広い。
-
-そのため「512では差がない」とまでは言えないが、128 simulationsで得た +8.55 points がそのまま深い search に移ることは確認できなかった。
-
-search parameter の良し悪しは simulation budget に依存する可能性がある。
+そのため「512では差がない」とまでは言えないが、128 simulationsで得た +8.55 points がそのまま深い search に移ることは確認できなかった。search parameter の良し悪しは simulation budget に依存する可能性がある。
 
 ## PUCT defaultには128-simulation条件で改善余地があった
 
-G3 EAT + clean PUCT 128 では、selected setting が inherited default を confirmation で +8.55 points 上回った。
+G3 EAT + clean PUCT 128 では、selected setting が inherited default を confirmation で +8.55 points 上回った。しかも model を再学習せず、search の2つの parameter を変えただけで +8.55 points の差が出た。
 
-しかも model を再学習せず、search の2つの parameter を変えただけで +8.55 points の差が出た。
+一方で、`c_puct` を下げたことと `fpu_reduction` を0にしたことのどちらが主要因なのかは、この experiment だけでは分からない。3×3 grid の組み合わせとして選んでいるためである。また、winner は `c_puct` grid の下端0.75だった。さらに低い値に改善余地がある可能性はあるが、それは別の experiment として確認する必要がある。
 
-一方で、`c_puct` を下げたことと `fpu_reduction` を0にしたことのどちらが主要因なのかは、この experiment だけでは分からない。3×3 grid の組み合わせとして選んでいるためである。
+今回はこの setting を production default に変更していない。self-play actor の設定も変えていない。次は、その setting を self-play target の生成に使い、次世代 model の playing strength まで比較する。
 
-また、winner は `c_puct` grid の下端0.75だった。さらに低い値に改善余地がある可能性はあるが、それは別の experiment として確認する必要がある。
-
-今回はこの setting を production default に変更していない。self-play actor の設定も変えていない。
-
-次は、その setting を self-play target の生成に使い、次世代 model の playing strength まで比較する。
-
-そのため、`c_puct=0.75, fpu_reduction=0.0` を treatment にした G4 learner-transfer A/B を別に行う予定である。
-
-search 自体が強くなることと、その search を教師にして network が強くなることは別なので、そこは分けて確認したい。
+そのため、`c_puct=0.75, fpu_reduction=0.0` を treatment にした G4 learner-transfer A/B を別に行う予定である。search 自体が強くなることと、その search を教師にして network が強くなることは別なので、そこは分けて確認したい。
 
 ---
 
