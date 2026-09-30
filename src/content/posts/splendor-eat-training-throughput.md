@@ -62,17 +62,9 @@ speedup: 3.82x
 
 candidate を packed にするだけでは、従来と同じ小さい microbatch の条件ではほとんど速くならなかった。
 
-大きかったのは、padding を減らして memory に余裕を作り、そのうえで512 rowsを一度に処理できるようにしたことだった。
+padding reduction で memory に余裕ができ、512 rowsを一度に処理できるようになった。
 
-つまり今回の改善は、
-
-```text
-可変長 candidate の無駄な paddingを減らす
-        +
-小さい microbatch を何度も回すのをやめる
-```
-
-という組み合わせで高速化している。
+今回の3.82倍は、可変長 candidate の padding 削減と、microbatch を大きくして call 回数を減らした効果の組み合わせである。
 
 ## モデルは変えていない
 
@@ -80,7 +72,7 @@ candidate を packed にするだけでは、従来と同じ小さい microbatch
 
 EAT の entity representation、candidate-conditioned policy、value head、loss、optimizer、学習する row の内容は変えていない。
 
-そのため今回の3.82倍は model quality の改善ではなく、同じ supervised training をより短い時間で回せるようになったという進捗になる。
+model、loss、optimizer、training rows は変えていないため、3.82倍は同じ supervised training の execution time の改善である。
 
 大きめの EAT を今後何度も学習するなら、architecture の改善だけでなく、1回の学習に何時間かかるかも研究速度そのものを左右する。
 
