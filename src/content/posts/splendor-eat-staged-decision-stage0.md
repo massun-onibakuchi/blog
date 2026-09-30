@@ -104,7 +104,7 @@ Apple M2 CPU、Torch 4 threads、float32 で測った結果は以下だった。
 
 候補集合だけを見ると reserve overflow が可能な parent は2.2%、複数 noble を選べる parent は2.3%あった。それでも実際に選ばれた trajectory 上ではほとんど cleanup に到達しなかった。
 
-つまり、情報を使えるときの価値が小さいと分かったわけではない。
+この Stage 0 で測ったのは情報価値ではなく、post-refill decision event の頻度である。
 
 分かったのは、今回の teacher / heuristic mixture では、その情報を使えるイベント自体がかなり疎だったということである。
 
@@ -122,7 +122,7 @@ trained checkpoint もなく、arena result もなく、playing strength が上�
 
 2つ目は、post-refill recourse の自然な exposure が今回の behavior mixture では非常に少ないこと。
 
-特に2つ目は重要で、イベントがほとんど起きない分布で大きな training campaign を回しても、情報を使う能力を十分に学習できない可能性がある。
+event frequency が低いため、自然分布だけの training campaign では post-refill decision を十分に学習できない可能性がある。
 
 そのため、情報利用の arm に本格的な計算資源を使う前に、現在の強い policy に近い分布でも同じくらい疎なのかを再計測する方針にした。
 
@@ -130,7 +130,7 @@ trained checkpoint もなく、arena result もなく、playing strength が上�
 
 将来 blind reserve を入れる場合、引いた hidden card は acting player だけが手の途中で知る情報になる。その場合、先に suffix を全部 commit する方式より、revealed information のあとで RETURN / NOBLE を選べる staged representation の意味が大きくなる。
 
-そのため現在の問いは、「no-blind ですぐ強くなるか」だけではなく、「将来必要になる information boundary を正しく表現しつつ、現在の EAT に対して非劣性で使えるか」に変わってきている。
+次の検証では、将来必要な information boundary を保ちつつ、現在の EAT に対して non-inferior に学習できるかを見る。
 
 次は factorized arm が atomic baseline に対して measurable な strength loss を持たないかを、paired training / play で測る Stage 1 を準備している。こちらはまだ preregistration と harness の段階で、結果は出ていない。
 
