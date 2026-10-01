@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。前回、G4からG10までself-playを6世代続けるとG10はG4を+6.15 points上回ったが、G8〜G10の追加改善は確認できなかった。そこで今回はG5〜G10で実際に使ったcorpusと開始checkpointを固定し、fit recipeだけを変えて18 generation stepを再学習した。
+前回、G4からG10までself-playを6世代続けるとG10はG4を+6.15 points上回ったが、G8〜G10の追加改善は確認できなかった。そこで今回はG5〜G10で実際に使ったcorpusと開始checkpointを固定し、fit recipeだけを変えて18 generation stepを再学習した。
 
 EATはactionを予測するpolicy headと勝敗を予測するvalue headを同時に学習する。baselineでは両lossを同じ係数で使う。今回は512 updatesとlearning rate 1e-4はそのままにして、value lossの係数だけを1.0から0.25へ下げた。
 
