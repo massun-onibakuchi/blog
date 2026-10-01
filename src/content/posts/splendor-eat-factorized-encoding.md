@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を使っている。EAT では、プレイヤー、カード、貴族、bank などを entity として表現し、それぞれを同じ Transformer へ入れて局面を読む。
+EAT では、プレイヤー、カード、貴族、bank などを entity として表現し、それぞれを同じ Transformer へ入れて局面を読む。
 
 今回は、この entity を最初に neural network へ埋め込む部分を factorize すると学習しやすくなるかを試した。
 

@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "training"]
 ---
 
-Splendor をプレイする policy-value model を作っている。
-
 現在使っている EAT（Entity-Action Transformer）は、局面に存在するカードやプレイヤーを entity、合法手を candidate として扱う model である。
 
 今回は model の構造や学習目標を変えず、教師あり学習の1 updateにかかる時間をかなり短くできた。A100 上では、同じ512 rowsの update が 4,053 rows/s から 15,501 rows/s になった。約3.82倍である。

@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。これまで学習や評価に使う局面の多くは、現在のモデル自身が self-play して到達した状態から取っていた。
+これまで学習や評価に使う局面の多くは、現在のモデル自身が self-play して到達した状態から取っていた。
 
 これは自然な分布を得るには便利だが、弱点もある。
 

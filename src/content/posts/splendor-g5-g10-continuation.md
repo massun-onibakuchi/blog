@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。前回、self-play に使う PUCT の設定を変えたところ、1世代後の G4 network が control より +3.26 points 強くなった。そこで `c_puct=0.75, fpu_reduction=0.0` を採用したが、1世代だけ強くなっても、そのまま self-play を続ければ何世代も伸びるとは限らない。
+前回、self-play に使う PUCT の設定を変えたところ、1世代後の G4 network が control より +3.26 points 強くなった。そこで `c_puct=0.75, fpu_reduction=0.0` を採用したが、1世代だけ強くなっても、そのまま self-play を続ければ何世代も伸びるとは限らない。
 
 今回は G4 から recipe を変えず、G5、G6、G7、G8、G9、G10 まで6世代続けた。結果として G10 は G4 との直接対戦で +6.15 points、95% interval [+4.78, +7.53] だった。一方、後半の G8〜G10 が前半の G5〜G7 をさらに上回ったかは解決できなかった。self-play を続けることで G4 より強い network は作れたが、後半の世代でも同じ速度で伸び続けているとまでは言えなかった。
 

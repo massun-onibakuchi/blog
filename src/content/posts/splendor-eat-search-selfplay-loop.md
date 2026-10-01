@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy よりかなり強くなることは確認できていた。
+教師あり学習した EAT に PUCT を重ねると、同じ network の raw policy よりかなり強くなることは確認できていた。
 
 次に知りたかったのは、その探索結果を教師として network に戻し、それを何世代か繰り返したときに、本当に対局性能まで伸びるかだった。
 

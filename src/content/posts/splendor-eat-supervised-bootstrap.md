@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "training"]
 ---
 
-Splendor をプレイする policy-value model として、EAT（Entity-Action Transformer）を作っている。
-
 最終的には、この model を探索付き self-play で強くしていきたい。その前に、何も学習していない network から始めるより、既存の探索 teacher を模倣した policy と value を持たせておく方が self-play の出発点として使いやすい。
 
 そこで現在の 888,324-parameter EAT を、まず教師あり学習した。

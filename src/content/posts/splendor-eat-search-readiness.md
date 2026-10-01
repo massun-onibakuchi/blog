@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。教師あり学習で policy と value を持たせた後は、探索付き self-play に進みたい。ただし、探索は計算量が増える。現在の network に PUCT を重ねることで、実際に raw policy より良い手を選べるのかを先に確認した。
+教師あり学習で policy と value を持たせた後は、探索付き self-play に進みたい。ただし、探索は計算量が増える。現在の network に PUCT を重ねることで、実際に raw policy より良い手を選べるのかを先に確認した。
 
 今回使ったのは、教師あり学習を16 epochs行った EAT checkpoint である。
 

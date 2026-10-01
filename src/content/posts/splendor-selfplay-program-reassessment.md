@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。ここ数週間、self-play、PUCT、action representation、終盤の探索、データ生成、学習速度などを個別に調べてきた。実験ごとにはそれぞれ次の一手が見えていたが、局所的な結論を積み上げるだけでは、最終的にどこへ計算資源と実装時間を使うべきか分かりにくくなってきた。
+ここ数週間、self-play、PUCT、action representation、終盤の探索、データ生成、学習速度などを個別に調べてきた。実験ごとにはそれぞれ次の一手が見えていたが、局所的な結論を積み上げるだけでは、最終的にどこへ計算資源と実装時間を使うべきか分かりにくくなってきた。
 
 そこで今回、これまでの25本の experiment report をいったん横に並べ直した。各 report の「次にこれをやるべき」という提案はそのまま採用せず、実測された metrics と artifacts だけを材料にして、長期目標である Board Game Arena の Splendor leaderboard で top-5% 相当まで強くするには、今どこが制約になっているのかを見直した。
 

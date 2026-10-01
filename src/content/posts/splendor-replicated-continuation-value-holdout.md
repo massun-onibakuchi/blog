@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "value"]
 ---
 
-Splendor をプレイする policy-value model を、PUCT というゲーム木探索と自己対局で改善している。
-
 Splendor は宝石を集めてカードを買い、買ったカードを次の購入の割引として使いながら15点以上を目指すゲームだ。value は、ある局面から最終的に loss / draw / win のどれになりそうかを予測する。
 
 これまでの学習では、1ゲームの最終結果を、そのゲーム中の各局面の value target として使っていた。1ゲームに約58 decisionあるので、同じ win / draw / loss が多数の異なる局面に付く。
