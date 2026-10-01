@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "performance"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
-
 現在は、モデルに自己対戦させ、その探索結果を教師として次のモデルを学習し、arena で評価する、というループを回している。このループはモデルの強さを上げる中心部分だが、CPU で回すと時間の大半を探索中のニューラルネットワーク推論が占めていた。
 
 そこで、探索や学習の意味を変えずに、CPU 実行だけを速くする最適化を進めた。最初の計測では1世代あたり25.2%短縮できた。

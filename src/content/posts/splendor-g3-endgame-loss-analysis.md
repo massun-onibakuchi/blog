@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイするニューラルネットワークを作っている。
-
 現在の主力モデルのひとつが G3 である。これは教師データから学習した policy-value model を出発点に、PUCT を使った self-play と再学習を3世代進めたモデル群だ。最近、G3 を複数のルールベース相手と対戦させた。相手は、従来の教師、得点を急ぐ point rush、強いカードを reserve に抱えて終盤に使う reserve anchor の3種類である。
 
 対戦成績だけを見ると、G3 はどの相手にもかなり勝っていた。たとえば reserve anchor には82.55%で、point rush との差も統計的には解決できなかった。

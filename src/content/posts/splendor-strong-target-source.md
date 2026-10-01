@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model を、探索と自己対局で強くしている。
-
 Splendor は、宝石トークンを集めてカードを購入し、買ったカードの色を以後の購入コストの永久割引として使いながら得点を伸ばすボードゲームだ。通常は15点以上を目指す。
 
 モデルは局面ごとに、各合法手の良さを表す policy と、最終的な win / draw / loss を予測する value を出す。実戦ではこの予測を PUCT というゲーム木探索に入れて手を選ぶ。

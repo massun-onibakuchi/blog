@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
-
 前回は、探索 self-play を3世代進めた generation 3、G3 の network を固定し、PUCT の探索パラメータだけを変える実験をした。その結果、128 simulations では従来の
 
 `c_puct=1.5, fpu_reduction=0.25`

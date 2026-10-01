@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする EAT（Entity-Action Transformer）では、1ターンをどの単位で policy に選ばせるかを検討している。特に気になっていたのが、表向きカードを取ったあとに市場へ新しいカードが補充され、そのカードを見てから token return や noble choice を選べることだった。
+EAT（Entity-Action Transformer）では、1ターンをどの単位で policy に選ばせるかを検討している。特に気になっていたのが、表向きカードを取ったあとに市場へ新しいカードが補充され、そのカードを見てから token return や noble choice を選べることだった。
 
 従来の atomic policy は、main action と cleanup をまとめて先に選ぶ。
 

@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "value"]
 ---
 
-Splendor をプレイする policy-value model を作っている。
-
 前回は、教師データを取るゲーム数を 29,400 局から 58,800 局へ増やしても、value の予測誤差は少し改善したものの、対局の強さは伸びなかった。
 
 次は value の学習方法を変えることを考えていたが、その前にモデルへ渡している局面情報を見直した。

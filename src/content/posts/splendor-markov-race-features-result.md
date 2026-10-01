@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "value"]
 ---
 
-Splendor をプレイする policy-value model を作っている。
-
 以前、value の入力に手番の情報が足りていないことに気づき、手番側が先手かどうか、得点差、購入カード枚数差、双方の15点までの距離を追加する実験を始めた。
 
 その実験が最後まで終わった。

@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model を、PUCT というゲーム木探索と自己対局で改善している。
-
 Splendor は宝石を集めてカードを買い、買ったカードを永久割引として使いながら得点を伸ばすゲームだ。AI は各局面で「どの手を選ぶか」という policy と、「この局面から勝てそうか」という value を予測する。
 
 自己対局では、その予測を PUCT に入れて探索し、各合法手が何回訪問されたかという分布を次の policy の教師信号にしている。

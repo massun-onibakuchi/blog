@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model を、探索と自己対局で強くしている。
-
 Splendor は、宝石を集めてカードを買い、買ったカードを以後の購入コストの割引として使いながら得点を伸ばすゲームだ。モデルは各局面で、どの手を選ぶかを表す policy と、最終的な win / draw / loss を表す value を予測する。
 
 前回は128回の PUCT 探索で8,192局の自己対局を作った。policy の教師信号はかなり鋭くなった一方、探索中の root value は終局まで遠い局面では最終結果との誤差が大きかった。

@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "training"]
 ---
 
-Splendor をプレイする policy-value model を作っている。
-
 Splendor は、宝石トークンを集めてカードを買い、カードの色を以後の購入コストの永久割引として使いながら得点を伸ばすゲームだ。現在のモデルは、次にどの手を選ぶかという policy と、その局面から最終的に勝つ・引き分ける・負ける確率という value を同時に学習している。
 
 これまでの実験では、value head が長く学習すると先に過学習しやすいことが分かっていた。

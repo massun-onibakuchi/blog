@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-Splendor をプレイする policy-value model として EAT（Entity-Action Transformer）を作っている。
-
 前回、G3 という self-play 済みモデル群の4,608局を手ごとに再生し、終盤の負け方を調べた。その中で、探索器側の問題だと切り分けられた失敗があった。
 
 相手に次の1手で勝てる reply があるのに、その手の policy prior が低いため PUCT が一度も訪問せず、network の楽観的な value を信じたまま別の手を選んでしまう。

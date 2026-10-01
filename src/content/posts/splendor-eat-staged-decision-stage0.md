@@ -6,7 +6,7 @@ lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
-Splendor をプレイする EAT（Entity-Action Transformer）では、これまで1手をかなり大きな単位で選んでいた。例えば表向きのカードをリザーブしてトークンが10枚を超える場合、現在の policy は「どのカードを取るか」と「最後にどのトークンを返すか」をまとめた complete candidate の中から1つを選ぶ。
+EAT（Entity-Action Transformer）では、これまで1手をかなり大きな単位で選んでいた。例えば表向きのカードをリザーブしてトークンが10枚を超える場合、現在の policy は「どのカードを取るか」と「最後にどのトークンを返すか」をまとめた complete candidate の中から1つを選ぶ。
 
 この方式は単純だが、Splendor の実際の手順とは少し違う。表向きカードを取ると市場が補充され、その新しいカードを見たあとでトークン返却や貴族の選択を行える。つまり、1手の途中で新しい情報が増える。
 

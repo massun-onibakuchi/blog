@@ -6,8 +6,6 @@ lang: ja
 tags: ["splendor", "machine-learning", "training"]
 ---
 
-Splendor をプレイする policy-value model を作っている。
-
 以前の実験では、学習に使う行数を約42万行に固定したまま、教師データを取るゲーム数を7,350局から29,400局へ増やすと、value の汎化性能と実戦の強さが改善した。
 
 そこで、同じ方法でゲーム数をさらに2倍にするとまだ強くなるのかを試した。
