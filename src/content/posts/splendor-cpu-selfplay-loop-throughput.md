@@ -6,25 +6,25 @@ lang: ja
 tags: ["splendor", "machine-learning", "performance"]
 ---
 
-CPUでself-play、training、arenaを回す1 generationでは、時間の大半をONNX Runtimeの推論が使っていた。そこでsearchや学習recipeを変えず、networkへ渡すrow数とpaddingを減らす方向で最適化した。
+自己対局（self-play）、学習（training）、モデル評価（arena）をすべてCPU環境で回す1世代（generation）の実行サイクルでは、処理時間の大半をONNX Runtimeによる推論が占めていた。そこで探索アルゴリズムや学習レシピには手を加えず、ニューラルネットワークに渡すデータ行数とパディングの無駄を徹底的に削る方針で最適化を進めた。
 
-stageごとのmicrobenchmarkでは25.2%短縮したが、実際のproduct loopを最初から最後まで測ると改善は16.6%だった。以下は後者を採用値としている。
+個別のステージを対象としたマイクロベンチマークでは25.2%の短縮が確認されたものの、一連のパイプライン全体を通しで測定したところ、最終的な短縮幅は16.6%にとどまった。本稿では実態に即した指標として、後者の数値を採用値としている。
 
 ## 何を変えたか
 
-| 変更 | 実測 |
+| 変更内容 | 測定結果 |
 | --- | --- |
-| logical CPUではなくphysical coreごとにworkerを置く | 16 workers 約5,400 rows/s → 8 workers 約7,600 rows/s |
-| 同じpublic stateのnetwork評価をmemoize | evaluator rows: self-play -8.1%、arena -2.8% |
-| candidate幅でbatchを分割 | padded/actual: self-play 1.68→1.08、arena 2.22→1.11 |
-| opset 20のGELUを使う | 0.937 ms/row → 0.899 ms/row |
-| 存在するentity/candidate rowだけ計算 | 約8,100 rows/s → 約11,800 rows/s |
+| 論理CPUではなく物理コアごとにworkerを配置 | 16 workers 約5,400 rows/s → 8 workers 約7,600 rows/s |
+| 同一の公開局面（public state）に対する推論結果をメモ化 | evaluator rows: self-play -8.1%、arena -2.8% |
+| 合法手の候補数に応じてバッチを適切に分割 | padded/actual比: self-play 1.68→1.08、arena 2.22→1.11 |
+| opset 20のGELUを使用 | 0.937 ms/row → 0.899 ms/row |
+| 存在するentity/candidateの行のみを計算 | 約8,100 rows/s → 約11,800 rows/s |
 
-特に効いたのはworker数を増やすことではなく、不要なrowとpaddingを減らすことだった。
+特に大きな効果を上げたのは、やみくもにワーカー数を増やすことではなく、不要な行（row）や余計なパディングの削減だった。
 
 ## 実ループでは16.6%短縮
 
-同じGCE c3d-standard-16 Spot VMで、self-play 256 games、training 512 updates、arena 800 pairsの1 generationをend-to-endで比較した。
+同一のGCE c3d-standard-16 Spot VM環境において、自己対局256局、学習512 updates、arena評価800 pairsからなる1世代をエンドツーエンドで比較した。
 
 | stage | baseline | treatment | change |
 | --- | ---: | ---: | ---: |
@@ -33,17 +33,17 @@ stageごとのmicrobenchmarkでは25.2%短縮したが、実際のproduct loop�
 | arena | 1,285.5 s | 1,053.7 s | -18.0% |
 | generation total | 1,866.3 s | 1,555.6 s | -16.6% |
 
-baselineではarenaがgeneration時間の約69%を占めていたため、self-playやtrainingだけを速くしてもend-to-end改善はそこで頭打ちになる。
+baselineではarenaが世代全体の処理時間の約69%を占めていたため、自己対局や学習だけを高速化してもエンドツーエンドでの改善幅には限界があった。
 
-## 速かったが採用しなかったもの
+## 高速化したが採用を見送った手法
 
 | 試したもの | 結果 | 採用しなかった理由 |
 | --- | --- | --- |
-| dynamic INT8 | 8,139 → 13,286 rows/s | policy top-1 agreement 94.8%、evaluator自体が変わる |
-| bf16 CPU training | 1 update 約19%高速化 | training recipeが変わる |
-| arena concurrency 32→128 | 約19%遅くなった | working set増加で逆効果 |
+| dynamic INT8 | 8,139 → 13,286 rows/s | policy top-1一致率が94.8%に低下し、評価器の挙動自体が変わる |
+| bf16 CPU training | 1 updateで約19%高速化 | 学習レシピの前提が変わってしまう |
+| arena concurrency 32→128 | 約19%低下 | ワーキングセットの増大によるキャッシュ効率悪化 |
 
-microbenchmarkだけではなく、最終的に使うworkflow全体で測り直したことで、採用できる改善を16.6%と確定できた。同じCPU時間で回せるexperiment iterationが増えることが、この変更の目的である。
+単体のマイクロベンチマークだけでなく、実際に運用するワークフロー全体で検証し直したことで、確実に享受できる実行時間短縮の効果を16.6%と見極めることができた。同じCPU予算のなかで実験のイテレーション回数を増やせることが、今回の最適化の最大の成果である。
 
 ---
 

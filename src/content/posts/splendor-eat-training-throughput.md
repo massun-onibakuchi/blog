@@ -6,29 +6,29 @@ lang: ja
 tags: ["splendor", "machine-learning", "training"]
 ---
 
-EAT の supervised training では、局面ごとに合法 candidate 数が違う。平均26.8に対して最大195あり、padded batchでは小さい局面も最大幅まで計算していた。
+Entity-Action Transformer（EAT）の教師あり学習では、盤面の状況によって選択可能な合法手（候補手）の数が大きく変動する。平均すると約26.8手であるのに対し、最大局面では195手に達するため、従来の固定長パディングによるバッチ処理では、候補手の少ない局面に対しても最大幅分の冗長な計算リソースを浪費していた。
 
-candidateを実在するrowだけのpacked representationへ変え、512 rowsをmicrobatchへ分割せず一度に処理できるようにした。
+そこで、候補手データを実在する要素のみで密に詰めた packed 表現へと刷新し、512サンプルからなるバッチをマイクロバッチに細分化することなく一度にGPUへ投入できるパイプラインを構築した。
 
-## throughputは3.82倍
+## 学習スループットは3.82倍へ向上
 
-| condition | throughput |
+| 条件 | スループット |
 | --- | ---: |
-| before | 4,053 rows/s |
-| after | 15,501 rows/s |
-| speedup | 3.82× |
+| 改善前（before） | 4,053 rows/s |
+| 改善後（after） | 15,501 rows/s |
+| 高速化倍率 | 3.82倍 |
 
-packed representationだけでは、従来と同じ小さいmicrobatch条件では大きく速くならなかった。padding削減でGPU memoryに余裕ができ、512 rowsを1回で処理できるようになったことが大きい。
+単に packed 表現を導入しただけでは、従来の小さなマイクロバッチ設定のままでは劇的な速度向上は得られなかった。無駄なパディングを排したことでGPUメモリ消費に大きな余白が生まれ、512行を一括処理できるようになったことが飛躍的なスループット向上の主因である。
 
-| bottleneck | before | after |
+| ボトルネック比較 | 改善前 | 改善後 |
 | --- | --- | --- |
-| candidate layout | batch最大幅までpadding | actual candidatesのみpacked |
-| 512-row update | 128 rows × 4 microbatches | 512 rows × 1 |
-| model / loss / optimizer | unchanged | unchanged |
+| 候補手のテンソル配置 | バッチ内の最大候補数まで一律パディング | 実際に存在する候補手のみを詰めた packed 表現 |
+| 512行の更新処理 | 128行 × 4マイクロバッチに分割 | 512行を一括処理（1マイクロバッチ） |
+| モデル構造・損失関数・最適化 | 変更なし | 変更なし |
 
-policy score計算後だけ、candidate indexを使って `[batch, width]` へ戻す。学習するrows、loss、optimizer、model architectureは変えていない。
+方策スコアを計算した直後のみ、候補手インデックスを参照して元の `[batch, width]` テンソルへと整列し直す。学習に使用するデータ行、損失関数の定義、オプティマイザ、ネットワーク構造には一切変更を加えていない。
 
-今回の3.82倍はpadding除去単独ではなく、padding削減で大きなmicrobatchを使えるようになった複合効果である。同じsupervised experimentを何度も回すときの反復コストを下げるexecution optimizationとして採用した。
+今回の3.82倍という高速化は、パディングの除去そのものだけでなく、メモリ効率の改善によって大規模なバッチ処理が可能となった複合的な成果である。教師あり学習の実験サイクルを高速に回すための重要な基盤改善となった。
 
 ---
 

@@ -6,19 +6,19 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-arenaは新しいmodelを採用してよいか判定する評価フェーズで、当時のCPU loopでは全体の約77%を占めていた。arenaで必要なのは最終的に選ばれるactionだけなので、そのactionが残りsimulationでは覆らないと確定した時点でPUCTを止めるようにした。
+モデルの更新採否を判定するarena評価フェーズは、当時のCPU学習ループにおいて全体の実行時間の約77%を占めていた。arenaで必要なのは最終的に選択される着手（action）のみである。そこで、残りのシミュレーション回数をすべて他の候補手に割り振っても1位の手が覆らないと確定した時点で、PUCT探索を早期終了（early stop）できるようにした。
 
-self-playではvisit distributionをpolicy targetに使うため、このearly stopは使わない。
+なお、自己対局（self-play）では訪問回数分布をpolicyの学習ターゲットとして用いるため、この早期終了は適用せず最後まで探索を行う。
 
 ## selected actionが確定したら止める
 
-clean PUCTでは、残りsimulationをすべて他候補へ与えても現在の1位を追い越せないなら、最終actionは変わらない。実装ではarenaだけをselected-action searchとして扱い、self-playや固定局面評価は従来どおりfull resultを要求する。
+PUCT探索において、残りシミュレーションをすべて他の候補手へ与えても現在の最多訪問手を追い越せない状態になれば、最終的に選ばれる手は変わらない。そこで実装上はarena評価時のみを「選択手のみを求める探索モード」として扱い、自己対局やベンチマーク局面の評価では従来通り完全な訪問回数分布を要求する仕様とした。
 
-学習target、feature、ONNX interface、seed、self-play artifactは変更していない。
+学習ターゲットや入力特徴量、ONNXの推論インターフェース、乱数シード、生成される自己対局データなどの設定は一切変更していない。
 
 ## 1 generationで23.3%短縮
 
-Apple M2、8 workersで、PUCT128 self-play 256 games、512 updates、clean PUCT128 arena 800 pairsの1 generationを比較した。
+Apple M2、8 workersの環境で、PUCT128自己対局256局、512 updates、clean PUCT128 arena 800 pairsによる1世代の所要時間を比較した。
 
 | stage | baseline | early stop | change |
 | --- | ---: | ---: | ---: |
@@ -27,9 +27,9 @@ Apple M2、8 workersで、PUCT128 self-play 256 games、512 updates、clean PUCT
 | arena | 1,505.8 s | 1,056.0 s | -29.9% |
 | generation total | 1,955.6 s | 1,500.5 s | -23.3% |
 
-arenaのevaluator rowsは11,189,248から約7,748,000へ30.8%減り、process CPU timeも25.4%減った。4 runsのarena aggregateはすべて850-10-740でpromotion判定も同じだった。
+arenaにおけるevaluator行数は11,189,248行から約7,748,000行へと30.8%減少し、プロセス全体のCPU時間も25.4%削減された。4回の試行におけるarenaの勝敗集計はすべて850勝10分740敗で一致し、モデル採否の判定結果も同一だった。
 
-early-stop searchからfull visit distributionを読もうとするとerrorにし、途中のdistributionが学習targetへ混ざらないようにした。
+早期終了した探索から完全な訪問回数分布を取得しようとした場合はエラーを発生させ、中途半端な探索分布が誤って学習データに組み込まれるのを防いでいる。
 
 ## 他の高速化は採用しなかった
 
@@ -40,7 +40,7 @@ early-stop searchからfull visit distributionを読もうとするとerrorに�
 | sole-candidate shortcut | 89,378 decisions中3回 | 効果が小さい |
 | partition負荷分散 | 254.5〜261.8 s | 長いtailなし |
 
-profileではworker timeの96%がONNX inferenceだったため、search内部を少し速くするより、結果が変わらないleaf evaluationを削る方が効いた。
+プロファイリングの結果、ワーカー処理時間の96%をONNX推論が占めていた。そのため、探索アルゴリズムの内部処理を微小に最適化するよりも、結果に影響しない末端（leaf）の推論呼び出しを間引くアプローチの方が大幅な高速化に寄与した。
 
 ---
 

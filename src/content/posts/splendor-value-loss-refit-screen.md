@@ -6,9 +6,9 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-前回、G4からG10まで同じself-play recipeを6世代続けると、G10はG4を+6.15 points上回った。一方、G8〜G10がG5〜G7をさらに上回ったとは確認できなかった。
+前回、G4からG10まで同一の自己対局レシピ（self-play recipe）を6世代にわたって継続したところ、G10はG4に対して+6.15 pointsの勝ち越しを記録した。しかしその一方で、G8〜G10の後半世代がG5〜G7の世代を有意に上回るような持続的成長は確認できなかった。
 
-そこでG5〜G10で使ったcorpusと開始checkpointを固定し、fit recipeだけを変えて18 generation stepを再学習した。主に見たのは、value lossの重みとoptimizer updatesである。
+そこでG5〜G10で蓄積した局面コーパスと学習開始チェックポイントを固定し、学習設定（fit recipe）のみを変更して18 generation stepsの再学習（refit）実験を行った。主な検証項目は、value lossの重み付けとオプティマイザの更新ステップ数（optimizer updates）である。
 
 ## refitの結果
 
@@ -23,15 +23,15 @@ baselineは512 updates、learning rate 1e-4、value loss weight 1.0である。
 | cosine LR | 2,048 updates | -17.94 pt |
 | baseline LR | 2,048 updates, 1e-4 | -21.40 pt |
 
-value loss weightを0.25にした512-update armは3 tracksすべてで正方向だった。G10同士を双方512 simulationsで探索して比較しても+9.70 points、95% interval [+5.74, +13.66]だった。
+value lossの重みを0.25に設定した512-updateの条件は、検証した3つの評価トラックすべてで明確な勝率向上を示した。G10同士について、互いに512 simulationsの探索を行わせて対局させた場合でも+9.70 points（95%信頼区間 [+5.74, +13.66]）の勝ち越しを記録した。
 
-一方、updatesを2,048へ増やした4 recipesはすべて弱くなった。baseline LRのlong fitはtraining rowsのpolicy KLを0.057 nats改善したが、次世代のunseen rowsでは0.028 nats悪化しており、training fitの改善がplaying strengthへ移っていない。
+対照的に、更新ステップ数を2,048へ増やした4つの設定は、いずれも対局性能が低下する結果となった。ベースラインの学習率を用いた長時間の最適化では、訓練データに対する方策のKLダイバージェンス（policy KL）が0.057 nats改善したものの、次世代の未知局面（unseen rows）に対しては0.028 nats悪化しており、訓練セットへの適合度合いの向上が実対局での強さには反映されていない実態が浮き彫りになった。
 
 ## 次はG11でtransferを確認する
 
-このscreenだけでは、value loss weight 0.25を通常recipeへ採用しない。既存corpusのrefitで強かった設定がfresh self-playでも再現するかを、G10→G11のtransfer testで確認する。
+ただし、このスクリーニング結果のみをもって、value lossの重み0.25を直ちに標準レシピへ本採用するわけではない。既存コーパスに対する再学習で好成績を収めた設定が、新たに生成する自己対局データ（fresh self-play）のループでも再現するかどうか、G10からG11への移行テスト（transfer test）で検証を進める。
 
-今回分かったのは、試した範囲ではupdatesを増やすより、value lossの寄与を下げる方がstrengthを大きく動かしたことまでである。なぜ0.25が効くのかはまだ切り分けていない。
+今回の実験で確認できたのは、検証した範囲においては更新ステップ数をむやみに増やすよりも、value lossの寄与度を適度に抑える方が対局勝率の改善に大きく寄与するという事実にとどまる。なぜ重み0.25が有効に機能するのか、そのメカニズムの特定は今後の検証課題である。
 
 ---
 

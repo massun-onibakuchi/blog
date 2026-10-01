@@ -6,46 +6,46 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-G3を固定してPUCT parameterだけを変えると、128 simulationsでは `c_puct=0.75, fpu_reduction=0.0` が従来設定より+8.55 points強かった。今回は、その設定で作ったself-play dataを学習すると次世代networkも強くなるかをA/Bした。
+第3世代モデル（G3）を固定し、木探索PUCTのハイパーパラメータのみを調整した以前の実験では、128回シミュレーションにおいて `c_puct=0.75, fpu_reduction=0.0` の設定が従来設定を+8.55ポイント上回る好成績を記録した。今回は、その改良された探索設定を用いて生成した自己対局データで学習を行うことにより、次世代のニューラルネットワーク（G4）そのものの実力も向上するかをA/Bテストで検証した。
 
-## G3から1世代だけ比較した
+## G3を出発点とした1世代限りの比較実験
 
-3つのG3 training trackを1世代だけ継続し、各armで3 collection replicatesを作った。
+G3の3つの独立した学習系統をベースとし、それぞれの条件（対照群・実験群）において3つのデータ収集試行（collection replicates）を実施した。
 
 | arm | c_puct | fpu_reduction |
 | --- | ---: | ---: |
-| control | 1.5 | 0.25 |
-| treatment | 0.75 | 0.0 |
+| 対照群（control） | 1.5 | 0.25 |
+| 実験群（treatment） | 0.75 | 0.0 |
 
-両armとも128 simulationsで、root noise、temperature、tree reuseなどは同じにした。各networkは32,768 fresh rowsを保持し、G2/G3 replayと混ぜて512 updates学習した。
+両群とも探索回数は128回とし、ルートノイズの付与や探索温度、探索木の再利用といった条件は同一に揃えた。各ネットワークは新しく生成した32,768行のデータを保持し、過去のG2およびG3のリプレイデータと組み合わせて512ステップのオプティマイザ更新を行った。
 
-評価時は両armとも `c_puct=0.75, fpu_reduction=0.0` に統一し、G3 lineages、point rush、reserve anchorへ当てた。panelは23,040 games、matched head-to-headは4,608 gamesである。
+性能評価時には、両群とも `c_puct=0.75, fpu_reduction=0.0` の統一探索設定を適用し、G3の各学習系統、point rush、reserve anchorを相手に対戦させた。評価パネル全体で23,040局、モデル同士の直接対局（head-to-head）で4,608局を実施している。
 
-## treatmentは+3.26 points
+## 実験群が+3.26ポイントの有意な向上を達成
 
-| endpoint | treatment − control | fixed-network 95% | replicate-level 95% |
+| 評価指標（endpoint） | 実験群 − 対照群 | 固定ネットワーク95%信頼区間 | 試行間分散を含む95%信頼区間 |
 | --- | ---: | --- | --- |
-| equal-halves composite | +3.26 pt | [+2.06, +4.45] | [+1.40, +5.12] |
-| league half | +5.30 | [+3.59, +7.02] | [+2.16, +8.44] |
-| rule half | +1.22 | [−0.17, +2.60] | [−1.57, +4.00] |
-| head-to-head | +4.25 | [+2.89, +5.61] | [+2.04, +6.46] |
+| 総合複合スコア（equal-halves composite） | +3.26 pt | [+2.06, +4.45] | [+1.40, +5.12] |
+| リーグ対戦パート（league half） | +5.30 pt | [+3.59, +7.02] | [+2.16, +8.44] |
+| ルールベース対戦パート（rule half） | +1.22 pt | [−0.17, +2.60] | [−1.57, +4.00] |
+| 直接対戦（head-to-head） | +4.25 pt | [+2.89, +5.61] | [+2.04, +6.46] |
 
-3 parent tracksの平均差も+4.53、+2.25、+3.00 pointsですべて正だった。改善は主にlineage network相手から来ており、point rush / reserve anchorへの改善は確認できなかった。
+3つの親学習系統における平均差分も、+4.53ポイント、+2.25ポイント、+3.00ポイントといずれもプラスを記録した。改善の大部分はニューラルネットワーク同士の対戦において発揮されており、ルールベースAI（point rush / reserve anchor）に対する勝率の有意な変化は確認されなかった。
 
-終盤のreserve-threat value errorも残った。
+なお、ゲーム終盤において相手のキープ（予約）による脅威を見誤る局面評価エラーは依然として解消されなかった。
 
-| model | threat turnsでraw valueが見積もる勝率 |
+| モデル | 終盤脅威局面でネットワーク素の評価が見積もる勝率 |
 | --- | ---: |
-| 実測 | 0.388 |
-| G3 | 0.625 |
-| control G4 mean | 0.681 |
-| treatment G4 mean | 0.664 |
+| 実際の勝率（実対局結果） | 0.388 |
+| G3（ベースライン） | 0.625 |
+| 対照群 G4 平均 | 0.681 |
+| 実験群 G4 平均 | 0.664 |
 
-探索parameterの変更だけでは、このoff-distributionな終盤value errorは直らなかった。
+探索ハイパーパラメータの調整だけでは、このような分布外（off-distribution）に起因する終盤の評価バイアスを根本的に修正することはできなかった。
 
-training recordではtarget entropyがcontrol 0.723に対してtreatment 0.805、policy CEは1.023に対して1.195だった。target自体が広くなっているためCEだけでは採否を決めず、arena resultを使った。
+学習ログにおいては、生成されたターゲット分布のエントロピーが対照群の0.723から実験群では0.805へと拡大し、方策クロスエントロピー損失も1.023から1.195へと増加していた。学習ターゲットの分布自体が広がっているため、クロスエントロピー損失の増減のみでモデルの優劣を論じることはせず、arena対戦の実力判定を採択基準として用いた。
 
-adoption条件を満たしたので、G5以降のself-playは `sml-puct-v4, 128 simulations, c_puct=0.75, fpu_reduction=0.0` を使う。改善したsearch settingが、1世代後のnetwork strengthへtransferすることを確認できた。
+事前に定めた採択条件を満たしたため、第5世代（G5）以降の自己対局パイプラインには `sml-puct-v4, 128 simulations, c_puct=0.75, fpu_reduction=0.0` を標準設定として正式採用した。探索側で得られた質の高いシミュレーション成果が、1世代先のニューラルネットワーク本体の実力へと正常に波及・転移（transfer）することが実証された。
 
 ---
 

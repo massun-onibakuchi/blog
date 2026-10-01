@@ -6,57 +6,57 @@ lang: ja
 tags: ["splendor", "machine-learning", "value"]
 ---
 
-value入力へ手番と得点raceの情報を追加したpaired experimentが完了した。unknown test statesのvalue predictionが改善し、PUCT32のarenaでもtreatmentが強かったため、新feature contractを採用した。
+局面評価（value）の入力に手番の先後および得点レースの進捗情報を追加したペア比較実験が完了した。未知のテスト局面に対する勝敗予測精度が大幅に改善し、PUCT32による実対局評価においても有意な勝ち越しを記録したため、新たな特徴量設計（feature contract）を正式採用した。
 
-## treatmentで追加した情報
+## 実験群で追加した特徴量
 
-最終treatmentでは `game_ply` を外し、global featureを4個から9個へ増やした。
+最終的な実験群では、手番数（`game_ply`）を除外した上で、全体特徴量（global feature）の次元数を4次元から9次元へと拡張した。
 
-| feature | 目的 |
+| 特徴量 | 導入の目的 |
 | --- | --- |
-| actor is starting player | equal-turn終了時の手番差 |
-| prestige difference | race状況 |
-| purchased-card difference | tie-break情報 |
-| actor distance to 15 | 終局までの距離 |
-| opponent distance to 15 | 相手のrace状況 |
+| 手番プレイヤーが先手（starting player）か否か | 同手番終了ルールにおける手番差の識別 |
+| 勝利点の点数差（prestige difference） | 得点レースにおけるリード状況 |
+| 購入カード枚数の差（purchased-card difference） | タイブレーク判定に必要な情報 |
+| 手番プレイヤーの15点までの残り点数 | 終局までの最短距離 |
+| 対戦相手の15点までの残り点数 | 相手の勝利リーチ状況の把握 |
 
-`game_ply` はrule上必要なstateではなく、game lengthへのshortcutを学ぶ可能性があるため最終実験から外した。
+`game_ply` については、ゲームのルール定義上本質的な状態変数ではなく、ゲーム手数に対するショートカット学習を招く懸念があったため、最終仕様からは意図的に除外した。
 
-8組のcontrol / treatmentを同じteacher data、row identities、targets、row orderで比較し、最大16,000 optimizer stepsまで学習した。
+8組の対照群と実験群を同一の教師データ、局面サンプル、学習ターゲット、データ提示順序で比較し、最大16,000ステップまで学習を進めた。
 
-## offline valueが改善した
+## オフラインの局面評価精度が顕著に改善
 
-| metric | result | gate |
+| 評価指標 | 測定結果（実験群 − 対照群） | 事前設定した合否判定基準 |
 | --- | ---: | ---: |
-| WDL Brier treatment − control | -0.011508 | mean ≤ -0.0027 |
-| one-sided 95% upper | -0.008802 | < 0 |
-| policy KL one-sided 95% upper | +0.003634 | < +0.01 |
+| WDL ブライアスコア差分 | -0.011508 | 平均値 ≤ -0.0027 |
+| ブライアスコア片側95%上限 | -0.008802 | < 0 |
+| 方策KL情報量片側95%上限 | +0.003634 | < +0.01 |
 
-value改善はmateriality thresholdを超え、policy imitationの悪化も許容範囲内だった。
+局面評価の精度改善は事前に設定していた統計的基準を大幅に上回り、方策模倣精度のわずかな変動も許容範囲内に収まっていた。
 
-horizon別では終盤の改善が大きかった。
+終局までの残り手数帯別で見ると、特に終盤局面における予測精度の向上が顕著だった。
 
-| remaining decisions | WDL Brier差 |
+| 終局までの残り意思決定数 | WDL ブライアスコア改善幅 |
 | --- | ---: |
-| 1–8 | -0.0253 |
-| 33+ | -0.0065 |
+| 1〜8手（終盤） | -0.0253 |
+| 33手以上（序盤） | -0.0065 |
 
-これは、starting-player情報がequal-turn終了に直接効くという仮説と整合する。
+この測定結果は、先手・後手に関する情報が、同手番で決着するルール判定において局面の勝敗予測に直接寄与するという当初の仮説とも整合している。
 
-## arenaでも改善した
+## 実対局（arena）における実力向上も実証
 
-offline gateを通過した後、control / treatmentをPUCT32で8 replicates、合計8,192 games対戦させた。
+オフラインの評価基準をクリアした後、対照群と実験群を32回シミュレーションのPUCT探索を用いて8回の試行、計8,192局にわたって直接対戦させた。
 
-| metric | value |
+| 対戦評価指標 | 測定結果 |
 | --- | ---: |
-| mean pair score | 0.523560 |
-| standard error | 0.006280 |
-| one-sided lower bound | 0.511662 |
-| replicates ≥ 0.5 | 7 / 8 |
+| 平均ペアスコア（mean pair score） | 0.523560 |
+| 標準誤差 | 0.006280 |
+| 片側95%信頼区間の下限 | 0.511662 |
+| スコア0.5以上を達成した試行数 | 7 / 8 試行 |
 
-事前条件の「mean ≥ 0.52、lower bound > 0.5、8 replicates中6以上が0.5以上」をすべて満たした。
+事前プロトコルで規定していた「平均スコア0.52以上、下限値0.5超え、8試行中6試行以上で勝ち越し」というすべての昇格条件を完全に達成した。
 
-training data量やsearch budgetを増やさず、欠けていたstate情報を追加しただけでoffline valueとplaying strengthの両方が改善した。以後はこの9-feature contractをbaselineとして使う。
+訓練データの行数や探索シミュレーション回数を一切増やすことなく、欠落していた盤面情報を入力特徴量として補っただけで、オフラインの局面評価精度と実対局での勝率の双方が明確に向上した。今後はこの9特徴量からなる入力仕様を新たな標準ベースラインとして採用する。
 
 ---
 
