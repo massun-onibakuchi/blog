@@ -1,7 +1,7 @@
 ---
 title: "Splendor AIでvalue loss係数を0.25にしたrefitが+10.4pt勝った"
 date: "2026-10-01T07:37:15+09:00"
-isPublished: false
+isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
