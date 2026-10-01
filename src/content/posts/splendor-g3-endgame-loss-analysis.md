@@ -6,120 +6,43 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-現在の主力モデルのひとつが G3 である。これは教師データから学習した policy-value model を出発点に、PUCT を使った self-play と再学習を3世代進めたモデル群だ。最近、G3 を複数のルールベース相手と対戦させた。相手は、従来の教師、得点を急ぐ point rush、強いカードを reserve に抱えて終盤に使う reserve anchor の3種類である。
+G3をteacher、point rush、reserve anchorと対戦させた4,608局を、初期状態からmove-by-moveでreplayした。aggregateの勝率だけでは見えない、終盤の失敗パターンを切り分けるためである。
 
-対戦成績だけを見ると、G3 はどの相手にもかなり勝っていた。たとえば reserve anchor には82.55%で、point rush との差も統計的には解決できなかった。
+4,601局は元のarenaと完全に同じtrajectoryを再現した。残り7局はbatch compositionによる小さな推論差でactionが変わったが、最終結果は同じだった。
 
-しかし、それだけでは次にモデルをどう改善すればよいか分からない。
+## 大半はrace loss、終盤に系統的なerrorが残った
 
-そこで今回は、過去の対局を4,608局すべて手ごとに再生し、G3 がどの局面で勝ち、どの局面で負けているのかを調べた。
+652敗を調べると、多くは相手が先に得点raceを完成させたゲームだった。その中に、再現性のある終盤errorが混ざっていた。
 
-結果として、負けの大半は単純な読み違いではなかった。一方で、終盤にはかなり具体的な失敗パターンが残っていた。
+| pattern | evidence |
+| --- | --- |
+| opponent reserve threatを過小評価 | 165 threat turnsで実勝率0.388、search 0.500、raw network 0.625 |
+| card-count tie-breakを誤る | point rush + reserve anchorとのequal-prestige finishで0勝34敗 |
+| multi-point surgeへのvalue更新が遅い | teacher敗戦29/268で、相手1手後にsearch valueが0.8以上低下 |
+| root visitsが負け手へ集中 | error例で111〜128 visits、block候補は最大8 visits |
 
-## まず、負けの大半は普通のレース負けだった
+最後の項目はvisit concentrationの観測であり、policy prior単独が原因だとはこのreplay dataだけでは決めていない。PUCTのvisit数はpriorだけでなくQとFPUにも依存する。
 
-4,608局のうち、G3 の敗戦は652局だった。各手で G3 の search value を記録し、どの時点から不利を認識していたかを調べると、多くの敗戦ではかなり前から value が負け側へ傾いていた。
+reserve anchorの例では、相手がreserved cardを次の手で買えば15点へ届くのに、networkは勝率を約0.62と見積もっていた。PUCT128は0.50まで補正したが、実測0.39までは届かなかった。
 
-決定的な購入の直前まで value が0.5を超えていた敗戦は49局、全敗戦の7.5%だけだった。つまり、多くの場合は「勝てると思っていたのに突然負けた」のではない。
+tie-breakでは逆方向の学習も見えた。equal prestigeで、低カード枚数のpoint rush / reserve anchorには0勝34敗だった一方、card-heavyなteacherには21勝8敗10分だった。teacher由来のdataで「大きなengineを持ったequal-prestige state」が勝ち側に偏っていた可能性がある。
 
-相手の展開が先に完成し、そのレースに負けたことをモデル自身も途中から認識していた。相手によって、その勝ち筋は違った。
+## aggregate scoreだけでは見えなかった
 
-教師は noble の獲得競争で差をつけることが多かった。教師が最初の noble を取ったゲームでは G3 の敗率が32.3%だったのに対し、G3 が最初の noble を取った場合は3.3%だった。point rush と reserve anchor は、高得点の tier-3 card を終盤に買って15 prestigeへ到達する形が多かった。
+reserve anchorに対するG3のscoreは82.55%だった。point rushと同じstartsで比較した差は-1.56 points、95% interval [-4.59, +1.47]で、reserve-heavyな相手だけに弱いとは確認できなかった。
 
-reserve anchor に負けた201局では、110局で15点を超える決定打が tier-3 card の購入だった。そのうち78局は reserve していたカードからの購入だった。相手の戦略は違っても、共通していたのは「10 prestige に先に到達した側がそのまま終盤を取りやすい」という構造だった。
+それでも局面単位では、reserve threat、tie-break、multi-point surgeのように改善対象を具体化できた。平均勝率が高い相手でも、特定stateではvalueやsearchが系統的に外れる。
 
-G3 が先に10 prestigeへ到達した場合、どの相手に対しても敗率は最大4.7%だった。
+## 次に試すこと
 
-## それでも終盤には系統的なミスがあった
+| 次の実験 | 見たいこと |
+| --- | --- |
+| endgame-threat start statesを増やす | reserve threatの0.62予測を実測0.39へ近づけられるか |
+| card-count tie-breakの固定eval set | feature / labelとsearchのどちらが原因か |
+| 512 simulationsでthreat turnsを再検索 | search量でblockへ反転するか |
+| reserve-heavy agentを評価・self-playへ混ぜる | off-distribution errorが減るか |
 
-負けの大半が通常のレース負けだった一方で、約10〜15%には G3 側の改善可能な失敗が見つかった。主に4種類ある。
-
-### 相手の reserve にある勝ち札を軽く見ている
-
-reserve anchor では、相手が reserve しているカードを終盤まで保持し、必要な token が揃ったところで一気に買う。G3 の手番のうち、ply 46以降で「相手が reserve しているカードをすでに購入可能で、そのカードを買うと15 prestige以上になる」局面を抽出すると165件あった。
-
-この局面で G3 が最終的に勝った割合は38.8%だった。ところが raw network の value は平均62.5%の勝率を見積もっていた。128 simulations の PUCT を通しても50.0%だった。
-
-実際にはかなり危険な状態なのに、network が楽観的すぎる。探索によって誤差は半分程度まで修正されているが、それでも十分ではなかった。
-
-実例では、相手が次の手で reserve していた勝ち札を買える状態なのに、G3 は別の購入へ128 visitsすべてを集中させ、その直後に負けている。
-
-### 同点時のカード枚数 tie-break を扱えていない
-
-Splendor では同じ prestige でゲームが終わった場合、購入した development card が少ない側が勝つ。point rush と reserve anchor は、G3 より少ないカード枚数で高得点へ到達しやすい。
-
-この2相手との対局で最終 prestige が同点になった34局では、G3 は0勝34敗だった。いくつかの局面では、G3 は同点終了になる購入を value 0.8〜0.99で高く評価し、そのまま選んでいた。
-
-その時点で相手より購入カード枚数が多いため、同点にした瞬間に tie-break で負ける。
-
-一方、カードを reserve して相手の勝ち札を塞ぐ手にはほとんど visits が入っていなかった。興味深いことに、カード枚数の多い教師との同点終了では G3 は21勝8敗10分だった。
-
-同じ「prestige が同点」というパターンでも、教師相手では大きな engine を持つ G3 が勝ちやすく、低カード枚数の rush 系相手では必ず負けている。学習データ上で前者のパターンを強く見てきたため、終盤の意味を取り違えている可能性がある。
-
-### 一手で大きく得点される局面への value 更新が遅い
-
-教師との敗戦では、相手の1手だけで G3 の search value が0.8以上落ちるケースが29局あった。典型例では、教師が tier-3 card を購入し、同時に noble も獲得して、一手で8 prestige相当進んだ。
-
-その直後、search value は0.05まで落ちていた。
-
-しかし raw network の value はまだ0.97だった。tree search を進めると危険を発見できるが、network 単体では大きな得点変化を即座に評価できていない。
-
-### PUCT の prior が早い段階で一つの手に集中しすぎる
-
-終盤の失敗例では、負けにつながる手へ111〜128 visitsが集中し、block する候補には最大でも8 visits程度しか入らないケースがあった。PUCT は network の policy prior を使って探索場所を決める。
-
-prior が強く偏った状態では、128 simulationsあっても別の候補を十分に調べる前に探索予算を使ってしまう。reserve threat のケースでは search が network の value error をある程度修正できていたので、探索量を増やす余地はある。
-
-ただし、tie-break のように候補自体の Q が間違っている場合は、simulation を増やすだけでは直らない可能性もある。
-
-## 4,608局をほぼそのまま再生できた
-
-今回の分析では、arena の最終結果だけではなく、各ゲームを初期状態から再実行した。毎手について、
-
-- 公開されている盤面状態
-- 実際に選んだ action
-- G3 の network value
-- PUCT 後の search value
-- visit 数が多い上位候補
-
-を保存した。4,608局のうち4,601局は元の arena と完全に同じ軌跡を再現した。
-
-7局だけ途中の action が変わったが、最終的な勝敗は同じだった。原因を調べると、arena 本番では32ゲームをまとめて neural network inference しているのに対し、replay は1 leafずつ評価していた。
-
-inference の batch composition による小さな数値差が探索へ入り、極めて近い候補の順番を変えたと考えられる。
-
-少なくとも今回の7局について、以前導入した arena early-stop が原因ではなかった。この点は、tree search の「同じ seed なら必ず完全再現できる」という前提にも注意が必要だと分かった。
-
-## aggregate の勝率だけでは分からなかった
-
-今回、reserve anchor との対戦成績そのものは82.55%だった。同じ初期配置で point rush と比較した差は -1.56 percentage points、95%区間は -4.59 から +1.47 で、reserve-heavy な相手だけに特別弱いとは結論できなかった。
-
-この aggregate だけを見ると、「G3 は十分強いので問題なし」で終わる可能性がある。
-
-しかし負けた対局を局面単位で見ると、別の情報が出てきた。
-
-- 相手の reserve にある即勝ちカードを過小評価する
-- equal prestige の card-count tie-break を誤る
-- 大きな prestige surge の直後でも network value が追随しない
-- 終盤では prior が一つの手に集中し、block を十分探索できない
-
-これらは対戦相手全体に対する平均勝率とは別の問題である。モデルが80%以上勝てる相手でも、特定の終盤状態では明確に評価を誤っている。
-
-## 次は終盤のデータ分布を見る
-
-今回の分析は post-hoc なので、ここで見つけたパターンだけから改善効果までは断定できない。
-
-次に試す価値が高いのは、終盤の threat state を学習・評価データとして明示的に増やすことだ。特に、
-
-- 相手が15 prestigeへ到達できる reserve card を持つ局面
-- prestige がほぼ同点で card-count tie-break が重要になる局面
-- tier-3 card と noble で一気に得点が動く局面
-
-を独立した評価集合として持つと、モデル改善が平均値に埋もれにくい。また、同じ局面を512 simulationsなどより大きな探索予算で読み直せば、問題が network value / policy にあるのか、それとも128 simulationsという探索量にあるのかを切り分けられる。
-
-これまでは「G3 はどの相手に何%勝つか」を主に見ていた。
-
-今回の4,608局の replay で、次に直す対象を局面レベルまで絞れるようになった。
+replayを入れたことで、「どの相手に何%勝つか」から「どのstateを直すべきか」まで診断できるようになった。
 
 ---
 

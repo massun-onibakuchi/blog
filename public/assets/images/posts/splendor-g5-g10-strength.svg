@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+<title id="title">G4からG10までのnetwork-rung composite</title>
+<desc id="desc">G4を0 pointsとして、G5からG10までのdescriptive strength differenceを折れ線で示す。</desc>
+<rect width="800" height="420" fill="white"/>
+<text x="400" y="32" text-anchor="middle" font-family="sans-serif" font-size="20">Network-rung composite vs G4</text>
+<line x1="80" y1="350" x2="750" y2="350" stroke="#777" stroke-width="1"/>
+<line x1="80" y1="70" x2="80" y2="350" stroke="#777" stroke-width="1"/>
+<g font-family="sans-serif" font-size="13" fill="#444">
+<text x="60" y="354" text-anchor="end">0</text>
+<text x="60" y="284" text-anchor="end">2</text>
+<text x="60" y="214" text-anchor="end">4</text>
+<text x="60" y="144" text-anchor="end">6</text>
+<text x="60" y="74" text-anchor="end">8</text>
+<text x="28" y="210" transform="rotate(-90 28 210)" text-anchor="middle">points vs G4</text>
+</g>
+<g stroke="#ddd" stroke-width="1">
+<line x1="80" y1="280" x2="750" y2="280"/>
+<line x1="80" y1="210" x2="750" y2="210"/>
+<line x1="80" y1="140" x2="750" y2="140"/>
+<line x1="80" y1="70" x2="750" y2="70"/>
+</g>
+<polyline fill="none" stroke="#222" stroke-width="3" points="95,350 200,245 305,101.5 410,87.5 515,108.5 620,98 725,168"/>
+<g fill="white" stroke="#222" stroke-width="3">
+<circle cx="95" cy="350" r="5"/><circle cx="200" cy="245" r="5"/><circle cx="305" cy="101.5" r="5"/><circle cx="410" cy="87.5" r="5"/><circle cx="515" cy="108.5" r="5"/><circle cx="620" cy="98" r="5"/><circle cx="725" cy="168" r="5"/>
+</g>
+<g font-family="sans-serif" font-size="13" fill="#222" text-anchor="middle">
+<text x="95" y="375">G4</text><text x="200" y="375">G5</text><text x="305" y="375">G6</text><text x="410" y="375">G7</text><text x="515" y="375">G8</text><text x="620" y="375">G9</text><text x="725" y="375">G10</text>
+<text x="95" y="335">0.0</text><text x="200" y="230">+3.0</text><text x="305" y="86">+7.1</text><text x="410" y="72">+7.5</text><text x="515" y="93">+6.9</text><text x="620" y="83">+7.2</text><text x="725" y="153">+5.2</text>
+</g>
+<text x="400" y="408" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#666">Descriptive panel values; single-generation intervals are wide.</text>
+</svg>
