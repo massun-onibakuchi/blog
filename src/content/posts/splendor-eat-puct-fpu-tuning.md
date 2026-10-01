@@ -6,20 +6,20 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-search self-play を3世代回した G3 を固定し、PUCT の `c_puct` と `fpu_reduction` だけを調整した。従来値は `1.5 / 0.25` だった。
+自己対局による学習を3世代進めたチェックポイントG3を固定し、木探索アルゴリズムPUCTのハイパーパラメータである `c_puct`（探索の積極性）と `fpu_reduction`（未訪問ノードの初期値オフセット）のチューニングを行った。従来のデフォルト設定値は `1.5 / 0.25` だった。
 
-9 settings の discovery で候補を1つ選び、fresh schedule の confirmation で効果量を測った。
+3×3の探索グリッドによる予備探索フェーズ（discovery）で最有望な設定を1つ絞り込み、独立した対局スケジュールによる本検証フェーズ（confirmation）で正確な効果量を測定した。
 
-## 128 simulationsでは0.75 / 0.0が強かった
+## 128 simulations環境では0.75 / 0.0が優位だった
 
 | stage | 条件 | 結果 |
 | --- | --- | ---: |
-| discovery | 3×3 grid、G3-1701 | winnerは `0.75 / 0.0` |
-| confirmation | 3 models × 3 opponents、9,216 games | +8.55 pt [+6.66, +10.44] |
-| timing | fixed-state corpus | call-time ratio 1.004 |
-| 512-sim diagnostic | G3-1701 reference、384 games | +0.5 pt [-9.4, +10.4] |
+| discovery | 3×3 grid、G3-1701 | 最優秀設定は `0.75 / 0.0` |
+| confirmation | 3モデル × 3対戦相手、9,216局 | +8.55 pt [+6.66, +10.44] |
+| timing | 固定局面コーパス | 実行時間比率 1.004 |
+| 512-sim diagnostic | G3-1701 reference、384局 | +0.5 pt [-9.4, +10.4] |
 
-confirmation の lineage 別差もすべて正だった。
+本検証において、学習系統ごとの改善幅も一貫してプラスを示した。
 
 | lineage | finalist − control |
 | --- | ---: |
@@ -27,28 +27,28 @@ confirmation の lineage 別差もすべて正だった。
 | 2901 | +4.85 pt |
 | 4301 | +12.53 pt |
 
-9 cellsすべてで差が正だったため、特定 model / opponent だけの改善ではなかった。timing ratio も事前の ±5% 範囲内で、単に長く計算した結果ではない。
+検証した9つの組み合わせすべてにおいて勝率の改善が確認され、特定のモデルや対戦相手だけに依存した局所的な効果ではないことが示された。また、探索時間の比率も事前定義した±5%の許容範囲内に収まっており、計算時間の増加による見かけ上のゲインでもない。
 
-## 何を変えたか
+## チューニング対象とパラメータ空間
 
-`c_puct` は prior による exploration bonus、`fpu_reduction` は未訪問候補の初期 value を調整する。比較した grid は次の通り。
+`c_puct` は policy prior による探索ボーナスのスケールを制御し、`fpu_reduction` は未訪問の候補手に対する初期評価値（First Play Urgency）の引き下げ幅を調整する。比較したパラメータ空間は以下の通りである。
 
 | parameter | values |
 | --- | --- |
 | `c_puct` | 0.75 / 1.5 / 3.0 |
 | `fpu_reduction` | 0.0 / 0.25 / 0.5 |
 
-network weight、feature、action representation、128 simulations、root noiseなし、temperature 0、tree reuseなしは固定した。
+ネットワークの重み、入力特徴量、着手の表現形式、探索回数128回、ルートノイズなし、温度パラメータ0、探索木の再利用なしという条件はすべて統一した。
 
-discovery の +17.2 points は9 settingsからwinnerを選んだ後の値なので、効果量としては使っていない。採用判断には fresh confirmation の +8.55 points を使った。
+なお、予備探索で記録された+17.2ポイントという数値は、9つの候補から最大値を選定した後の値であるため、過大推定を避けるべく正式な効果量としては採用していない。採否の判断には、未見の対局で測定した本検証の+8.55ポイントを拠り所とした。
 
-## 512 simulationsへの外挿はしない
+## 深い探索への安易な外挿は避ける
 
-512 simulations の secondary diagnostic は interval が広く、128 simulations の改善が深い search でも同じ大きさで残ることは確認できなかった。search parameter は simulation budget ごとに評価する必要がある。
+シミュレーション回数を512回に増やした補助診断テストでは、信頼区間が広く（[-9.4, +10.4]）、128回探索で得られた改善が深い探索でもそのまま維持されるかは確認できなかった。探索ハイパーパラメータは、シミュレーション予算の規模ごとに最適値を見極める必要がある。
 
-また、この実験では `c_puct` と `fpu_reduction` のどちらが主要因かも分離していない。
+また今回の実験設計では、`c_puct` の引き下げと `fpu_reduction` の撤廃のどちらが主たる改善要因であるかまでは分離していない。
 
-この時点では production default や self-play actor は変更せず、次に `0.75 / 0.0` を self-play target 生成へ移し、G4 learner-transfer A/B で次世代 network まで強くなるかを確認することにした。
+現段階では本番環境のデフォルト設定や自己対局のアクター設定を性急に変更することはせず、この有望な設定 `0.75 / 0.0` を自己対局のデータ生成プロセスに適用した上で、次世代のネットワーク（G4）自体が強化されるかをA/Bテストで検証することにした。
 
 ---
 

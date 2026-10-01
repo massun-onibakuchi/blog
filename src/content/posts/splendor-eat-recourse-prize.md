@@ -6,21 +6,21 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-カードを取ったあと市場へ新しいカードが補充され、その情報を見てからtoken returnやnoble choiceを選べる。このpost-refill情報をpolicyへ渡す価値を、representation全体を変える前にofflineで測った。
+Splendor では、カードを購入した直後に市場へ新たなカードが山札から補充される。その後、所持上限を超えたトークンの返却（token return）や、複数条件を同時に満たした際の貴族タイルの選択（noble choice）を行うルールになっている。この「補充された最新の情報を見てから事後処理を選べる」という後出しの自由度が、方策ネットワークにとってどれだけの情報価値を持つのかを、モデル表現を刷新する前にオフラインで測定した。
 
-比較したのは、refill前にcleanupへcommitする場合と、refill後にcleanupを選び直せる場合である。
+検証したのは、補充が発生する前に事後処理まで一括決定してしまう場合と、補充結果を確認した上で事後処理を選び直せる場合との期待値の差（VOI: Value of Information）である。
 
 $$
-operatorname{VOI}
+\operatorname{VOI}
 =
-mathbb{E}_{z}left[max_b Q(z,b)ight]
+\mathbb{E}_{z}\left[\max_b Q(z,b)\right]
 -
-max_b mathbb{E}_{z}left[Q(z,b)ight]
+\max_b \mathbb{E}_{z}\left[Q(z,b)\right]
 $$
 
-## 1 eventあたりの情報価値
+## 1イベントあたりの情報価値
 
-Gen0〜Gen2の13,824 games、805,102 decisionsから1,319 chosen eventsを評価した。評価は別lineageのG3とclean PUCT128を使い、selectionとevaluationを分けるcross-fittingを行った。
+自己対局世代Gen0からGen2にかけての13,824局（805,102意思決定）から、実際に事後選択が発生した1,319イベントを抽出して評価した。評価器には学習系統の異なるG3モデルとclean PUCT128を用い、意思決定の選択と価値評価を分離する交差検証（cross-fitting）を実施した。
 
 | quantity | value |
 | --- | ---: |
@@ -28,36 +28,36 @@ Gen0〜Gen2の13,824 games、805,102 decisionsから1,319 chosen eventsを評価
 | one-sided 95% lower bound | 0.00288 |
 | frozen threshold | 0.00250 |
 
-thresholdを超えたので、事前ルールではper-eventの情報価値はmaterialだった。
+測定値の片側95%信頼区間の下限（0.00288）があらかじめ定めた閾値（0.00250）を上回ったため、事後情報がもたらす1イベントあたりの価値は統計的に有意であると確認できた。
 
-内訳は大きく違った。
+ただし、イベント種別ごとの内訳には大きな偏りがあった。
 
 | family | n | mean VOI | one-sided 95% bound |
 | --- | ---: | ---: | ---: |
 | token return | 647 | 0.0054 | lower 0.0049 |
 | noble choice | 672 | 0.0013 | upper 0.0020 |
 
-価値の大半はtoken returnから来ていた。
+情報価値の大部分は、どのトークンを場に戻すかという判断（token return）から生じており、貴族タイルの選択における情報価値はごくわずかだった。
 
-## game全体では小さい
+## ゲーム全体で見ると影響はごく小さい
 
-chosen eventは自然なtrajectoryで約0.2回/gameだった。実測occupancyを掛けるとgame-level prizeは約0.0007 score/game、約0.07 percentage point/gameになる。
+自然な対局ログにおいて、こうした事後選択イベントが発生する頻度は1ゲームあたり平均約0.2回にすぎない。実際の出現頻度（occupancy）を掛け合わせると、ゲーム全体での期待利得は約0.0007 score/game、勝率換算でもわずか約0.07ポイント/gameにとどまる。
 
-| 比較 | result |
+| 比較項目 | 結果 |
 | --- | ---: |
 | PUCT512 − PUCT128のVOI差 | +0.00021 [-0.00032, +0.00075] |
 | cleanup correction `C+P-C` | 0.0178 score/event |
 | post-refill information `C+R-C+P` | 0.00329 score/event |
 
-search budgetを4倍にしてもVOIはほぼ変わらなかった。一方、refillを見なくてもcleanup choice自体を改善する余地は、post-refill情報価値の約5.4倍あった。
+探索回数を128回から512回へ4倍に増やしても、得られる情報価値の差はほとんど生じなかった。一方で、カード補充を見ずとも「事後選択そのものの精度を高める余地」は、補充後の情報価値と比べて約5.4倍も大きいことが判明した。
 
-またVOIは少数のeventに偏り、上位1%の14 eventsで全体の18%を占めた。最大13 eventsを除くとlower boundは0.00247まで下がるため、tailの妥当性は別途確認が必要である。
+また情報価値の分布は少数の極端なイベントに集中しており、上位1%にあたる14イベントだけで総価値の18%を占めていた。この上位13イベントを除外すると片側下限値は0.00247まで低下するため、テール事象の解釈には慎重を期す必要がある。
 
-## staged action採用の根拠にはしない
+## 段階的意思決定モデルを採用する根拠にはしない
 
-この実験で測ったのは情報を見ること自体の価値であり、staged representationの学習しやすさではない。自然occupancyでのgame-level prizeは小さく、以前のstaged armには別のlearnability costもあった。
+本実験で測定したのは「情報を事前に知ることそのものの理論的価値」であり、手番を段階化（staged representation）した際の方策ネットワークの学習しやすさではない。通常の対戦環境におけるゲーム単位の獲得スコアは極めて小さく、以前の実験では着手の段階化に伴う表現学習コストが別途生じることも確認されていた。
 
-次にaction contractを比較するときは、post-refill information prizeとrepresentationの学習コストを別々に評価する。
+今後アクションインターフェースの改修を検討する際は、補充後情報の利得と、表現形式の変更に伴う学習コストとを切り離して評価する方針とする。
 
 ---
 

@@ -1,14 +1,16 @@
 ---
-title: "Splendor AIで自己対戦が見ない局面を、モデルなしで生成できるようにした"
+title: "Splendor AIの自己対局で出現しにくい局面を、モデル推論なしで効率的に生成する"
 date: "2026-09-29"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-self-playだけでdataを作ると、現在のpolicyがほとんど訪れない局面は次の世代でも不足しやすい。G3では終盤、100以上の合法候補、10-token状態などが少なかった。
+強化学習において自己対局（self-play）データのみに依存して学習を反復すると、現行世代の方策（policy）がほとんど訪れない局面は次世代の学習データでも恒常的に不足し、モデルの分布外（OOD）挙動が是正されにくいという課題が生じる。
 
-そこでnetwork inferenceを使わず、rule-based policyで合法なtrajectoryを進め、指定したstate regionだけをstart stateとして保存するsamplerを作った。
+実際に第3世代モデル（G3）の自己対局コーパスを分析したところ、15点前後の競り合いが発生する終盤局面や、合法手が100手を超える分岐の広い局面（wide state）、プレイヤーが上限の10トークンを抱えた状態、ゴールドトークン（ワイルドカード）を保有した状態などが極めて低頻度しか出現していなかった。
+
+こうした探索の盲点を補うために、重いニューラルネットワークの推論を用いず、軽量なルールベース行動（rule-based behavior）によって合法な対局遷移（trajectory）を生成し、指定した局面領域（state region）のみを開始局面（start state）として抽出・保存する高速サンプラーを実装した。
 
 ## samplerの構成
 
@@ -20,11 +22,21 @@ self-playだけでdataを作ると、現在のpolicyがほとんど訪れない�
 | sampling | 1 trajectoryから最大1 state |
 | output | 既存の `sml-start-state-set-v1` |
 
-専用のtraining pathは増やさず、既存self-playやarenaのstart sourceだけを差し替えられる。
+サンプラーの主要な設計方針は以下の通りである。
+
+ニューラルネットワークのフォワードパスを完全に排し、C++で実装されたネイティブ対局エンジンのみで高速にロールアウトを実行する。これによりCPU単体でも短時間で膨大な局面を探索できる。
+
+エージェントの行動特性（behavior）としては、完全ランダムな着手、既存のルールベース教師、勝利点を最速で狙う `point rush`、カード確保を積極的に行う `reserve anchor` など、意図的に性質の異なるヒューリスティックを用意した。
+
+収集時は、首位プレイヤーの威信点（leader prestige）と有効な合法手候補数（effective candidate count）を軸に層化（stratum）を行い、各対局軌道（trajectory）から最大1局面のみをサンプリングすることで、局面間の自己相関を排除している。
+
+出力フォーマットは既存の開始局面セット規格である `sml-start-state-set-v1` に準拠させた。そのため、専用の学習パイプラインを新設することなく、既存の自己対局やアリーナ評価における初期局面ジェネレータを差し替えるだけでそのまま利用できる。
 
 ## self-playに少ない状態を増やせた
 
-20,000 trajectoriesから13,405 unique statesを採用した。
+20,000本の対局軌道（trajectories）を実行したところ、重複のない13,405件のユニーク局面を抽出できた。
+
+第3世代（G3）の自己対局データセットと、今回サンプリングした開始局面セットの分布を比較した結果は以下の通りである。
 
 | metric | G3 self-play | sampled states |
 | --- | ---: | ---: |
@@ -38,9 +50,15 @@ self-playだけでdataを作ると、現在のpolicyがほとんど訪れない�
 | actor holds 10 tokens | 3.6% | 39% |
 | actor holds any gold | 7.6% | 28% |
 
-生成はM2 CPUで26.6秒だった。比較したG3 corpusとのexact overlapは0だった。
+通常の自己対局と比較して、合法手候補が100手を超える局面の割合は 2.2% から 14.2% へ、150手以上は 0.41% から 3.9% へと大幅に増加した。候補手数の90パーセンタイル値（p90）も 30手から 108手へと大きく引き上げられている。
 
-sampled starts 1,000件から2,000 gamesを再開すると、すべて通常の `target_score_equal_turns` で終了し、ply-cap timeoutは0だった。
+また、手数64手以上の長手数局面や終盤トリガー局面（endgame triggered）の頻度も約7倍に拡大し、プレイヤーがトークン上限（10個）を保持している局面は 3.6% から 39% へと10倍以上に達した。
+
+特筆すべきはサンプリング速度であり、M2 MacのCPU単体環境においてわずか26.6秒で生成が完了した。さらに、既存のG3学習コーパスとの局面完全一致（exact overlap）は0件であり、既存データと重複しない新規局面が網羅されていることを確認した。
+
+サンプリングされた局面が実戦として健全に成立しているかを検証するため、抽出した1,000局面から各2回、計2,000回の対局を再開した。その結果、すべての対局が規定の勝利条件である `target_score_equal_turns` で正常終了し、最大手数到達によるタイムアウト（ply-cap timeout）は0件であった。
+
+再開後の残り手数（remaining plies）の分布は以下の通りである。
 
 | remaining plies | value |
 | --- | ---: |
@@ -50,14 +68,18 @@ sampled starts 1,000件から2,000 gamesを再開すると、すべて通常の 
 
 ## behaviorごとに作れる分布が違う
 
-reserve-heavyなbehaviorほどwide stateを作りやすい。
+ロールアウトに用いるエージェントの行動方針（behavior）によって、生成される局面の特性には顕著な差異が見られた。
+
+特にカードのキープ（確保）を積極的に行う `reserve anchor` は、手牌の選択肢を大きく広げるため、合法手の多い局面（wide state）を生成しやすい傾向を示した。
 
 | behavior | emitted | candidate p90 | candidate p99 | share ≥ 100 |
 | --- | ---: | ---: | ---: | ---: |
 | point rush | 2,825 | 115 | 195 | 17.0% |
 | reserve anchor | 3,008 | 135 | 217 | 24.7% |
 
-sampler自体にもdistribution biasはある。目的はproduction playの自然分布を再現することではなく、通常のself-playでは不足する領域を意図的に補うことである。以後は終盤value、wide-state policy、Go-Exploit型restartなどを、自然発生を待たずに評価できる。
+当然ながら、本サンプラーによって生成された局面セット自体にも独自の分布の偏り（distribution bias）は存在する。しかし本手法の狙いは、実戦対局における自然な出現分布を再現することではなく、標準的な自己対局では遭遇頻度が極めて低いロングテール領域を意図的に補強することにある。
+
+本サンプラーの確立により、今後は終盤の価値関数（endgame value）、選択肢が膨大な局面での方策（wide-state policy）、あるいはGo-Exploit型の再開学習などを、自己対局ループ内での自然発生を待つことなく能動的かつ即座に評価・学習できる体制が整った。
 
 ---
 

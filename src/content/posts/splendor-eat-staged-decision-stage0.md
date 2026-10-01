@@ -6,46 +6,46 @@ lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
-従来の EAT は、MAIN action と token return / noble choice をまとめた complete candidate を1回で選ぶ。実際の Splendor では途中で market refill が起こるため、refill 後の情報を見て cleanup を選べる。
+従来の EAT モデルでは、主着手（MAIN action）と、それに伴うトークン返却や貴族タイルの選択といった事後処理（cleanup）をひとまとめにした完全な候補手（complete candidate）を一度の推論で選択していた。しかし実際の Splendor では、カードの購入や予約に伴って市場に新しいカードが補充されるため、その補充された情報を見てから事後処理を選び直す余地がある。
 
-そこで MAIN → refill → RETURN → NOBLE と段階化した surface を実装し、学習前の Stage 0 で使用頻度と計算コストを測った。
+そこで、手番の意思決定を「MAIN → 市場補充 → トークン返却（RETURN） → 貴族選択（NOBLE）」と段階化（staged）したインターフェースを実装し、本格的な学習に投入する前の Stage 0 として、実際の意思決定頻度や推論コストを検証した。
 
-## 3つのaction surfaceを比較した
+## 比較した3つのアクションインターフェース
 
-| arm | actionの分け方 | cleanupが見られる情報 |
+| arm | 着手の分割方法 | 事後処理が参照できる盤面情報 |
 | --- | --- | --- |
-| C | complete candidateを最初に選ぶ | 初期公開情報のみ |
-| F0 | MAIN / cleanupを分ける | refill前 |
-| F1 | MAIN / cleanupを分ける | refill後 |
+| C | ターン開始時に完全な候補手を1つ選択（従来方式） | 初期の公開情報のみ |
+| F0 | MAIN と事後処理を分離 | 補充前の盤面情報 |
+| F1 | MAIN と事後処理を分離 | 補充後の最新盤面情報 |
 
-F0 は factorization だけを変え、F1 は post-refill information も使える。F1用に5次元の `decision_context` を追加し、parameter数は888,324から888,964になった。
+F0 は着手空間の因数分解（factorization）のみを変更したものであり、F1 は補充後の最新情報も活用できる。F1 の推論用に5次元のコンテキスト情報（`decision_context`）を追加した結果、モデルのパラメータ数は888,324個から888,964個へと微増した。
 
-## 候補は減ったが速度は変わらなかった
+## 候補手数は減ったが実行速度は向上せず
 
-71 gamesから4,096 turn-start statesを集め、同じ complete leaf を実行する条件で比較した。
+71対局から収集した4,096個のターン開始局面を用い、同一の完全な着手系列を実行する条件下でベンチマークを実施した。
 
-| metric | C | staged |
+| 指標 | 従来方式（C） | 段階化方式（staged） |
 | --- | ---: | ---: |
-| candidate数 | 26.0 | 24.8 |
-| candidate row | baseline | -4.7% |
-| state-encoder calls / turn | 1.000 | 1.0007 |
-| complete turn | 1.37 ms | F0 1.38 / F1 1.37 ms |
+| 局面ごとの候補手総数 | 26.0手 | 24.8手 |
+| 候補手データの行数 | 基準値 | -4.7% |
+| ターンあたりの盤面エンコーダ呼出回数 | 1.000回 | 1.0007回 |
+| 1ターンの合計推論時間 | 1.37 ms | F0: 1.38 ms / F1: 1.37 ms |
 
-candidate数は減ったが、batch-of-one CPU inferenceではstate encoderの固定費が支配的で、wall timeはほぼ変わらなかった。
+候補手の総数は確かに減少したものの、CPU上でのバッチサイズ1による推論環境では盤面エンコーダの固定計算コストが大半を占めており、実際の壁時計時間（wall time）はほとんど変化しなかった。
 
-## post-refill decisionは4096手中2回
+## 補充後の情報が判断を分けたのは4096手中わずか2回
 
-| event | count / 4,096 turns |
+| イベント | 発生頻度 / 4,096手 |
 | --- | ---: |
-| public refill発生 | 58.7% |
-| discretionary RETURN / NOBLEへ到達 | 3 |
-| F1とF0で情報差が出るpost-refill cleanup | 2 |
+| 市場のカード補充が発生した割合 | 58.7% |
+| プレイヤーの任意選択を要する RETURN / NOBLE に到達した回数 | 3回 |
+| 補充前のF0と補充後のF1で選択内容に差が生じた回数 | 2回 |
 
-candidate set上では reserve overflow可能なparentが2.2%、複数 noble候補が2.3%あったが、実際のtrajectoryでそのcleanupが選ばれる頻度はかなり低かった。
+生成可能な候補手セットの上では、トークン上限超過が発生し得る局面が2.2%、複数の貴族タイルから選択可能な局面が2.3%存在していた。しかし、実際の対局ログにおいてそうした事後選択が必要となる局面が選ばれる頻度は極めて稀だった。
 
-このStage 0では情報価値やplaying strengthは測っていない。分かったのは、候補削減による高速化は小さく、自然分布上のpost-refill recourse eventも疎だったことまでである。
+この Stage 0 の検証から、候補手の絞り込みによる推論高速化の効果は限定的であり、かつ通常の対局局面において補充後の状況変化が選択に影響を与える機会（post-refill recourse event）も極めて稀であることが判明した。
 
-そのため、いきなり大規模な3-arm trainingへ進まず、強いpolicyに近い分布でもeventが疎いかを測り、staged representation自体のlearnabilityは別のpaired trainingで検証することにした。
+したがって、直ちにコストのかかる大規模な3条件比較の学習実験へ進むことは見送り、より強い方策同士の対戦環境でも同様にイベントが疎であるかを追加検証した上で、段階化表現そのものの学習効率（learnability）を別の独立した実験で評価する方針とした。
 
 ---
 

@@ -1,24 +1,28 @@
 ---
-title: "Splendor AIのentity encodingをfactorizeしたが、対局には効かなかった"
+title: "Splendor AIのentity encodingを構造化したが、対局性能の改善には結びつかなかった"
 date: "2026-09-21"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]
 ---
 
-EAT の entity encoder では、type / role / location などの categorical metadata と cost / prestige などの数値を同じ MLP へ入れていた。これを意味ごとに factorize すると学習しやすくなるかを比較した。
+Entity-Action Transformer（EAT）のエンティティエンコーダでは、カードの種別や役割・配置場所といったカテゴリカルなメタデータと、コストや勝利点といった数値を同一のMLPに入力していた。これらを意味のまとまりごとに分離・構造化（factorize）することで、学習効率を高められないか比較検証した。
 
-## 3つのencoder
+## 3種類のエンコーダ構成
 
-| arm | 構成 | parameters |
+検証したアーキテクチャは次の3通りである。
+
+| arm | 構成 | パラメータ数 |
 | --- | --- | ---: |
-| B | 62 featuresをshared 2-layer MLP | 888,324 |
-| F | numeric MLP + type/role/location/tier embeddings | 888,836 |
-| FT | F + entity type別の最初のnumeric projection | 890,116 |
+| B | 62次元の特徴量を共有の2層MLPへ入力（ベースライン） | 888,324 |
+| F | 数値用MLPに、種別・役割・配置・レベルの各埋め込みベクトルを結合 | 888,836 |
+| FT | Fの構成に加え、エンティティ種別ごとに初期の数値射影層を分離 | 890,116 |
 
-入力情報は同じで、inductive biasだけを変えている。B / F / FT を各3 seeds、同じtraining cacheと16-epoch budgetで学習した。
+ネットワークに入力する情報量そのものは同一であり、構造上の帰納バイアス（inductive bias）のみを変化させている。各構成について乱数シード3種類を用意し、共通の学習キャッシュを用いて同一の16エポック予算で学習を進めた。
 
-## offline lossは改善した
+## オフライン損失は改善した
+
+検証データセットにおける方策と勝敗の結合クロスエントロピー損失（validation joint CE）は以下の通りとなった。
 
 | encoder | validation joint CE |
 | --- | ---: |
@@ -26,27 +30,29 @@ EAT の entity encoder では、type / role / location などの categorical met
 | F | 1.38168 |
 | FT | 1.37606 |
 
-平均では FT < F < B だった。ただし baseline 自体のseed間幅は約0.0275 natsあり、平均差より大きかった。
+平均値で見ると FT < F < B の順で損失が低く、構造化を進めたモデルほどオフライン指標は良好だった。ただし、ベースラインB自体のシード間ばらつきが約0.0275 nats存在しており、構成間の平均差を上回る規模だった点には留意が必要である。
 
-さらに structured encoder は inference が遅かった。
+さらに、構造を細分化したエンコーダは推論速度のオーバーヘッドを伴うことが判明した。
 
-| encoder | 128-sim runtime差 | matched-time budget |
+| encoder | 128回探索時の実行時間差 | 同一時間予算でのシミュレーション回数 |
 | --- | ---: | ---: |
 | F | +5.3% | 121 simulations |
 | FT | +11.9% | 114 simulations |
 
-## 対局では優位が消えた
+## 実対局では優位性が消失した
+
+ベースラインBを相手にしたarena対戦を実施した。同一の制限時間で戦わせた場合と、同一の128回シミュレーションで戦わせた場合のペアスコアは次の通りである。
 
 | encoder | matched-time score vs B | equal-128 score vs B |
 | --- | ---: | ---: |
 | F | 0.4958 | 0.5049 |
 | FT | 0.4661 | 0.4808 |
 
-0.5が互角なので、validation CEの順位はplaying strengthへ移らなかった。raw policy比較でも同様だった。
+スコア0.5が互角を意味するため、検証損失で優れていた順位が、実対局での勝率には反映されなかったことになる。探索なしの方策ネットワーク単体による着手比較でも同様の傾向だった。
 
-今回のteacher distributionは最適policyではないため、teacher imitation lossを少し下げることと対局で良い手を選ぶことは同じではない。
+今回の教師データ分布は必ずしも最適解の方策ではない。そのため、教師データの模倣損失をわずかに下げることと、実際の対局でより勝ちにつながる手を選べることとは直結しない。
 
-このfactorizationは採用せずbaseline encoderを残した。architecture変更はoffline metricだけでなく、deployment costを含むdecision qualityまで確認する必要がある。
+この結果を受け、エンコーダの構造化は不採用とし、ベースラインのシンプルなエンコーダを維持することとした。モデルアーキテクチャの変更においては、単体のオフライン損失だけでなく、推論コストを含めた最終的な対局判断の質まで総合的に見極める必要がある。
 
 ---
 

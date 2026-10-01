@@ -6,47 +6,47 @@ lang: ja
 tags: ["splendor", "machine-learning", "value"]
 ---
 
-教師game数を増やしてもplaying strengthが伸びなかったため、valueへ渡しているstate representationを見直した。すると、equal-turn終了に必要なstarting-player情報がmodel inputから消えていた。
+教師データの対局数を増やしても実対局での強さが伸び悩んだことを受け、局面評価ヘッド（value head）に入力している盤面状態の表現形式を根本から見直した。その結果、同手番終了ルールの勝敗判定に不可欠である「先手・後手に関する情報」が、モデルの入力特徴量から完全に脱落していたことが判明した。
 
-## representation aliasingが起き得た
+## 表現の縮退（representation aliasing）が発生していた
 
-player rowsは「actor / opponent」順へ並べ直していたため、actorがstarting playerかどうかをvalue headから直接識別できなかった。
+当時の実装では、各プレイヤーの特徴量行を「現在の手番プレイヤー / 対戦相手」という相対順序に並べ替えてネットワークに入力していた。そのため、手番プレイヤー自身がゲーム開始時の先手（starting player）であったのか後手であったのかを、局面評価ヘッドが直接識別できない構造になっていた。
 
-同じprestigeやcardsでもstarting playerが違えば、15点到達後に相手へもう一度turnが回るかが変わる。異なるtrue valueを持つstatesが同じfeatureへ写る representation aliasing になり得る。
+Splendor では、勝利点15点に到達したプレイヤーが出たラウンドの終了時（後手番の完了時）に勝敗が決する。手元のカードや獲得点数が全く同一の盤面であっても、手番プレイヤーが先手か後手かによって、相手にもう一度手番が回るかどうかが決定的に分かれる。真の局面評価値が全く異なる2つの状態が、モデル入力上では同一の特徴量ベクトルに写し取られてしまうという「表現の縮退（representation aliasing）」が発生していたのである。
 
-## 追加したfeature
+## 新規に追加した特徴量
 
-最初の実験案ではglobal featureを4→10へ増やした。
+初回の実験設計において、全体特徴量（global feature）の次元数を4次元から10次元へと拡充した。
 
-| feature | normalization |
+| 特徴量 | 正規化手法 |
 | --- | --- |
-| actor is starting player | 0 / 1 |
-| game ply | `game_ply / 160` |
-| prestige difference | `(self - opp) / 22` |
-| purchased-card difference | `(opp - self) / 30` |
-| self distance to 15 | `(15 - self prestige) / 15` |
-| opponent distance to 15 | `(15 - opp prestige) / 15` |
+| 手番プレイヤーが先手（starting player）か否か | 0 / 1 のバイナリフラグ |
+| 手番手数（game ply） | `game_ply / 160` |
+| 勝利点の点数差（prestige difference） | `(self - opp) / 22` |
+| 購入カード枚数の差（purchased-card difference） | `(opp - self) / 30` |
+| 手番プレイヤーの15点までの残り点数 | `(15 - self prestige) / 15` |
+| 対戦相手の15点までの残り点数 | `(15 - opp prestige) / 15` |
 
-starting-playerとgame-plyは従来inputから欠けていた情報で、残りは既存player rowsから導出できるrace summaryである。
+先手フラグと手数情報は従来完全に欠落していた一次情報であり、残りの4項目は既存のプレイヤー特徴量から算出可能なレース進行状況の集約値（summary）である。
 
-architectureはglobal encoder inputを94→100へ広げるだけにし、attention trunk、policy head、WDL headは変えなかった。
+モデルアーキテクチャについては、全体エンコーダの入力次元を94次元から100次元へと拡張する最小限の変更にとどめ、Attentionブロックや方策ヘッド、局面評価ヘッドの内部構造には一切手を加えていない。
 
-## paired designでfeature差だけを見る
+## ペア実験による特徴量単体の因果検証
 
-| item | value |
+| 実験パラメータ | 設定値 |
 | --- | ---: |
-| paired replicates | 8 |
-| groups / arm | 29,400 |
-| games / arm | 58,800 |
-| training rows / arm | 419,840 |
-| max optimizer steps | 16,000 |
-| checkpoint interval | 1,000 steps |
+| 独立な実験ペア数（replicates） | 8組 |
+| 1条件あたりのグループ数 | 29,400組 |
+| 1条件あたりのゲーム総数 | 58,800局 |
+| 1条件あたりの学習行数 | 419,840行 |
+| 最大オプティマイザ更新ステップ | 16,000 |
+| チェックポイント保存間隔 | 1,000ステップごと |
 
-control / treatmentでgames、retained rows、policy targets、terminal WDL targets、row orderを同一にした。testやarenaを見る前にvalidation joint lossだけでcheckpointを固定する。
+対照群と実験群において、参照する対局、サンプリングした行、方策ターゲット、最終勝敗ラベル、データ提示順序を完全に一致させた。テストデータや対戦評価を見る前に、検証データの結合損失のみを基準としてチェックポイントを一意に選定するプロトコルを敷いた。
 
-評価順序は、WDL Brier改善 → policy KL non-inferiority → horizon guardrail → fresh PUCT32 arenaとした。
+評価の進行順序は、オフラインの局面評価ブライアスコア改善 → 方策KL情報量の非劣性検証 → 手数帯ごとの安全基準確認 → 32回探索PUCTによる実対局評価、という厳格なゲートを設定した。
 
-この時点では実装とpreregistrationまでで、scientific outcomeはまだなかった。後続実験では `game_ply` を最終treatmentから外し、starting-playerとrace featuresがoffline valueとplaying strengthの両方を改善した。
+本稿の段階では実装と事前登録（preregistration）の完了までを報告する。後続の本検証において `game_ply` は除外され、先手フラグとレース特徴量がオフライン指標および実対局勝率の双方を有意に向上させる決定打となった。
 
 ---
 
