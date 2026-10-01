@@ -6,21 +6,32 @@ lang: ja
 tags: ["splendor", "machine-learning", "self-play"]
 ---
 
-前回、G4からG10までself-playを6世代続けるとG10はG4を+6.15 points上回ったが、G8〜G10の追加改善は確認できなかった。そこで今回はG5〜G10で実際に使ったcorpusと開始checkpointを固定し、fit recipeだけを変えて18 generation stepを再学習した。
+前回、G4からG10まで同じself-play recipeを6世代続けると、G10はG4を+6.15 points上回った。一方、G8〜G10がG5〜G7をさらに上回ったとは確認できなかった。
 
-EATはactionを予測するpolicy headと勝敗を予測するvalue headを同時に学習する。baselineでは両lossを同じ係数で使う。今回は512 updatesとlearning rate 1e-4はそのままにして、value lossの係数だけを1.0から0.25へ下げた。
+そこでG5〜G10で使ったcorpusと開始checkpointを固定し、fit recipeだけを変えて18 generation stepを再学習した。主に見たのは、value lossの重みとoptimizer updatesである。
 
-## value loss係数0.25が+10.37 pointsだった
+## refitの結果
 
-同じcheckpointとcorpusからbaseline recipeでrefitしたnetworkとの直接対戦で、value loss係数0.25は+10.37 points [+8.60, +12.15]だった。3 tracksでも+12.21、+8.85、+10.06とすべて正で、G10で双方512 simulationsにしても+9.70 points、95% interval [+5.74, +13.66]だった。
+baselineは512 updates、learning rate 1e-4、value loss weight 1.0である。
 
-一方、512 updatesを2,048へ増やしたrecipeはすべてbaselineより弱かった。value loss係数0.25で-9.16 points、LR 3e-5で-11.96、cosine LRで-17.94、baseline LRで-21.40だった。baseline LRのlong fitはtraining rowsのpolicy KLを0.057 nats改善したが、次世代のunseen rowsでは0.028 nats悪化した。
+| arm | 主な変更 | baseline比 |
+| --- | --- | ---: |
+| value weight 0.25 | 512 updates | +10.37 pt [+8.60, +12.15] |
+| replay window拡張 | g-4..g-1 | +4.21 pt [+1.98, +6.44] |
+| value weight 0.25 | 2,048 updates | -9.16 pt |
+| lower LR | 2,048 updates, 3e-5 | -11.96 pt |
+| cosine LR | 2,048 updates | -17.94 pt |
+| baseline LR | 2,048 updates, 1e-4 | -21.40 pt |
+
+value loss weightを0.25にした512-update armは3 tracksすべてで正方向だった。G10同士を双方512 simulationsで探索して比較しても+9.70 points、95% interval [+5.74, +13.66]だった。
+
+一方、updatesを2,048へ増やした4 recipesはすべて弱くなった。baseline LRのlong fitはtraining rowsのpolicy KLを0.057 nats改善したが、次世代のunseen rowsでは0.028 nats悪化しており、training fitの改善がplaying strengthへ移っていない。
 
 ## 次はG11でtransferを確認する
 
-value loss係数0.25は次のtransfer testの候補で、まだ通常recipeには採用していない。G10→G11でfresh collection replicates、共通opponent、replicate間の再現性を確認してから採用を判断する。
+このscreenだけでは、value loss weight 0.25を通常recipeへ採用しない。既存corpusのrefitで強かった設定がfresh self-playでも再現するかを、G10→G11のtransfer testで確認する。
 
-今回のrefit screenでは、updatesを増やすよりvalue lossの寄与を下げる方が大きくstrengthを動かした。
+今回分かったのは、試した範囲ではupdatesを増やすより、value lossの寄与を下げる方がstrengthを大きく動かしたことまでである。なぜ0.25が効くのかはまだ切り分けていない。
 
 ---
 
