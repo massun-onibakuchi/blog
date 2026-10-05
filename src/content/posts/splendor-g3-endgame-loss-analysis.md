@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIの4,608局を再生して、終盤の弱点を特定した"
+title: "4,608局の対局ログをリプレイして、終盤の敗北パターンを特定した"
 date: "2026-09-27"
 isPublished: true
 lang: ja

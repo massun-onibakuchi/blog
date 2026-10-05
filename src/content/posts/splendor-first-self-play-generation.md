@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIを自己対局に進めて、最初のモデル更新を通した"
+title: "自己対局ループを立ち上げ、最初のモデル更新を通した"
 date: "2026-08-16"
 isPublished: true
 lang: ja

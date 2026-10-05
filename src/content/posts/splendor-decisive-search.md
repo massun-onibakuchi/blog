@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのPUCTで即勝ちを厳密に扱ったら、終盤の誤探索が+0.82pt改善した"
+title: "PUCT探索で即勝ち候補手を厳密に扱い、終盤の誤探索を+0.82pt改善した"
 date: "2026-09-29"
 isPublished: true
 lang: ja

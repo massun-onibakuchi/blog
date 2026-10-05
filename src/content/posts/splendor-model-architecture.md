@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのモデル構造と特徴量"
+title: "Splendor AIのモデル構造と特徴量設計"
 date: "2026-08-13"
 isPublished: true
 lang: ja

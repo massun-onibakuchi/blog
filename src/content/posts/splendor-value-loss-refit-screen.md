@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでvalue loss係数を0.25にしたrefitが+10.4pt勝った"
+title: "value loss係数を0.25に引き下げた再学習で、対局勝率が+10.4pt改善した"
 date: "2026-10-01T07:37:15+09:00"
 isPublished: true
 lang: ja

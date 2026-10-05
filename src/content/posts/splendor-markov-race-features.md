@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのvalueが手番を見ていなかったので特徴量を追加した"
+title: "value入力に手番情報が欠落していた問題と、レース特徴量の設計"
 date: "2026-09-01"
 isPublished: true
 lang: ja

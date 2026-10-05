@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで教師データをさらに2倍にしたが、対局の強さは伸びなかった"
+title: "自己対局データをさらに2倍に増やしたが、強さの伸びは頭打ちになった"
 date: "2026-08-30"
 isPublished: true
 lang: ja

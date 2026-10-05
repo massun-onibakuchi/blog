@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで探索評価値をvalue targetに混ぜたらG11で+10.9pt勝ち越した"
+title: "探索評価値をvalue targetに反映させて学習したら、G11で+10.9pt勝ち越した"
 date: "2026-10-02T14:30:00+09:00"
 isPublished: true
 lang: ja

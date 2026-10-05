@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでsearch self-playを3世代回したら固定panelで+10.9pt改善した"
+title: "探索付き自己対局ループを3世代回し、固定パネルで+10.9ptの向上を確認した"
 date: "2026-09-21"
 isPublished: true
 lang: ja

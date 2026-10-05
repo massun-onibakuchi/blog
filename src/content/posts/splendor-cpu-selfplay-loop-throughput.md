@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのCPU学習ループを高速化したら、実ループで16.6%短縮できた"
+title: "CPU自己対局ループの無駄なパディングを削り、実行時間を16.6%短縮した"
 date: "2026-09-29"
 isPublished: true
 lang: ja

@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで「補充を見てから返す」価値を測った"
+title: "「カード補充を見てからトークンを返却する」情報価値をオフラインで測定した"
 date: "2026-09-26"
 isPublished: true
 lang: ja

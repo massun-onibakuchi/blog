@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでPUCTの探索設定をself-playへ移したらG4が+3.26pt改善した"
+title: "PUCTの探索設定を自己対局データ生成に反映したら、G4が+3.26pt勝ち越した"
 date: "2026-09-29"
 isPublished: true
 lang: ja

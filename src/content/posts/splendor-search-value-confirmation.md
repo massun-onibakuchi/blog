@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで探索評価値をvalue教師に反映させたモデルを1,600局で検証した"
+title: "探索評価値をvalue教師に反映させたモデルを1,600局で検証した"
 date: "2026-08-18T23:40:00Z"
 isPublished: true
 lang: ja

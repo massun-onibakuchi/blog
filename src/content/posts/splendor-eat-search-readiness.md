@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでPUCT探索を使う価値を測った"
+title: "自己対局ループの投入前に、EATにおけるPUCT探索の効果を検証した"
 date: "2026-09-20"
 isPublished: true
 lang: ja

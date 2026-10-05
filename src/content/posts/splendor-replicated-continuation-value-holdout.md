@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのvalue教師信号を継続対局で検証する: 8回平均は現行モデルを上回らなかった"
+title: "継続対局によるvalue教師信号の検証: 8局平均は現行モデルを上回らなかった"
 date: "2026-08-20"
 isPublished: true
 lang: ja

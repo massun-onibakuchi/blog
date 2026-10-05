@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIを2世代回しても伸び悩んだため、学習量不足の仮説を検証した"
+title: "自己対局を2世代回しても伸び悩んだため、学習量不足の仮説を検証した"
 date: "2026-08-16T12:00:00Z"
 isPublished: true
 lang: ja

@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのPUCTを調整したら128 simulationsで+8.6pt改善した"
+title: "PUCTのハイパーパラメータを再調整し、128シミュレーションで+8.6pt改善した"
 date: "2026-09-23"
 isPublished: true
 lang: ja
