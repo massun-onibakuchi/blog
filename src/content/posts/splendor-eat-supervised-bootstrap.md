@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのEATを教師あり学習した"
+title: "ルールベース教師を用いたEntity-Action Transformerの初期学習"
 date: "2026-09-19"
 isPublished: true
 lang: ja

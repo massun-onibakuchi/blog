@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIの25本の実験を横断して、研究計画を組み直した"
+title: "25本の自己対局実験を横断整理し、今後の開発ロードマップを再設計した"
 date: "2026-09-29T09:58:19Z"
 isPublished: true
 lang: ja

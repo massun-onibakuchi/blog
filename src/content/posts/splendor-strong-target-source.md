@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで128回探索の自己対局を8,192局作り、value教師の弱点を測った"
+title: "128回探索の自己対局8,192局を生成し、value教師信号の課題を分析した"
 date: "2026-08-18"
 isPublished: true
 lang: ja

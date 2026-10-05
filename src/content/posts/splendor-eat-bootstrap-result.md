@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIにEntity-Action Transformerを導入した"
+title: "盤面と候補手を直接評価するEntity-Action Transformer（EAT）の導入"
 date: "2026-09-13"
 isPublished: true
 lang: ja

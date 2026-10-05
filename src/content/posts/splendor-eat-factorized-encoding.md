@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのentity encodingを構造化したが、対局性能の改善には結びつかなかった"
+title: "エンティティ表現の構造化を試みたが、対局性能の改善には結びつかなかった"
 date: "2026-09-21"
 isPublished: true
 lang: ja

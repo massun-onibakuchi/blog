@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIで学習行数を増やさず、対局数を4倍にしたら強くなった"
+title: "学習行数を増やさずに自己対局数を4倍にスケールしたら、対局勝率が向上した"
 date: "2026-08-24"
 isPublished: true
 lang: ja

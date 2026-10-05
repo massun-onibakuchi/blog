@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのarena探索を途中で止めたら1世代23%速くなった"
+title: "Arena評価のPUCT探索を早期終了させ、1世代の所要時間を23%短縮した"
 date: "2026-09-27"
 isPublished: true
 lang: ja

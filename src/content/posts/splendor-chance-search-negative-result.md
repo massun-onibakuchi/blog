@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでランダム補充の探索を工夫したが、単純なPUCTの方が強かった"
+title: "Splendorのランダム補充に対して木探索を工夫したが、単純なPUCTの方が強かった"
 date: "2026-08-19T23:00:00Z"
 isPublished: true
 lang: ja

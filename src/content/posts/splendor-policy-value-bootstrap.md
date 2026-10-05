@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIの教師あり学習: policyは向上したがvalueが早期に過学習した"
+title: "教師あり学習による初期ブートストラップ: policy向上とvalueの早期過学習"
 date: "2026-08-15"
 isPublished: true
 lang: ja

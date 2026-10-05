@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIのself-playを6世代継続したらG10がG4を+6.2pt上回った"
+title: "自己対局ループを6世代継続実行し、G10がG4に+6.2pt勝ち越した"
 date: "2026-09-30T10:25:00Z"
 isPublished: true
 lang: ja

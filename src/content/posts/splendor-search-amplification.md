@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIでPUCT探索がどれだけ勝率を押し上げるか検証した"
+title: "PUCT探索による勝率の押し上げ効果を定量的に検証した"
 date: "2026-08-16T23:59:59Z"
 isPublished: true
 lang: ja

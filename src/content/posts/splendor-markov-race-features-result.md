@@ -1,5 +1,5 @@
 ---
-title: "Splendor AIに手番と得点レースの特徴量を入れたら対局でも強くなった"
+title: "手番と得点レースの特徴量を追加したら、実対局でも有意に勝ち越した"
 date: "2026-09-08"
 isPublished: true
 lang: ja
