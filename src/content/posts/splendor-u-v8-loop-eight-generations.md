@@ -18,3 +18,4 @@ Splendorの2人対戦を対象に、ニューラルネットワークとPUCT探�
 各世代では512組のseat-swapped自己対局を生成し、512 optimizer updatesを行った。探索はMAINでPUCT 128 simulationsを使い、AdamW stateも世代をまたいで引き継いだ。
 
 最終評価ではU8-raw-3に対して67.08%だった。
+1,600のseat-swapped setup pairを使った評価で、one-sided 95% lower boundは65.70%だった。
