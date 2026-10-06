@@ -6,4 +6,4 @@ lang: ja
 tags: ["splendor"]
 ---
 
-Draft two.
+Uモデルを8世代学習した。
