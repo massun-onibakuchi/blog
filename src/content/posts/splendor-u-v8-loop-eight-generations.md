@@ -31,3 +31,4 @@ U8とoriginal EAT G12を相手にした評価でも、最終世代は出発点�
 出発点は1.71 natsで、最終世代は1.67 natsだった。少なくとも今回の範囲では、target変更によるrunaway softeningは観測されなかった。
 
 古いreplay sourceは移行せず、新しいsearch contractのsourceだけで1→2→3世代分へ増やすrampを使った。
+最初の1-source世代もmonitorではimprovedとなり、移行直後に崩れる挙動は見られなかった。
