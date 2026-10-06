@@ -21,3 +21,7 @@ Splendorの2人対戦を対象に、ニューラルネットワークとPUCT探�
 1,600のseat-swapped setup pairを使った評価で、one-sided 95% lower boundは65.70%だった。
 
 U8とoriginal EAT G12を相手にした評価でも、最終世代は出発点を上回った。
+
+## 毎世代強くなった、とは言えない
+
+世代ごとのmonitorにはimprovedとinconclusiveが混在した。
