@@ -12,3 +12,7 @@ Splendorの2人対戦を対象に、ニューラルネットワークとPUCT探�
 
 ただし、これは3世代だけの比較だった。
 変更直後の一度きりの改善なのか、その後のself-play loopでも伸び続けるのかは分からない。そこで3世代目のモデルU8-raw-3を出発点に、loopを8世代回した。
+
+## 8世代後、出発点に67.1%で勝った
+
+各世代では512組のseat-swapped自己対局を生成し、512 optimizer updatesを行った。探索はMAINでPUCT 128 simulationsを使い、AdamW stateも世代をまたいで引き継いだ。
