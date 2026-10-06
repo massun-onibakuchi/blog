@@ -21,3 +21,5 @@ one-sided 95% lower boundは0.6570だった。
 U8との集計値は0.6644から0.8244、original EAT G12では0.7969から0.8769へ変化した。
 
 この1 lineageでは、target変更後の改善がその後のself-play loopでも積み上がった。
+
+## 世代ごとの差
