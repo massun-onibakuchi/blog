@@ -6,4 +6,4 @@ lang: ja
 tags: ["splendor"]
 ---
 
-Draft.
+Draft two.
