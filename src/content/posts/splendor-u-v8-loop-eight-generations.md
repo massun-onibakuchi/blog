@@ -29,3 +29,5 @@ U8とoriginal EAT G12を相手にした評価でも、最終世代は出発点�
 
 固定した局面群でprior entropyも追跡したが、8世代で大きく増え続ける挙動は見られなかった。
 出発点は1.71 natsで、最終世代は1.67 natsだった。少なくとも今回の範囲では、target変更によるrunaway softeningは観測されなかった。
+
+古いreplay sourceは移行せず、新しいsearch contractのsourceだけで1→2→3世代分へ増やすrampを使った。
