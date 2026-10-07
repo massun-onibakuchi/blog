@@ -7,7 +7,7 @@
  */
 
 :root {
-  --measure: 42rem; /* ~70 characters at the body size */
+  --measure: 48rem; /* ~45-50 CJK / ~75-85 Latin characters, comfortable for code blocks */
   --bg: #ffffff;
   --fg: #1a1a1a; /* 15.9:1 on white */
   --muted: #595959; /* 7.0:1 on white — dates, meta, counts */
@@ -35,7 +35,7 @@ html {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   font-size: 17px;
-  line-height: 1.7;
+  line-height: 1.75;
   background: var(--bg);
   color: var(--fg);
   /* Latin and CJK sit on the same baseline without per-language overrides. */
@@ -46,6 +46,12 @@ body {
   margin: 0 auto;
   padding: 1.5rem 1rem 4rem;
   max-width: var(--measure);
+}
+
+@media (min-width: 640px) {
+  body {
+    padding: 2rem 1.5rem 5rem;
+  }
 }
 
 a {
@@ -117,6 +123,7 @@ code {
 :not(pre) > code {
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   padding: 0.1em 0.3em;
+  word-break: break-word;
 }
 
 /* Site chrome ------------------------------------------------------------- */
@@ -257,7 +264,11 @@ code {
   margin-bottom: 2rem;
 }
 
-.prose :is(p, ul, ol) {
+h1,
+h2,
+h3,
+h4,
+.prose :is(p, ul, ol, blockquote) {
   overflow-wrap: break-word;
 }
 
@@ -293,6 +304,15 @@ code {
   padding-top: 1rem;
   border-top: 1px solid var(--rule);
   font-size: 0.9rem;
+}
+
+.neighbours span {
+  flex: 1 1 50%;
+  overflow-wrap: break-word;
+}
+
+.neighbours span:last-child {
+  text-align: right;
 }
 
 /* Math blocks are the one element that reliably overflows on phones. */
