@@ -1,0 +1,27 @@
+---
+// src/pages/tags/[tag].astro — all published articles carrying a tag (end-state §2).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getAllArticles, getTags, tagKey } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const allTags = await getTags();
+  const allArticles = await getAllArticles();
+  return allTags.map(({ tag }) => ({
+    params: { tag: tagKey(tag) },
+    props: {
+      tag,
+      articles: allArticles.filter((article) =>
+        article.data.tags.some((t) => tagKey(t) === tagKey(tag)),
+      ),
+    },
+  }));
+}
+
+const { tag, articles } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`}>
+  <h1>#{tag}</h1>
+  <EntryList articles={articles} empty="No articles for this tag." />
+</BaseLayout>

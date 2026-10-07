@@ -125,7 +125,7 @@ Deferred to v2: Mermaid diagrams.
 
 Bare minimal: one column, plain background, unstyled-looking links, no cards,
 borders, shadows, or hero areas.
-Body face is a readable default at ~65–75 character measure. Code and figures are the only visual interest.
+Body face is a readable default at ~45–50 CJK / ~75–85 Latin character measure (~48rem, giving 80-column code blocks breathing room). Code and figures are the only visual interest.
 
 Dark / light toggle. Switching plays a circular reveal expanding from the click
 point, degrading to a plain switch where unsupported. Both themes are
