@@ -14,7 +14,7 @@ const { articles, empty = 'Nothing here yet.' } = Astro.props;
 
 {articles.length === 0 && <p class="meta">{empty}</p>}
 
-<ul class="entries">
+<ul class="entries article-entries">
   {
     articles.map((article) => (
       <li>
@@ -27,21 +27,24 @@ const { articles, empty = 'Nothing here yet.' } = Astro.props;
           {/* Older writing lives on Qiita, Medium and HackMD; say so before the click. */}
           {isExternal(article) && <span class="meta"> ↗</span>}
         </a>
-        {' '}
-        {/* Externally hosted writing may carry no date; then nothing is shown. */}
-        {article.data.date && (
-          <time datetime={dateAttr(article.data.date, article.data.datePrecision)}>
-            {formatDate(article.data.date, article.data.datePrecision)}
-          </time>
-        )}
-        {article.data.tags.length > 0 && (
-          <span class="tag-list">
-            {article.data.tags.map((tag) => (
-              <a class="meta" href={`/tags/${encodeURIComponent(tagKey(tag))}/`}>
-                #{tag}
-              </a>
-            ))}
-          </span>
+        {(article.data.date || article.data.tags.length > 0) && (
+          <div class="entry-meta">
+            {/* Externally hosted writing may carry no date; then nothing is shown. */}
+            {article.data.date && (
+              <time datetime={dateAttr(article.data.date, article.data.datePrecision)}>
+                {formatDate(article.data.date, article.data.datePrecision)}
+              </time>
+            )}
+            {article.data.tags.length > 0 && (
+              <span class="tag-list">
+                {article.data.tags.map((tag) => (
+                  <a class="meta" href={`/tags/${encodeURIComponent(tagKey(tag))}/`}>
+                    #{tag}
+                  </a>
+                ))}
+              </span>
+            )}
+          </div>
         )}
       </li>
     ))

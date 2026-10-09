@@ -27,7 +27,7 @@ const { entries } = Astro.props;
           {entry.name}
         </a>
         <span class="meta">{entry.year}</span>
-        <div>
+        <div class="project-description">
           {entry.description}
           {entry.with && entry.with.length > 0 && <span class="meta"> with {entry.with.join(', ')}</span>}
         </div>
