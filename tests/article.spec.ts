@@ -41,8 +41,8 @@ for (const section of SECTIONS) {
 
       await expect(summary).toHaveText(
         targetLang === 'ja'
-          ? 'ChatGPTで日本語の要約を読む'
-          : 'Summarize in English with ChatGPT',
+          ? '日本語で要約を読む'
+          : 'Summarize in English',
       );
 
       const href = await summary.getAttribute('href');
