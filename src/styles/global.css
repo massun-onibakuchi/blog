@@ -199,8 +199,8 @@ code {
 }
 
 .entries li {
-  /* Flex rather than inline whitespace: the title, date and tags must keep a gap
-     even when they wrap onto separate lines on a phone. */
+  /* Flex rather than inline whitespace: name and year keep a gap in project lists,
+     or wrap gracefully on narrow viewports. */
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -209,10 +209,43 @@ code {
 }
 
 /* A project's description belongs on its own line under the name and year. */
-.entries li > div {
+.entries li > .project-description {
   flex-basis: 100%;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.article-entries > li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+
+.article-entries > li > a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.entry-meta > time {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.entry-meta > .tag-list {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .entries time,

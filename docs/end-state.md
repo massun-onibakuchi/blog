@@ -41,7 +41,7 @@ would add nothing.
 
 URLs are permanent. No dates in URLs.
 
-List entries carry title, date, and tags only — no excerpt, no thumbnail.
+Article lists (`/posts/`, `/publications/`, and `/tags/<tag>/`) show title, date, and tags only — no excerpt or thumbnail. Each title occupies its own row and may wrap. Available date and tags appear together beneath the title, wrapping as needed on narrow screens.
 
 **Every link that leaves the site opens in a new tab** — header social links, the
 external entries in the lists, the language-summary button, and links inside article
