@@ -13,6 +13,32 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { rehypeGithubAlerts } from 'rehype-github-alerts';
 import rehypeExternalLinks from 'rehype-external-links';
 
+
+/**
+ * Rehype plugin to add loading="lazy" and decoding="async" to all markdown images,
+ * ensuring below-the-fold figures don't block initial page load or main-thread decode.
+ */
+function rehypeLazyImages() {
+  /** @param {any} node */
+  function walk(node) {
+    if (!node || typeof node !== 'object') return;
+    if (node.type === 'element' && node.tagName === 'img') {
+      node.properties = node.properties || {};
+      node.properties.loading = node.properties.loading || 'lazy';
+      node.properties.decoding = node.properties.decoding || 'async';
+    }
+    if (Array.isArray(node.children)) {
+      for (const child of node.children) {
+        walk(child);
+      }
+    }
+  }
+
+  /** @param {any} tree */
+  return (tree) => {
+    walk(tree);
+  };
+}
 export default defineConfig({
   site: process.env.SITE_URL ?? 'http://localhost:4321',
   trailingSlash: 'always',
@@ -40,6 +66,7 @@ export default defineConfig({
       // Links out of an article body open in a new tab, so the reader keeps
       // their place in what they were reading (end-state §2).
       [rehypeExternalLinks, { target: '_blank', rel: ['noopener'] }],
+      rehypeLazyImages,
     ],
   },
 });
