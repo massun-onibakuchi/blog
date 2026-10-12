@@ -1,0 +1,30 @@
+# public/_headers — response headers for Cloudflare Workers Static Assets.
+# Cloudflare Workers serves static assets with `max-age=0, must-revalidate`
+# by default. Rules here set long-lived Cache-Control headers for images
+# and fingerprinted assets so browsers and edge caches reuse them.
+
+# Avatar: revalidate daily, serve stale up to a week while refetching
+/avatar.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Favicons: cache for 30 days
+/favicon-32.png
+  Cache-Control: public, max-age=2592000
+
+/favicon-180.png
+  Cache-Control: public, max-age=2592000
+
+# Article images and diagrams: static and permanent
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Generated Open Graph card images (one per published article)
+/:section/:slug/og.png
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fingerprinted build bundles (CSS, JS, optimized chunks)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
