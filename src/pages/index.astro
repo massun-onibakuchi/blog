@@ -9,7 +9,16 @@ import { SITE } from '../site';
 
 <BaseLayout>
   <div class="profile">
-    <img class="avatar" src="/avatar.jpg" alt="" width="96" height="96" />
+    <img
+      class="avatar"
+      src="/avatar.jpg"
+      alt=""
+      width="96"
+      height="96"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
     <div>
       <h1 class="name">{SITE.name}</h1>
       <WhoAmI />
