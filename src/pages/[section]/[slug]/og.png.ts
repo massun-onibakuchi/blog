@@ -17,7 +17,8 @@
 // instance of Noto Sans JP crashes satori's bundled opentype.js parser on its
 // `fvar` table, hence the static (non-variable) OTF here instead.
 
-import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
@@ -49,6 +50,11 @@ const TITLE_MAX_LINES = 4;
 // touches the site name below it.
 const TITLE_MAX_HEIGHT = TITLE_FONT_SIZE * TITLE_LINE_HEIGHT * TITLE_MAX_LINES;
 
+
+const CACHE_DIR = join(process.cwd(), 'node_modules/.cache/og-images');
+const memoryCache = new Map<string, Buffer>();
+const FONT_HASH = createHash('sha256').update(fontData).digest('hex').slice(0, 16);
+const LAYOUT_VERSION = 'v1';
 /** Build the satori element tree for one card. Plain object nodes (satori's
  *  JSX-like shape) so this stays a .ts file with no React/JSX dependency. */
 function cardTree(title: string, siteName: string) {
@@ -110,6 +116,41 @@ async function renderOgPng(title: string): Promise<Buffer> {
   return resvg.render().asPng();
 }
 
+/** Returns a cached PNG if previously rendered with the same layout, font,
+ *  site name and title; renders and caches on first request. */
+async function getCachedOrRenderOgPng(title: string): Promise<Buffer> {
+  const cacheKey = createHash('sha256')
+    .update(LAYOUT_VERSION)
+    .update(FONT_HASH)
+    .update(SITE.name)
+    .update(title)
+    .digest('hex');
+
+  const inMem = memoryCache.get(cacheKey);
+  if (inMem) return inMem;
+
+  const cacheFile = join(CACHE_DIR, `${cacheKey}.png`);
+  if (existsSync(cacheFile)) {
+    try {
+      const cached = readFileSync(cacheFile);
+      memoryCache.set(cacheKey, cached);
+      return cached;
+    } catch {
+      // Fall through to re-render on read failure
+    }
+  }
+
+  const png = await renderOgPng(title);
+  try {
+    mkdirSync(CACHE_DIR, { recursive: true });
+    writeFileSync(cacheFile, png);
+  } catch {
+    // Non-fatal if cache write fails
+  }
+  memoryCache.set(cacheKey, png);
+  return png;
+}
+
 export async function getStaticPaths() {
   const sections: Section[] = ['publications', 'posts'];
   const lists = await Promise.all(sections.map(getSection));
@@ -124,7 +165,7 @@ export async function getStaticPaths() {
 }
 
 export async function GET({ props }: { props: { article: Article } }) {
-  const png = await renderOgPng(props.article.data.title);
+  const png = await getCachedOrRenderOgPng(props.article.data.title);
   return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
