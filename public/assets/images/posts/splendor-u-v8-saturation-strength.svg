@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+<title id="title">U v8 自己対局ループのブロック別対局強度推移</title>
+<desc id="desc">Look 1からLook 12までの各4世代ブロック終了時の対戦成績差分（ポイント）を示す折れ線グラフ。前半は約+5pt/ブロックで推移し、中盤で約+2ptに鈍化、第12ブロックで-3.55ptのリグレッションが起きた。</desc>
+<rect width="800" height="440" fill="white"/>
+<text x="400" y="34" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#222">4世代ブロックごとの対局強度差分（Look 1〜12）</text>
+
+<!-- Grid lines & Y axis -->
+<g stroke="#e2e8f0" stroke-width="1">
+  <line x1="80" y1="91.4" x2="750" y2="91.4"/>
+  <line x1="80" y1="134.3" x2="750" y2="134.3"/>
+  <line x1="80" y1="177.1" x2="750" y2="177.1"/>
+  <line x1="80" y1="220.0" x2="750" y2="220.0"/>
+  <line x1="80" y1="305.7" x2="750" y2="305.7"/>
+  <line x1="80" y1="348.6" x2="750" y2="348.6"/>
+</g>
+
+<!-- Reference lines -->
+<!-- y = 0 line (neutral) -->
+<line x1="80" y1="262.9" x2="750" y2="262.9" stroke="#94a3b8" stroke-width="1.5"/>
+<!-- y = +2.5 saturation threshold line -->
+<line x1="80" y1="209.3" x2="750" y2="209.3" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+<!-- Axes text -->
+<g font-family="sans-serif" font-size="12" fill="#64748b" text-anchor="end">
+  <text x="70" y="95.4">+8 pt</text>
+  <text x="70" y="138.3">+6 pt</text>
+  <text x="70" y="181.1">+4 pt</text>
+  <text x="70" y="213.3" fill="#b45309" font-weight="bold">+2.5 pt</text>
+  <text x="70" y="266.9" fill="#334155" font-weight="bold">0 pt</text>
+  <text x="70" y="309.7">-2 pt</text>
+  <text x="70" y="352.6">-4 pt</text>
+</g>
+
+<text x="745" y="204" text-anchor="end" font-family="sans-serif" font-size="11" fill="#b45309">飽和判定閾値 (+2.5 pt)</text>
+<text x="745" y="258" text-anchor="end" font-family="sans-serif" font-size="11" fill="#64748b">互角基準線 (0 pt)</text>
+
+<!-- Shaded areas for regions -->
+<rect x="85" y="60" width="215" height="24" rx="4" fill="#eff6ff" stroke="#bfdbfe"/>
+<text x="192" y="76" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1d4ed8">前半: 平均約+5 pt/block</text>
+
+<rect x="315" y="60" width="380" height="24" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="505" y="76" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475569">中盤〜後半: 平均約+2 pt/block（成長鈍化）</text>
+
+<!-- Polyline -->
+<polyline fill="none" stroke="#2563eb" stroke-width="3" points="90.0,116.9 149.1,185.7 208.2,172.2 267.3,152.7 326.4,216.6 385.5,209.5 444.5,251.7 503.6,167.7 562.7,251.1 621.8,221.9 680.9,193.0 740.0,338.9"/>
+
+<!-- Data points and values -->
+<g fill="white" stroke="#2563eb" stroke-width="2.5">
+  <circle cx="90.0" cy="116.9" r="4.5"/>
+  <circle cx="149.1" cy="185.7" r="4.5"/>
+  <circle cx="208.2" cy="172.2" r="4.5"/>
+  <circle cx="267.3" cy="152.7" r="4.5"/>
+  <circle cx="326.4" cy="216.6" r="4.5"/>
+  <circle cx="385.5" cy="209.5" r="4.5"/>
+  <circle cx="444.5" cy="251.7" r="4.5"/>
+  <circle cx="503.6" cy="167.7" r="4.5"/>
+  <circle cx="562.7" cy="251.1" r="4.5"/>
+  <circle cx="621.8" cy="221.9" r="4.5"/>
+  <!-- Highlight g43 (D deliverable) -->
+  <circle cx="680.9" cy="193.0" r="6" stroke="#16a34a" stroke-width="3" fill="#dcfce7"/>
+  <!-- Highlight g47 regression -->
+  <circle cx="740.0" cy="338.9" r="6" stroke="#dc2626" stroke-width="3" fill="#fee2e2"/>
+</g>
+
+<!-- Point labels -->
+<g font-family="sans-serif" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="middle">
+  <text x="90.0" y="106.9">+6.8</text>
+  <text x="149.1" y="175.7">+3.6</text>
+  <text x="208.2" y="162.2">+4.2</text>
+  <text x="267.3" y="142.7">+5.1</text>
+  <text x="326.4" y="206.6">+2.2</text>
+  <text x="385.5" y="199.5">+2.5</text>
+  <text x="444.5" y="244.0">+0.5</text>
+  <text x="503.6" y="157.7">+4.4</text>
+  <text x="562.7" y="243.0">+0.6</text>
+  <text x="621.8" y="211.9">+1.9</text>
+  <text x="680.9" y="180.0" fill="#15803d">+3.3 (D)</text>
+  <text x="740.0" y="360.0" fill="#b91c1c">-3.55 (停止)</text>
+</g>
+
+<!-- X axis labels -->
+<g font-family="sans-serif" font-size="11" fill="#475569" text-anchor="middle">
+  <text x="90.0" y="380">L1</text><text x="90.0" y="394" font-size="9" fill="#94a3b8">g3</text>
+  <text x="149.1" y="380">L2</text><text x="149.1" y="394" font-size="9" fill="#94a3b8">g7</text>
+  <text x="208.2" y="380">L3</text><text x="208.2" y="394" font-size="9" fill="#94a3b8">g11</text>
+  <text x="267.3" y="380">L4</text><text x="267.3" y="394" font-size="9" fill="#94a3b8">g15</text>
+  <text x="326.4" y="380">L5</text><text x="326.4" y="394" font-size="9" fill="#94a3b8">g19</text>
+  <text x="385.5" y="380">L6</text><text x="385.5" y="394" font-size="9" fill="#94a3b8">g23</text>
+  <text x="444.5" y="380">L7</text><text x="444.5" y="394" font-size="9" fill="#94a3b8">g27</text>
+  <text x="503.6" y="380">L8</text><text x="503.6" y="394" font-size="9" fill="#94a3b8">g31</text>
+  <text x="562.7" y="380">L9</text><text x="562.7" y="394" font-size="9" fill="#94a3b8">g35</text>
+  <text x="621.8" y="380">L10</text><text x="621.8" y="394" font-size="9" fill="#94a3b8">g39</text>
+  <text x="680.9" y="380" fill="#15803d" font-weight="bold">L11</text><text x="680.9" y="394" font-size="9" fill="#15803d" font-weight="bold">g43</text>
+  <text x="740.0" y="380" fill="#b91c1c" font-weight="bold">L12</text><text x="740.0" y="394" font-size="9" fill="#b91c1c" font-weight="bold">g47</text>
+</g>
+
+<!-- Bottom note -->
+<text x="400" y="424" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">各Lookは直前ブロック末尾モデルとの3,200対局ペア（Bonferroni α = 0.05/12）。L12で上限48.1% &lt; 50%となり停止。</text>
+</svg>
