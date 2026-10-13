@@ -1,6 +1,6 @@
 ---
 title: "探索付き自己対局ループを3世代回し、固定パネルで+10.9ptの向上を確認した"
-date: "2026-09-21"
+date: "2026-09-21T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]

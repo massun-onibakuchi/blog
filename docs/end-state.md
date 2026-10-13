@@ -82,7 +82,7 @@ Earlier articles live on Qiita, Medium, HackMD and mirror.xyz. They appear in th
 Publications list by title, marked as leaving the site, and link straight out — no
 copy of the text is kept here and no local page is built for them. Their date is
 optional, because some originals show none; undated entries sort to the bottom.
-An article hosted here always has a date.
+An article hosted here always has a timezone-aware publication timestamp.
 
 Where the original is datable only to the month, the entry carries that month
 rather than a guessed day: it is recorded as the first of the month, marked
@@ -144,7 +144,7 @@ Responsive: desktop and mobile, including in-app browsers.
   ```yaml
   ---
   title:
-  date: '2025-12-14' # required, except for externally hosted entries
+  date: '2025-12-14T18:00:00+09:00' # required for local articles; ISO 8601 with TZ
   datePrecision: day # day | month — month shows YYYY-MM (see §2)
   isPublished: true
   lang: en # en | ja — drives the summary button's target language
@@ -156,6 +156,17 @@ Responsive: desktop and mobile, including in-app browsers.
 
   `isPublished: false` excludes the article from the build entirely. The slug
   comes from the filename, and the section from the directory the file sits in.
+  Local articles, including drafts, require a time and explicit timezone (`Z` or
+  an offset such as `+09:00`); date-only and timezone-less values fail the build.
+  External entries may retain a date-only value or omit it as described in §2.
+  Lists and article neighbours use publication timestamps newest first, comparing
+  absolute instants across timezones. Equal timestamps sort by section, then slug,
+  in ascending code-point order, independent of loader order and host locale.
+  To express chronology within a day, give later articles later timestamps.
+  If an exact time is unknown, an assigned ordering time may express the intended
+  chronology; it does not claim the actual publication time. Visible dates remain
+  UTC `YYYY-MM-DD` (or `YYYY-MM` for month precision); the timestamp controls order
+  without showing the time.
 - **OGP image**: per-article override allowed; otherwise auto-generated at build
   time as a solid-background card carrying the title (falling back to the site name).
 - No analytics of any kind.

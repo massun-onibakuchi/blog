@@ -1,6 +1,6 @@
 ---
 title: "128回探索の安定性を検証したら、同一局面でも22.5%で最善手が変わった"
-date: "2026-08-22"
+date: "2026-08-22T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

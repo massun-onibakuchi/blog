@@ -1,6 +1,6 @@
 ---
 title: "手番と得点レースの特徴量を追加したら、実対局でも有意に勝ち越した"
-date: "2026-09-08"
+date: "2026-09-08T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "value"]

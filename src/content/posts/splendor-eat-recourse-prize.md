@@ -1,6 +1,6 @@
 ---
 title: "「カード補充を見てからトークンを返却する」情報価値をオフラインで測定した"
-date: "2026-09-26"
+date: "2026-09-26T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

@@ -1,6 +1,6 @@
 ---
 title: "U v8自己対局ループの飽和調査：第43世代でL-s0比74.9%に到達し、第12ブロックのリグレッションで停止した"
-date: "2026-10-13"
+date: "2026-10-13T21:00:00+09:00"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]

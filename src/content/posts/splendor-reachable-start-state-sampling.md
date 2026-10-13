@@ -1,6 +1,6 @@
 ---
 title: "自己対局で出現しにくい終盤局面を、モデル推論なしで効率的にサンプリングする"
-date: "2026-09-29"
+date: "2026-09-29T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "self-play"]

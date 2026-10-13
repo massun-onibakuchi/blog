@@ -1,6 +1,6 @@
 ---
 title: "実験レポートが増えすぎたので、検索用catalogを作った"
-date: "2026-09-21"
+date: "2026-09-21T09:02:00Z"
 isPublished: true
 lang: ja
 tags: ["machine-learning", "research", "engineering"]

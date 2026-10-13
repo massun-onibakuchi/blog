@@ -1,6 +1,6 @@
 ---
 title: "候補手をpacked表現に刷新し、EATの学習速度を3.8倍に高速化した"
-date: "2026-09-16"
+date: "2026-09-16T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "training"]

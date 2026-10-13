@@ -1,6 +1,6 @@
 ---
 title: 'The rendering contract of this site'
-date: '2026-08-15'
+date: '2026-08-15T09:00:00Z'
 isPublished: false
 lang: en
 tags: ['meta', 'astro']

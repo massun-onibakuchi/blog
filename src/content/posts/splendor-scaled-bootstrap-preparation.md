@@ -1,6 +1,6 @@
 ---
 title: "自己対局学習を58,800局・16,000ステップへスケールする準備"
-date: "2026-08-27"
+date: "2026-08-27T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "training"]

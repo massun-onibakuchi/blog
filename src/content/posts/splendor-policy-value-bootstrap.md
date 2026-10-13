@@ -1,6 +1,6 @@
 ---
 title: "教師あり学習による初期ブートストラップ: policy向上とvalueの早期過学習"
-date: "2026-08-15"
+date: "2026-08-15T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "game-ai"]

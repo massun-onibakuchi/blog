@@ -1,6 +1,6 @@
 ---
 title: "PUCTのハイパーパラメータを再調整し、128シミュレーションで+8.6pt改善した"
-date: "2026-09-23"
+date: "2026-09-23T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

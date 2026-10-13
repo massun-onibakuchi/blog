@@ -1,6 +1,6 @@
 ---
 title: "value入力に手番情報が欠落していた問題と、レース特徴量の設計"
-date: "2026-09-01"
+date: "2026-09-01T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "value"]

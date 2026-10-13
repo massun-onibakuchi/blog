@@ -1,6 +1,6 @@
 ---
 title: "4,608局の対局ログをリプレイして、終盤の敗北パターンを特定した"
-date: "2026-09-27"
+date: "2026-09-27T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

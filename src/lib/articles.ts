@@ -10,8 +10,15 @@ export type Article = CollectionEntry<Section> & { section: Section };
 
 // Undated entries exist only for externally hosted writing whose original shows
 // no date; they sit below everything dated rather than jumping to the top.
-const byNewest = (a: Article, b: Article) =>
-  (b.data.date?.getTime() ?? -Infinity) - (a.data.date?.getTime() ?? -Infinity);
+const byNewest = (a: Article, b: Article) => {
+  const aTime = a.data.date?.getTime() ?? -Infinity;
+  const bTime = b.data.date?.getTime() ?? -Infinity;
+  if (aTime !== bTime) return aTime > bTime ? -1 : 1;
+  // Equal timestamps (including undated entries) must not depend on loader order
+  // or host locale. Section + slug uniquely identifies an article.
+  if (a.section !== b.section) return a.section < b.section ? -1 : 1;
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+};
 
 /** Published entries of one section, newest first. */
 export async function getSection(section: Section): Promise<Article[]> {
