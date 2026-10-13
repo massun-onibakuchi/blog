@@ -12,6 +12,8 @@ Splendorの自己対局学習では、PUCT-128の訪問回数分布を次世代�
 
 いずれも標準のPUCT-128から切り替える根拠にはならなかった。局面単位の着手改善と、その教師データで学習したモデルの強さは別物だった。
 
+![Search Teacher Comparison](/assets/images/posts/splendor-search-teacher-comparison.svg)
+
 ## 深く読む利益は学習へ伝わらない
 
 終盤PUCT-512では固定局面の教師分布の品質が+0.0190 score/root改善した。しかし4世代学習させた子モデルは、PUCT-128側に対して+0.73ポイント［−0.95〜+2.42］にとどまり、有意な差は出なかった。
