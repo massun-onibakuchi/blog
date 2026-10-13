@@ -1,6 +1,6 @@
 ---
 title: "継続対局によるvalue教師信号の検証: 8局平均は現行モデルを上回らなかった"
-date: "2026-08-20"
+date: "2026-08-20T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "value"]

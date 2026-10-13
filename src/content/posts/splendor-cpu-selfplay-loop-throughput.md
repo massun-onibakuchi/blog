@@ -1,6 +1,6 @@
 ---
 title: "CPU自己対局ループの無駄なパディングを削り、実行時間を16.6%短縮した"
-date: "2026-09-29"
+date: "2026-09-29T09:03:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "performance"]

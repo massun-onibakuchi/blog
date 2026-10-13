@@ -1,6 +1,6 @@
 ---
 title: "自己対局ループの投入前に、EATにおけるPUCT探索の効果を検証した"
-date: "2026-09-20"
+date: "2026-09-20T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

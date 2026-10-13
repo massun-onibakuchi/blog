@@ -5,13 +5,15 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
+const timestamp = z.string().datetime({ offset: true });
+
 const article = z
   .object({
     title: z.string(),
     // Optional only for externally hosted writing, where the original may carry
     // no date worth trusting; the refinement below enforces that. Undated
     // entries sort to the bottom of the list.
-    date: z.coerce.date().optional(),
+    date: z.union([z.string().date(), timestamp]).optional(),
     // Externally hosted writing is sometimes only datable to the month. Recording
     // it as the first of the month and marking it here keeps sorting simple while
     // stopping the page from claiming a day it does not know.
@@ -26,12 +28,16 @@ const article = z
     // built, because there is no local text to show.
     externalUrl: z.string().url().optional(),
   })
-  // An article hosted here is dated, always: it is written here, so the date is
-  // known and the lists depend on it.
-  .refine((data) => Boolean(data.date) || Boolean(data.externalUrl), {
-    message: 'date is required unless the entry is externally hosted',
+  // Local articles need a timezone-aware timestamp to order same-day entries.
+  // External originals may only supply a calendar date, or no date at all.
+  .refine((data) => Boolean(data.externalUrl) || timestamp.safeParse(data.date).success, {
+    message: 'local articles require date as an ISO 8601 timestamp with timezone',
     path: ['date'],
-  });
+  })
+  .transform((data) => ({
+    ...data,
+    date: data.date === undefined ? undefined : new Date(data.date),
+  }));
 
 const publications = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/publications' }),

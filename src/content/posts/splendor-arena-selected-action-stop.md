@@ -1,6 +1,6 @@
 ---
 title: "Arena評価のPUCT探索を早期終了させ、1世代の所要時間を23%短縮した"
-date: "2026-09-27"
+date: "2026-09-27T09:01:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

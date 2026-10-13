@@ -1,6 +1,6 @@
 ---
 title: "Splendor AIのモデル構造と特徴量設計"
-date: "2026-08-13"
+date: "2026-08-13T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]

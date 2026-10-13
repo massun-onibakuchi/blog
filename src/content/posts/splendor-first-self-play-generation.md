@@ -1,6 +1,6 @@
 ---
 title: "自己対局ループを立ち上げ、最初のモデル更新を通した"
-date: "2026-08-16"
+date: "2026-08-16T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "reinforcement-learning"]

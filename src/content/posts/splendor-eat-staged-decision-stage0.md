@@ -1,6 +1,6 @@
 ---
 title: "意思決定を段階化して検証したら、カード補充後の追加判断は4096手中2回にとどまった"
-date: "2026-09-22"
+date: "2026-09-22T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]

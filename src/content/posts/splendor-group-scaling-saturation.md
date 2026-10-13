@@ -1,6 +1,6 @@
 ---
 title: "自己対局データをさらに2倍に増やしたが、強さの伸びは頭打ちになった"
-date: "2026-08-30"
+date: "2026-08-30T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "training"]
