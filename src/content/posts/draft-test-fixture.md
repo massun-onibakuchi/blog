@@ -1,6 +1,6 @@
 ---
 title: 'Draft Fixture (isPublished false, test-only)'
-date: '2025-01-01'
+date: '2025-01-01T09:00:00Z'
 isPublished: false
 lang: en
 tags: ['draft-fixture-tag']

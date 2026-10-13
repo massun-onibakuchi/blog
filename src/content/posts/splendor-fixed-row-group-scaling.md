@@ -1,6 +1,6 @@
 ---
 title: "学習行数を増やさずに自己対局数を4倍にスケールしたら、対局勝率が向上した"
-date: "2026-08-24"
+date: "2026-08-24T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "training"]

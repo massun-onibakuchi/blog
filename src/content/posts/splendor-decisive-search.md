@@ -1,6 +1,6 @@
 ---
 title: "PUCT探索で即勝ち候補手を厳密に扱い、終盤の誤探索を+0.82pt改善した"
-date: "2026-09-29"
+date: "2026-09-29T09:02:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

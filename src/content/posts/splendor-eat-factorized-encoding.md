@@ -1,6 +1,6 @@
 ---
 title: "エンティティ表現の構造化を試みたが、対局性能の改善には結びつかなかった"
-date: "2026-09-21"
+date: "2026-09-21T09:01:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]

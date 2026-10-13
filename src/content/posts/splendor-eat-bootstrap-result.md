@@ -1,6 +1,6 @@
 ---
 title: "盤面と候補手を直接評価するEntity-Action Transformer（EAT）の導入"
-date: "2026-09-13"
+date: "2026-09-13T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "neural-network"]

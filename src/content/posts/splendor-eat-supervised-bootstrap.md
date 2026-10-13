@@ -1,6 +1,6 @@
 ---
 title: "ルールベース教師を用いたEntity-Action Transformerの初期学習"
-date: "2026-09-19"
+date: "2026-09-19T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "training"]

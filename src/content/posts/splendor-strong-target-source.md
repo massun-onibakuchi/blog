@@ -1,6 +1,6 @@
 ---
 title: "128回探索の自己対局8,192局を生成し、value教師信号の課題を分析した"
-date: "2026-08-18"
+date: "2026-08-18T09:00:00Z"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]

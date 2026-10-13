@@ -1,6 +1,6 @@
 ---
 title: "探索教師を作り替えても、PUCT-128から切り替える根拠は得られなかった"
-date: "2026-10-13"
+date: "2026-10-13T20:00:00+09:00"
 isPublished: true
 lang: ja
 tags: ["splendor", "machine-learning", "search"]
