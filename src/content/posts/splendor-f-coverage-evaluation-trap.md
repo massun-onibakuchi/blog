@@ -26,8 +26,6 @@ tags: ["splendor", "search", "machine-learning"]
 | 救出された手（初期1〜3回訪問） | 最多訪問手より平均0.140低い | 平均+0.157上昇（最善手へ） |
 | 当初の最多訪問手 | 基準 | 平均0.095低下 |
 
-
-![Q-value Dynamics Under Search](/assets/images/posts/splendor-f-coverage-evaluation-trap.svg)
 初期訪問を受けた手の86%で128回時点のQ値が低く見積もられており、浅い探索の下振れによってPUCTの割り当てから脱落していた。
 
 ## 自己対局ループでの停滞
