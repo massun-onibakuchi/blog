@@ -10,11 +10,7 @@ tags: ["splendor", "machine-learning", "onnx", "webassembly"]
 
 ONNX Runtime WebとWebAssemblyを使い、盤面の探索からモデル推論までブラウザ内で完結させている。サーバーと通信しないため、一度読み込めばオフラインでも対局できる。
 
-![対局設定](/images/posts/splendor-web-client/match-settings-modal.png)
-
-![盤面](/images/posts/splendor-web-client/initial-board.png)
-
-![AI思考画面](/images/posts/splendor-web-client/game-ai-thinking.png)
+![対戦画面。リアルタイムの探索候補手や勝率予測グラフを表示できる。](/images/posts/splendor-web-client/game-ply-14-thinking.png)
 
 ## WebGPUとWASMの比較
 
