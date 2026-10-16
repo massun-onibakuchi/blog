@@ -1,9 +1,9 @@
 ---
-title: "ブラウザ上で動くSplendorのAI対戦環境を作った"
+title: "強いリアルの友人と実戦対局させてみた"
 date: "2026-10-16T12:00:00+09:00"
 isPublished: true
 lang: ja
-tags: ["splendor", "machine-learning", "onnx", "webassembly"]
+tags: ["splendor", "machine-learning", "self-play"]
 ---
 
 学習させたモデルとブラウザ上で対戦できる環境（[sml-web](https://sml-web.bakuchi.workers.dev/)）を作った。
