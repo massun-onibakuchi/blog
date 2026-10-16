@@ -20,7 +20,7 @@ ONNX Runtime WebとWebAssemblyを使い、盤面の探索からモデル推論�
 
 バックエンドとしてWebGPUも試したが、今回の探索構成では性能向上のメリットがなく、WASMを採用した。
 
-手元の環境（Apple Silicon、Chromium）におけるPUCT探索（1 leafずつの評価）の測定結果は以下の通りだ。
+測定環境（Apple M2 / Chromium）におけるPUCT探索（1 leafずつの評価）の測定結果は以下の通りだ。
 
 | バックエンド | 1評価あたりの所要時間 (p50) | 探索速度 |
 | :--- | ---: | ---: |
