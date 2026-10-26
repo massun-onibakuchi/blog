@@ -6,96 +6,65 @@ lang: ja
 tags: ["splendor", "machine-learning", "search"]
 ---
 
-前回、blind-reserve対応後のself-playを48世代回したところ、最終モデルB48はblind reserveをかなり多く使うようになった一方、対局強度は大きく伸びなかった。さらに、blind reserveの多い対局ほど負けやすいという相関も見えていた。
+前回、blind-reserve対応後のself-playを48世代回したところ、最終モデルB48はblind reserveを多用するようになった一方、対局強度は大きく伸びなかった。さらに、blind reserveの選択頻度が高い対局ほど敗北しやすい相関も観測されていた。
 
-ただし、相関だけでは「blind reserve自体が悪い」のか、「苦しい局面でblind reserveを選んでいるだけ」なのか分からない。
+しかし相関だけでは、blind reserveという手自体が悪手なのか、劣勢な局面でやむなく選ばれているだけなのかは判別できない。
 
-そこで今回は、B48のnetworkとPUCT-128をそのまま使い、B48側の合法手からblind reserveだけを取り除いたarenaを作った。相手はbootstrapモデルのn5_s1。blind reserve以外のsearch、value、policyは変えていない。
+そこで今回は、B48のニューラルネットワークとPUCT-128の探索設定を維持したまま、B48の合法手からblind reserveのみを除外したarenaを構築した。対戦相手はbootstrapモデルのn5_s1とし、blind reserveの除外以外のsearch、value、policyの設定はすべて統一した。
 
-結果は逆だった。blind reserveを禁止すると、B48の対局スコアは7.4ポイント下がった。
+結果は予想と異なり、blind reserveを禁止したB48の対局スコアは7.4ポイント低下した。
 
-## 同じB48からblind reserveだけを消した
+## 同一モデルからblind reserveのみを除外して比較した
 
-比較したのは次の2条件である。
+比較した2条件の対局結果は次の通りである。
 
 | 条件 | B48のscore vs n5_s1 |
 | --- | ---: |
 | 通常のB48 | 54.5% |
 | blind reserveを禁止したB48 | 47.1% |
 
-差は−7.4ポイントで、95%信頼区間は−11.5〜−3.3ポイントだった。
+両条件の差は−7.4ポイント（95%信頼区間: [−11.5, −3.3]）だった。mask側は1,200 seat-swapped pairs、通常側は前回のbaselineで用いた400 pairsを参照している。先頭400 startsについては同一の初期盤面とepisode seedを用いており、prefix-pairedの比較でも差は−6.3ポイント [−10.7, −1.8] だった。
 
-mask側は1,200 seat-swapped pairs、通常側は以前のbaselineで使った400 pairsを参照した。
+手番別に見ても、mask側のB48は先手（starting seat）で48.8%、後手（second seat）で45.4%となり、通常側の56.6% / 52.4%から双方ともに低下した。
 
-最初の400 startsは両条件で同じstart coordinateとepisode seedを使っている。そのprefix-paired比較でも差は−6.3ポイント［−10.7〜−1.8］だった。
+## blind reserveの除外は主にface-up reserveへの置換を生んだ
 
-maskしたB48はstarting seatで48.8%、second seatで45.4%。通常のB48は56.6% / 52.4%で、両seatとも低下した。
+対局ログ（native replay）の検証により、2,400対局を通じてmasked側のplayerによるblind reserveが0件であることを確認した。
 
-## blind reserveを消すと、主にface-up reserveへ置き換わった
+通常のB48は1対局あたり平均2.43回のblind reserveと4.16回のface-up reserveを行っていたのに対し、blind reserveを禁止するとface-up reserveが6.38回へと増加した。予約という行動自体を放棄したわけではなく、blind reserveの多くが公開カードの予約へ移行した格好である。
 
-maskが本当にblind reserveだけを除いているかもnative replayで確認した。
+また、獲得した黄金トークン（gold intake）の平均量にも大きな変化は見られなかった。そのため、blind reserveの有用性を単なる「黄金トークンの回収手段」としてのみ捉えるのは難しい。
 
-2,400 gamesで、masked playerのblind reservationは0件だった。
+## 「blind reserveが多いほど負ける」は因果関係ではなかった
 
-一方、通常のB48は1 gameあたり平均2.43回blind reserveし、4.16回face-up reserveしていた。blind reserveを禁止すると、face-up reserveは6.38回まで増えた。
+前回の対局分析では、同一マッチアップ内でblind reserveの回数が多い対局ほど敗北しやすい相関が確認されていた。もしblind reserve自体が悪手であるならば、使用を禁止したB48の勝率は向上するはずである。
 
-つまりreserveそのものをしなくなったわけではない。blind reserveの代わりに、主に公開カードのreserveへ置き換わった。
+しかし実際には7.4ポイントの低下を招いた。少なくともB48 vs n5_s1という条件下において、blind reserveは全体としてB48の実力に寄与していたことになる。
 
-gold intakeも大きくは変わっていない。blind reserveの価値を単純に「gold tokenを取れるから」とだけ説明するのは難しい。
+前回見られた負の相関は、「blind reserveを打ったから負けた」という因果関係ではなく、そもそもblind reserveを選択せざるを得ない劣勢局面であったという選択効果（selection effect）を含んでいた可能性が高い。
 
-## 「blind reserveが多いほど負ける」は因果ではなかった
+## 裏向きカードの評価バイアスとは別個の問題だった
 
-前回のplay analysisでは、matchup内でblind reserveが増えることと負けが関連していた。
+前回の分析では、blind reserveによって裏向きカード（concealed card）を保持している側のsearch valueが、実際の終局結果よりも0.03〜0.05ほど高く評価される傾向が確認されていた。このことから「blind reserveを過大評価して多用した結果、弱体化しているのではないか」という仮説が浮上していた。
 
-もしblind reserve自体が悪手なら、blind reserveを禁止したB48は強くなるはずだった。
+しかし今回のmask実験により、その単純な解釈は退けられた。search valueに評価バイアスが存在するとしても、手番選択肢からblind reserveを除去すると実力は低下する。裏向きカードに対する評価値の偏りと、blind reserveという行動自体の有効性は、独立した論点として分けて捉える必要がある。calibration上の課題を抱えつつも、行動そのものは実戦上プラスに寄与しうる。
 
-実際には逆で、7.4ポイント下がった。
+## 実験条件に関する制約
 
-少なくともB48 vs n5_s1という今回の条件では、blind reserveは全体としてB48の強さに寄与していた。
+今回の通常B48のデータは前回のbaseline panelを再利用している。mask側はKaggle T4、通常側はColab L4で実行されており、いずれもTensorRT FP32ではあるものの、実行ホスト間の差異が皆無であると直接確かめた比較ではない。
 
-前回見えていた負の相関は、「blind reserveを選ぶから負ける」というより、blind reserveを選びたくなる局面自体が難しい、というselection effectを含んでいた可能性が高い。
+観測された差は7.4ポイント、95%信頼区間の上端でも−3.3ポイントであるため、ホスト間差が3.3ポイントを超えない限り結論は覆らないが、検証上の制約として留意する必要がある。また、今回の評価はB48 vs n5_s1という単一のマッチアップに限られており、他の世代やlineage、別の対戦相手でも同様の寄与が確認できるとは限らない。
 
-## concealed cardのvalue biasとは別の問題だった
+## 今後の検証課題
 
-前回の分析では、blind reserveでconcealed cardを持っている側のsearch valueが、実際のoutcomeより0.03〜0.05程度高い傾向も見つかっていた。
+今回の結果により、blind reserveを一律に弊害とみなす根拠は薄れた。今後は単に使用の可否を論じるのではなく、以下の論点を局面単位で検証していく必要がある。
 
-ここから「blind reserveを過大評価しているため、使いすぎて弱くなっているのではないか」という仮説があった。
+- どの局面でblind reserveの利得（gain）が大きくなるか
+- concealment時のsearch valueバイアスが着手順位の決定にどう影響するか
+- カードのtierや対局フェーズによって価値がどう変動するか
+- belief searchが非公開情報をどこまで正確に評価できているか
 
-今回のmask実験では、その解釈はそのままでは成り立たなかった。
-
-search valueにcalibration biasがあったとしても、blind reserveというmove全体を取り除くと弱くなる。つまり、
-
-- concealed cardのvalue estimateにbiasがあること
-- blind reserveという行動自体が有効かどうか
-
-は分けて考える必要がある。
-
-value calibrationの問題が存在しても、blind reserve自体はnetで有益になりうる。
-
-## 実験上の注意点
-
-今回の通常B48は、以前のbaseline panelを再利用している。mask側はKaggle T4、通常側はColab L4で、どちらもTensorRT FP32だった。
-
-そのため、host差が完全にゼロだと直接確認した比較ではない。
-
-観測差は7.4ポイント、95%信頼区間の上端でも−3.3ポイントなので、host差が3.3ポイントを超えるほど大きければ結論は崩れる。この点は今回の比較の制約として残る。
-
-また、今回確認したのはB48 vs n5_s1だけであり、他世代、他lineage、他opponentでも同じblind reserveの価値があるとは限らない。
-
-## 次に見るべきもの
-
-今回の結果で、blind reserveを丸ごと弱点として扱う理由は薄くなった。
-
-次に重要なのは、blind reserveを使うかどうかではなく、
-
-- どの局面でblind reserveのgainが大きいか
-- concealment時のsearch value biasが着手順位へどう影響するか
-- blind reserveのtierやgame phaseで価値が変わるか
-- belief searchがhidden informationをどこまで正しく評価できているか
-
-を局面単位で調べることになる。
-
-blind-reserve対応後の48世代loopでは、blind reserveが1%から10〜13%まで増えた。その増加を単なる悪いstyle driftと解釈するのではなく、少なくとも一部はモデルが実際に有効な行動を学んだ結果だと考えられるようになった。
+blind-reserve対応後の48世代ループにおいて、blind reserveの選択率は1%から10〜13%へと増加した。この行動変化を単なる好ましくないプレイスタイルの偏り（style drift）と片付けるのではなく、少なくとも一部はモデルが有効な手を学習した結果として捉える見方が妥当になってきた。
 
 ---
 
