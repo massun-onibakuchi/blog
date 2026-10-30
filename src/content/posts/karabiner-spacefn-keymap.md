@@ -1,29 +1,29 @@
 ---
-title: "キーマップの紹介"
+title: "My Keymap Setup"
 date: "2026-10-30T17:00:00+09:00"
 isPublished: true
-lang: ja
+lang: en
 tags: ["keyboard", "tools"]
 ---
 
-Speech-to-Textアプリを取り入れている。喋った方がタイピングより断然速く、できる限りキーを叩きたくない。打ち間違えたり、特に日本語は変換がめんどくさい。
-音声入力を取り入れつつある時流で、キーボード設定を話題にするのは周回遅れかもしれない。だが、雑なプロンプトなどを音声に任せたことで、丁寧にプロンプトを書きたい時や微調整でキーボードに戻った際の手間が余計に気になり始めた。
+I use speech-to-text apps. Speaking is far faster than typing, and I prefer to avoid hitting keys whenever possible—typos happen, and Japanese conversion in particular is tedious.
+In an era shifting toward voice input, talking about keyboard configurations might feel a lap behind. But handing rough prompts over to voice has only made me notice the friction even more whenever I return to the keyboard to write careful prompts or make fine adjustments.
 
-AI開発が主流になる前から取り入れていたのがSpaceFNだ。
-英語配列のスペースキーは日本語配列と比べるとやたらと長く、両親指の直下という一等地を無駄に占領している。単に空白を1文字打つためだけにこの面積を遊ばせておくのは惜しい。そこで親指が最も届きやすい位置を最大限に活用するため、SpaceFNを導入したという経緯がある。
+I adopted SpaceFN well before AI development became mainstream.
+Compared to Japanese layouts, the spacebar on an ANSI keyboard is unusually long, taking up prime real estate right under both thumbs. Leaving all that space idle just to insert a single whitespace character is a waste. The goal is to make the most of where the thumbs naturally rest.
 
-スペースキーは単打で空白が入力され、押したまま他のキーを叩くとナビゲーション層として機能する。ホームポジションに手を置いたまま、カーソル移動や編集操作を完結できる。トラックパッドへの往復を減らすためスクロールも割り当てた。
+A single tap of the spacebar outputs a space, while holding it down activates a navigation layer. Cursor movement and editing operations can be completed without ever leaving the home position.
 
-あわせて重宝しているのがCombo（同時押し）だ。小指を無理に伸ばしたりShiftと数字キーを組み合わせたりせず、ホーム列の2打でプロンプトでよく使う頻出記号を拾える。
+I also rely on combos (simultaneous keypresses). Without stretching the pinky or chording Shift with number keys, two keys on the home row produce the symbols frequently needed in prompts.
 
-| 機能 | キー | 動作 |
+| Feature | Key | Action |
 | --- | --- | --- |
-| SpaceFN | Space単打 | 空白 |
-| SpaceFN | Space + `i` / `j` / `k` / `l` | 矢印キー（↑ / ← / ↓ / →） |
-| SpaceFN | Space + `a` / `d` | 単語移動 |
+| SpaceFN | Tap Space | Space |
+| SpaceFN | Space + `i` / `j` / `k` / `l` | Arrow keys (↑ / ← / ↓ / →) |
+| SpaceFN | Space + `a` / `d` | Word jump |
 | SpaceFN | Space + `;` / `'` | Enter / Delete |
 | SpaceFN | Space + `h` | Escape |
-| SpaceFN | Space + `q` / `e` | スクロール |
+| SpaceFN | Space + `q` / `e` | Scroll |
 | Combo | `h` + `j` | `:` |
 | Combo | `j` + `l` | `&` |
 | Combo | `n` + `j` | `-` |
@@ -31,5 +31,5 @@ AI開発が主流になる前から取り入れていたのがSpaceFNだ。
 
 ---
 
-この記事は、筆者のキー設定とメモをもとに、主にLLMが編集しています。
+This article was edited primarily by an LLM based on the author's key configuration and notes.
 
