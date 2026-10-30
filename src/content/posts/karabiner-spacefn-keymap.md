@@ -1,5 +1,5 @@
 ---
-title: "STT時代にあえて自慢するKarabinerキーマップ"
+title: "キーマップの紹介"
 date: "2026-10-30T17:00:00+09:00"
 isPublished: true
 lang: ja
