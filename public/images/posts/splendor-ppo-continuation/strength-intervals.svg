@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" viewBox="0 0 760 380" role="img" aria-labelledby="heading desc">
+<title id="heading">PPO継続の直接対戦スコア</title>
+<desc id="desc">256から1024反復の比較ではgreedy51.82%、stochastic52.33%。最後の192反復では50.09%、50.35%。線は95%区間。</desc>
+<rect width="760" height="380" fill="#fff"/>
+<g font-family="Noto Sans CJK JP, Noto Sans JP, Hiragino Kaku Gothic ProN, Yu Gothic, sans-serif" fill="#1f2937">
+<text x="25" y="35" font-size="22" font-weight="600">PPO継続後の直接対戦スコア</text>
+<text x="25" y="61" font-size="14" fill="#475569">P@1024と過去の同系統モデルを比較（2系統の等重み平均）</text>
+<line x1="346.3" y1="100" x2="346.3" y2="315" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="0"/>
+<text x="346.3" y="342" font-size="15" fill="#475569" text-anchor="middle">48%</text>
+<line x1="428.8" y1="100" x2="428.8" y2="315" stroke="#334155" stroke-width="2" stroke-dasharray="4 4"/>
+<text x="428.8" y="342" font-size="15" fill="#475569" text-anchor="middle">50%</text>
+<line x1="511.3" y1="100" x2="511.3" y2="315" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="0"/>
+<text x="511.3" y="342" font-size="15" fill="#475569" text-anchor="middle">52%</text>
+<line x1="593.8" y1="100" x2="593.8" y2="315" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="0"/>
+<text x="593.8" y="342" font-size="15" fill="#475569" text-anchor="middle">54%</text>
+<text x="25" y="104" font-size="17" font-weight="600">256 → 1024（全768反復）</text>
+<line x1="25" y1="205" x2="735" y2="205" stroke="#cbd5e1" stroke-width="1"/>
+<text x="25" y="229" font-size="17" font-weight="600">832 → 1024（直近192反復）</text>
+<text x="52" y="138" font-size="18" fill="#334155">greedy</text>
+<line x1="460.1" y1="132" x2="547.5" y2="132" stroke="#2b5f81" stroke-width="4" stroke-linecap="round"/>
+<line x1="460.1" y1="124" x2="460.1" y2="140" stroke="#2b5f81" stroke-width="2"/>
+<line x1="547.5" y1="124" x2="547.5" y2="140" stroke="#2b5f81" stroke-width="2"/>
+<circle cx="503.8" cy="132" r="7" fill="#2b5f81" stroke="white" stroke-width="2"/>
+<text x="657" y="138" font-size="19" fill="#1f2937">51.82%</text>
+<text x="52" y="179" font-size="18" fill="#334155">stochastic</text>
+<line x1="480.0" y1="173" x2="569.8" y2="173" stroke="#177f79" stroke-width="4" stroke-linecap="round"/>
+<line x1="480.0" y1="165" x2="480.0" y2="181" stroke="#177f79" stroke-width="2"/>
+<line x1="569.8" y1="165" x2="569.8" y2="181" stroke="#177f79" stroke-width="2"/>
+<circle cx="524.9" cy="173" r="7" fill="#177f79" stroke="white" stroke-width="2"/>
+<text x="657" y="179" font-size="19" fill="#1f2937">52.33%</text>
+<text x="52" y="262" font-size="18" fill="#334155">greedy</text>
+<line x1="387.7" y1="256" x2="476.9" y2="256" stroke="#2b5f81" stroke-width="4" stroke-linecap="round"/>
+<line x1="387.7" y1="248" x2="387.7" y2="264" stroke="#2b5f81" stroke-width="2"/>
+<line x1="476.9" y1="248" x2="476.9" y2="264" stroke="#2b5f81" stroke-width="2"/>
+<circle cx="432.3" cy="256" r="7" fill="#2b5f81" stroke="white" stroke-width="2"/>
+<text x="657" y="262" font-size="19" fill="#1f2937">50.09%</text>
+<text x="52" y="303" font-size="18" fill="#334155">stochastic</text>
+<line x1="399.4" y1="297" x2="487.3" y2="297" stroke="#177f79" stroke-width="4" stroke-linecap="round"/>
+<line x1="399.4" y1="289" x2="399.4" y2="305" stroke="#177f79" stroke-width="2"/>
+<line x1="487.3" y1="289" x2="487.3" y2="305" stroke="#177f79" stroke-width="2"/>
+<circle cx="443.4" cy="297" r="7" fill="#177f79" stroke="white" stroke-width="2"/>
+<text x="657" y="303" font-size="19" fill="#1f2937">50.35%</text>
+<text x="25" y="372" font-size="13" fill="#64748b">横線は95%信頼区間。50%の縦線が五分の目安。独立した固定対局セットで評価。</text>
+</g>
+</svg>
