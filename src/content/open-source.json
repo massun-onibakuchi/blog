@@ -24,28 +24,12 @@
     "order": 2
   },
   {
-    "id": "napier-v2-public",
-    "name": "napier-v2-public",
-    "description": "Napier V2 — fixed-yield protocol contracts.",
-    "url": "https://github.com/napierfi/napier-v2-public",
-    "year": 2025,
-    "order": 3
-  },
-  {
     "id": "smart-contracts-vulns-hacking",
     "name": "smart-contracts-vulns-hacking",
     "description": "Reproductions of DeFi hack incidents and a collection of security issues.",
     "url": "https://github.com/massun-onibakuchi/smart-contracts-vulns-hacking",
     "year": 2022,
-    "order": 4
-  },
-  {
-    "id": "nomad-bridge-exploit-poc",
-    "name": "nomad-bridge-exploit-poc",
-    "description": "Replay of the Nomad bridge hack as a runnable proof of concept.",
-    "url": "https://github.com/massun-onibakuchi/nomad-bridge-exploit-poc",
-    "year": 2022,
-    "order": 5
+    "order": 3
   },
   {
     "id": "best-yield-yearn-strategy",
@@ -53,14 +37,6 @@
     "description": "Yearn StrategyIdleV2.",
     "url": "https://github.com/Idle-Finance/best-yield-yearn-strategy",
     "year": 2022,
-    "order": 6
-  },
-  {
-    "id": "idle-tranches",
-    "name": "idle-tranches",
-    "description": "Idle Perpetual Yield Tranches contracts.",
-    "url": "https://github.com/Idle-Labs/idle-tranches",
-    "year": 2021,
-    "order": 7
+    "order": 4
   }
 ]
