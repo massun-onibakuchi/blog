@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="660" viewBox="0 0 660 660" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">PPO方策エントロピーは序盤で急減した</title>
+<desc id="chart-desc">同一の保留評価局面上で、正規化エントロピー H / ln K を威信点による序盤・中盤・終盤に分け、u0とu1の2学習系統についてE2@232、P@256、P@1024を比較した図。序盤でE2からP256への低下幅が大きい。終盤はより高い値を保つ。</desc>
+<rect width="660" height="660" fill="#ffffff"/>
+<text x="38" y="38" font-family="system-ui,sans-serif" font-size="20" font-weight="650" fill="#111827">局面帯ごとのPolicyの広がり</text>
+<text x="38" y="63" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">正規化エントロピー H / ln K（低いほど鋭い）</text>
+<line x1="48" y1="92" x2="80" y2="92" stroke="#2563a6" stroke-width="3" />
+<circle cx="64" cy="92" r="4" fill="#2563a6"/>
+<text x="89" y="97" font-family="system-ui,sans-serif" font-size="14" fill="#202936">E2@232</text>
+<line x1="232" y1="92" x2="264" y2="92" stroke="#c15d22" stroke-width="3" stroke-dasharray="7 4"/>
+<circle cx="248" cy="92" r="4" fill="#c15d22"/>
+<text x="273" y="97" font-family="system-ui,sans-serif" font-size="14" fill="#202936">P@256</text>
+<line x1="416" y1="92" x2="448" y2="92" stroke="#167c62" stroke-width="3" stroke-dasharray="2 3"/>
+<circle cx="432" cy="92" r="4" fill="#167c62"/>
+<text x="457" y="97" font-family="system-ui,sans-serif" font-size="14" fill="#202936">P@1024</text>
+<text x="46" y="130" font-family="system-ui,sans-serif" font-size="16" font-weight="600" fill="#111827">学習系統 u0</text>
+<line x1="110" y1="304.00" x2="565" y2="304.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="309.00" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.0</text>
+<line x1="110" y1="269.33" x2="565" y2="269.33" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="274.33" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.1</text>
+<line x1="110" y1="234.67" x2="565" y2="234.67" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="239.67" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.2</text>
+<line x1="110" y1="200.00" x2="565" y2="200.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="205.00" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.3</text>
+<line x1="110" y1="165.33" x2="565" y2="165.33" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="170.33" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.4</text>
+<line x1="110" y1="148" x2="110" y2="304" stroke="#94a3b8" stroke-width="1"/>
+<text x="155" y="332" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">序盤 0–4点</text>
+<text x="335" y="332" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">中盤 5–9点</text>
+<text x="515" y="332" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">終盤 10–14点</text>
+<path d="M 155 189.947 L 335 190.293 L 515 174.000" fill="none" stroke="#2563a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="155" cy="189.947" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u0 E2@232 序盤: 0.329</title></circle>
+<circle cx="335" cy="190.293" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u0 E2@232 中盤: 0.328</title></circle>
+<circle cx="515" cy="174.000" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u0 E2@232 終盤: 0.375</title></circle>
+<path d="M 155 238.133 L 335 231.200 L 515 189.253" fill="none" stroke="#c15d22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 4"/>
+<circle cx="155" cy="238.133" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u0 P@256 序盤: 0.190</title></circle>
+<circle cx="335" cy="231.200" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u0 P@256 中盤: 0.210</title></circle>
+<circle cx="515" cy="189.253" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u0 P@256 終盤: 0.331</title></circle>
+<path d="M 155 248.880 L 335 240.560 L 515 199.653" fill="none" stroke="#167c62" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<circle cx="155" cy="248.880" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u0 P@1024 序盤: 0.159</title></circle>
+<circle cx="335" cy="240.560" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u0 P@1024 中盤: 0.183</title></circle>
+<circle cx="515" cy="199.653" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u0 P@1024 終盤: 0.301</title></circle>
+<text x="46" y="368" font-family="system-ui,sans-serif" font-size="16" font-weight="600" fill="#111827">学習系統 u1</text>
+<line x1="110" y1="542.00" x2="565" y2="542.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="547.00" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.0</text>
+<line x1="110" y1="507.33" x2="565" y2="507.33" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="512.33" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.1</text>
+<line x1="110" y1="472.67" x2="565" y2="472.67" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="477.67" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.2</text>
+<line x1="110" y1="438.00" x2="565" y2="438.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="443.00" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.3</text>
+<line x1="110" y1="403.33" x2="565" y2="403.33" stroke="#e5e7eb" stroke-width="1"/>
+<text x="97" y="408.33" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.4</text>
+<line x1="110" y1="386" x2="110" y2="542" stroke="#94a3b8" stroke-width="1"/>
+<text x="155" y="570" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">序盤 0–4点</text>
+<text x="335" y="570" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">中盤 5–9点</text>
+<text x="515" y="570" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#334155">終盤 10–14点</text>
+<path d="M 155 423.093 L 335 427.253 L 515 412.693" fill="none" stroke="#2563a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="155" cy="423.093" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u1 E2@232 序盤: 0.343</title></circle>
+<circle cx="335" cy="427.253" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u1 E2@232 中盤: 0.331</title></circle>
+<circle cx="515" cy="412.693" r="5" fill="#ffffff" stroke="#2563a6" stroke-width="2.5"><title>u1 E2@232 終盤: 0.373</title></circle>
+<path d="M 155 482.027 L 335 476.480 L 515 445.973" fill="none" stroke="#c15d22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 4"/>
+<circle cx="155" cy="482.027" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u1 P@256 序盤: 0.173</title></circle>
+<circle cx="335" cy="476.480" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u1 P@256 中盤: 0.189</title></circle>
+<circle cx="515" cy="445.973" r="5" fill="#ffffff" stroke="#c15d22" stroke-width="2.5"><title>u1 P@256 終盤: 0.277</title></circle>
+<path d="M 155 480.293 L 335 479.600 L 515 443.547" fill="none" stroke="#167c62" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<circle cx="155" cy="480.293" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u1 P@1024 序盤: 0.178</title></circle>
+<circle cx="335" cy="479.600" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u1 P@1024 中盤: 0.180</title></circle>
+<circle cx="515" cy="443.547" r="5" fill="#ffffff" stroke="#167c62" stroke-width="2.5"><title>u1 P@1024 終盤: 0.284</title></circle>
+<text x="38" y="616" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">同じ保留評価局面・同じ局面帯で比較。u0 / u1 は別の学習系統。</text>
+<text x="38" y="637" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">出典：sml PR #790 §2.3（P@256自己対局由来の固定評価局面）</text>
+</svg>
