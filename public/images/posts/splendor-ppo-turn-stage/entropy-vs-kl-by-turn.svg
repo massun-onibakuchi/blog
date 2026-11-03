@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="700" viewBox="0 0 680 700" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">手番ごとのentropy変化とKL</title>
+<desc id="chart-desc">固定評価局面を自手番数で8区分し、P@1024から256反復後の各条件について、エントロピー変化量とKL(P@1024‖actor)を示した図。エントロピー変化は序盤と終盤で大きいU字型、KLは序盤で最小、手番15〜24で最大の山型になる。</desc>
+<rect width="680" height="700" fill="#ffffff"/>
+<text x="32" y="36" font-family="system-ui,sans-serif" font-size="20" font-weight="650" fill="#111827">広がりの変化と分布の移動は別の場所で起きた</text>
+<text x="32" y="60" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">P@1024 → 各条件@256、MAIN局面、2系統平均。横軸は手番側の自手番数</text>
+<line x1="40" y1="86" x2="68" y2="86" stroke="#64748b" stroke-width="3"/>
+<text x="74" y="91" font-family="system-ui,sans-serif" font-size="13" fill="#202936">ctl</text>
+<line x1="130" y1="86" x2="158" y2="86" stroke="#b91c1c" stroke-width="3"/>
+<text x="164" y="91" font-family="system-ui,sans-serif" font-size="13" fill="#202936">nr</text>
+<line x1="220" y1="86" x2="248" y2="86" stroke="#a16207" stroke-width="3"/>
+<text x="254" y="91" font-family="system-ui,sans-serif" font-size="13" fill="#202936">ent</text>
+<line x1="310" y1="86" x2="338" y2="86" stroke="#15803d" stroke-width="3"/>
+<text x="344" y="91" font-family="system-ui,sans-serif" font-size="13" fill="#202936">rkl</text>
+<line x1="400" y1="86" x2="428" y2="86" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 4"/>
+<text x="434" y="91" font-family="system-ui,sans-serif" font-size="13" fill="#202936">系統間 (u0↔u1のP@1024)</text>
+<text x="40" y="124" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#111827">エントロピー変化 ΔH</text>
+<text x="612" y="124" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">nat / 局面</text>
+<line x1="96" y1="330.0" x2="600" y2="330.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="334.0" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">-0.6</text>
+<line x1="96" y1="295.5" x2="600" y2="295.5" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="299.5" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">-0.4</text>
+<line x1="96" y1="260.9" x2="600" y2="260.9" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="264.9" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">-0.2</text>
+<line x1="96" y1="226.4" x2="600" y2="226.4" stroke="#94a3b8" stroke-width="1"/>
+<text x="86" y="230.4" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0</text>
+<line x1="96" y1="191.8" x2="600" y2="191.8" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="195.8" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">+0.2</text>
+<line x1="96" y1="157.3" x2="600" y2="157.3" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="161.3" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">+0.4</text>
+<text x="96.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">0</text>
+<text x="168.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">1–2</text>
+<text x="240.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">3–5</text>
+<text x="312.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">6–9</text>
+<text x="384.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">10–14</text>
+<text x="456.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">15–19</text>
+<text x="528.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">20–24</text>
+<text x="600.0" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">25+</text>
+<path d="M 96.0 218.4 L 168.0 218.4 L 240.0 223.8 L 312.0 223.4 L 384.0 224.1 L 456.0 223.9 L 528.0 220.5 L 600.0 226.5" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="218.4" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番0: 0.046</title></circle>
+<circle cx="168.0" cy="218.4" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番1–2: 0.046</title></circle>
+<circle cx="240.0" cy="223.8" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番3–5: 0.015</title></circle>
+<circle cx="312.0" cy="223.4" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番6–9: 0.017</title></circle>
+<circle cx="384.0" cy="224.1" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番10–14: 0.013</title></circle>
+<circle cx="456.0" cy="223.9" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番15–19: 0.014</title></circle>
+<circle cx="528.0" cy="220.5" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番20–24: 0.034</title></circle>
+<circle cx="600.0" cy="226.5" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番25+: -0.001</title></circle>
+<path d="M 96.0 315.1 L 168.0 294.1 L 240.0 277.8 L 312.0 272.8 L 384.0 274.9 L 456.0 275.1 L 528.0 281.6 L 600.0 288.2" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="315.1" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番0: -0.514</title></circle>
+<circle cx="168.0" cy="294.1" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番1–2: -0.392</title></circle>
+<circle cx="240.0" cy="277.8" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番3–5: -0.298</title></circle>
+<circle cx="312.0" cy="272.8" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番6–9: -0.269</title></circle>
+<circle cx="384.0" cy="274.9" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番10–14: -0.281</title></circle>
+<circle cx="456.0" cy="275.1" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番15–19: -0.282</title></circle>
+<circle cx="528.0" cy="281.6" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番20–24: -0.320</title></circle>
+<circle cx="600.0" cy="288.2" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番25+: -0.358</title></circle>
+<path d="M 96.0 150.0 L 168.0 184.4 L 240.0 208.1 L 312.0 208.9 L 384.0 208.4 L 456.0 200.5 L 528.0 177.7 L 600.0 174.4" fill="none" stroke="#a16207" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="150.0" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番0: 0.442</title></circle>
+<circle cx="168.0" cy="184.4" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番1–2: 0.243</title></circle>
+<circle cx="240.0" cy="208.1" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番3–5: 0.106</title></circle>
+<circle cx="312.0" cy="208.9" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番6–9: 0.101</title></circle>
+<circle cx="384.0" cy="208.4" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番10–14: 0.104</title></circle>
+<circle cx="456.0" cy="200.5" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番15–19: 0.150</title></circle>
+<circle cx="528.0" cy="177.7" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番20–24: 0.282</title></circle>
+<circle cx="600.0" cy="174.4" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番25+: 0.301</title></circle>
+<path d="M 96.0 190.3 L 168.0 201.0 L 240.0 214.1 L 312.0 216.7 L 384.0 215.5 L 456.0 210.8 L 528.0 196.7 L 600.0 190.1" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="190.3" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番0: 0.209</title></circle>
+<circle cx="168.0" cy="201.0" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番1–2: 0.147</title></circle>
+<circle cx="240.0" cy="214.1" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番3–5: 0.071</title></circle>
+<circle cx="312.0" cy="216.7" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番6–9: 0.056</title></circle>
+<circle cx="384.0" cy="215.5" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番10–14: 0.063</title></circle>
+<circle cx="456.0" cy="210.8" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番15–19: 0.090</title></circle>
+<circle cx="528.0" cy="196.7" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番20–24: 0.172</title></circle>
+<circle cx="600.0" cy="190.1" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番25+: 0.210</title></circle>
+<text x="40" y="394" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#111827">KL(P@1024 ‖ actor)</text>
+<text x="612" y="394" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">nat / 局面</text>
+<line x1="96" y1="620.0" x2="600" y2="620.0" stroke="#94a3b8" stroke-width="1"/>
+<text x="86" y="624.0" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.00</text>
+<line x1="96" y1="579.6" x2="600" y2="579.6" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="583.6" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.25</text>
+<line x1="96" y1="539.2" x2="600" y2="539.2" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="543.2" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.50</text>
+<line x1="96" y1="498.8" x2="600" y2="498.8" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="502.8" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">0.75</text>
+<line x1="96" y1="458.5" x2="600" y2="458.5" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="462.5" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">1.00</text>
+<line x1="96" y1="418.1" x2="600" y2="418.1" stroke="#e5e7eb" stroke-width="1"/>
+<text x="86" y="422.1" text-anchor="end" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">1.25</text>
+<text x="96.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">0</text>
+<text x="168.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">1–2</text>
+<text x="240.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">3–5</text>
+<text x="312.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">6–9</text>
+<text x="384.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">10–14</text>
+<text x="456.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">15–19</text>
+<text x="528.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">20–24</text>
+<text x="600.0" y="640" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">25+</text>
+<path d="M 96.0 564.3 L 168.0 553.1 L 240.0 525.3 L 312.0 529.2 L 384.0 522.4 L 456.0 513.4 L 528.0 515.2 L 600.0 545.5" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<circle cx="96.0" cy="564.3" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番0: 0.345</title></circle>
+<circle cx="168.0" cy="553.1" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番1–2: 0.414</title></circle>
+<circle cx="240.0" cy="525.3" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番3–5: 0.586</title></circle>
+<circle cx="312.0" cy="529.2" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番6–9: 0.562</title></circle>
+<circle cx="384.0" cy="522.4" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番10–14: 0.604</title></circle>
+<circle cx="456.0" cy="513.4" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番15–19: 0.660</title></circle>
+<circle cx="528.0" cy="515.2" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番20–24: 0.649</title></circle>
+<circle cx="600.0" cy="545.5" r="3.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2"><title>系統間 (u0↔u1のP@1024) 自手番25+: 0.461</title></circle>
+<path d="M 96.0 566.7 L 168.0 564.1 L 240.0 549.2 L 312.0 555.5 L 384.0 552.0 L 456.0 543.8 L 528.0 540.2 L 600.0 560.1" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="566.7" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番0: 0.330</title></circle>
+<circle cx="168.0" cy="564.1" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番1–2: 0.346</title></circle>
+<circle cx="240.0" cy="549.2" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番3–5: 0.438</title></circle>
+<circle cx="312.0" cy="555.5" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番6–9: 0.399</title></circle>
+<circle cx="384.0" cy="552.0" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番10–14: 0.421</title></circle>
+<circle cx="456.0" cy="543.8" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番15–19: 0.472</title></circle>
+<circle cx="528.0" cy="540.2" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番20–24: 0.494</title></circle>
+<circle cx="600.0" cy="560.1" r="3.5" fill="#ffffff" stroke="#64748b" stroke-width="2"><title>ctl 自手番25+: 0.371</title></circle>
+<path d="M 96.0 416.9 L 168.0 448.6 L 240.0 453.6 L 312.0 471.5 L 384.0 466.9 L 456.0 459.6 L 528.0 455.9 L 600.0 493.7" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="416.9" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番0: 1.257</title></circle>
+<circle cx="168.0" cy="448.6" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番1–2: 1.061</title></circle>
+<circle cx="240.0" cy="453.6" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番3–5: 1.030</title></circle>
+<circle cx="312.0" cy="471.5" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番6–9: 0.919</title></circle>
+<circle cx="384.0" cy="466.9" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番10–14: 0.948</title></circle>
+<circle cx="456.0" cy="459.6" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番15–19: 0.993</title></circle>
+<circle cx="528.0" cy="455.9" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番20–24: 1.016</title></circle>
+<circle cx="600.0" cy="493.7" r="3.5" fill="#ffffff" stroke="#b91c1c" stroke-width="2"><title>nr 自手番25+: 0.782</title></circle>
+<path d="M 96.0 559.3 L 168.0 556.5 L 240.0 542.0 L 312.0 550.2 L 384.0 545.9 L 456.0 538.4 L 528.0 533.7 L 600.0 548.0" fill="none" stroke="#a16207" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="559.3" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番0: 0.376</title></circle>
+<circle cx="168.0" cy="556.5" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番1–2: 0.393</title></circle>
+<circle cx="240.0" cy="542.0" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番3–5: 0.483</title></circle>
+<circle cx="312.0" cy="550.2" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番6–9: 0.432</title></circle>
+<circle cx="384.0" cy="545.9" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番10–14: 0.459</title></circle>
+<circle cx="456.0" cy="538.4" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番15–19: 0.505</title></circle>
+<circle cx="528.0" cy="533.7" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番20–24: 0.534</title></circle>
+<circle cx="600.0" cy="548.0" r="3.5" fill="#ffffff" stroke="#a16207" stroke-width="2"><title>ent 自手番25+: 0.446</title></circle>
+<path d="M 96.0 591.4 L 168.0 583.8 L 240.0 572.7 L 312.0 576.2 L 384.0 574.0 L 456.0 569.3 L 528.0 564.8 L 600.0 571.7" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="96.0" cy="591.4" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番0: 0.177</title></circle>
+<circle cx="168.0" cy="583.8" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番1–2: 0.224</title></circle>
+<circle cx="240.0" cy="572.7" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番3–5: 0.293</title></circle>
+<circle cx="312.0" cy="576.2" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番6–9: 0.271</title></circle>
+<circle cx="384.0" cy="574.0" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番10–14: 0.285</title></circle>
+<circle cx="456.0" cy="569.3" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番15–19: 0.314</title></circle>
+<circle cx="528.0" cy="564.8" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番20–24: 0.342</title></circle>
+<circle cx="600.0" cy="571.7" r="3.5" fill="#ffffff" stroke="#15803d" stroke-width="2"><title>rkl 自手番25+: 0.299</title></circle>
+<text x="348.0" y="662" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#334155">自手番数</text>
+<text x="32" y="688" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">出典：sml PR #791・#792 の固定評価局面（P@1024自己対局、各系統512局）を再集計</text>
+</svg>
