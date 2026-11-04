@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="691.2pt" height="316.8pt" viewBox="0 0 691.2 316.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-04T18:52:08.812579</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 316.8 
+L 691.2 316.8 
+L 691.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 55.296 259.776 
+L 315.234462 259.776 
+L 315.234462 44.352 
+L 55.296 44.352 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 67.111385 259.776 
+L 94.297225 259.776 
+L 94.297225 157.18032 
+L 67.111385 157.18032 
+z
+" clip-path="url(#p55fa367038)" style="fill: #2563eb; opacity: 0.85"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 119.391848 259.776 
+L 146.577688 259.776 
+L 146.577688 137.79216 
+L 119.391848 137.79216 
+z
+" clip-path="url(#p55fa367038)" style="fill: #2563eb; opacity: 0.85"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 171.67231 259.776 
+L 198.858151 259.776 
+L 198.858151 131.32944 
+L 171.67231 131.32944 
+z
+" clip-path="url(#p55fa367038)" style="fill: #2563eb; opacity: 0.85"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 223.952773 259.776 
+L 251.138614 259.776 
+L 251.138614 149.90976 
+L 223.952773 149.90976 
+z
+" clip-path="url(#p55fa367038)" style="fill: #2563eb; opacity: 0.85"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 276.233236 259.776 
+L 303.419077 259.776 
+L 303.419077 72.89568 
+L 276.233236 72.89568 
+z
+" clip-path="url(#p55fa367038)" style="fill: #2563eb; opacity: 0.85"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m4a2bf312b3" d="M 0 0 
+L 0 3.5 
+" style="stroke: #334155; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="80.704305" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(69.344188 276.381)">局面1</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(63.339071 289.131)">(手番60)</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="132.984768" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(121.624651 276.381)">局面2</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(115.619533 289.131)">(手番61)</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="185.265231" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(173.905114 276.381)">局面3</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(167.899996 289.131)">(手番63)</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="237.545694" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(226.176944 276.381)">局面4</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(220.180459 289.131)">(手番63)</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="289.826157" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(278.466039 276.381)">局面5</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(272.460922 289.131)">(手番65)</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6">
+      <path d="M 55.296 259.776 
+L 315.234462 259.776 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_7">
+      <defs>
+       <path id="mb4f9553c01" d="M 0 0 
+L -3.5 0 
+" style="stroke: #334155; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="263.516" transform="rotate(-0 48.296 263.516)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8">
+      <path d="M 55.296 232.848 
+L 315.234462 232.848 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="232.848" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="236.588" transform="rotate(-0 48.296 236.588)">10</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_10">
+      <path d="M 55.296 205.92 
+L 315.234462 205.92 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="205.92" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="209.66" transform="rotate(-0 48.296 209.66)">20</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_12">
+      <path d="M 55.296 178.992 
+L 315.234462 178.992 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="178.992" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="182.732" transform="rotate(-0 48.296 182.732)">30</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_14">
+      <path d="M 55.296 152.064 
+L 315.234462 152.064 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="152.064" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="155.804" transform="rotate(-0 48.296 155.804)">40</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_16">
+      <path d="M 55.296 125.136 
+L 315.234462 125.136 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="125.136" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="128.876" transform="rotate(-0 48.296 128.876)">50</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_18">
+      <path d="M 55.296 98.208 
+L 315.234462 98.208 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="98.208" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="101.948" transform="rotate(-0 48.296 101.948)">60</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_20">
+      <path d="M 55.296 71.28 
+L 315.234462 71.28 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_21">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="71.28" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="75.02" transform="rotate(-0 48.296 75.02)">70</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_22">
+      <path d="M 55.296 44.352 
+L 315.234462 44.352 
+" clip-path="url(#p55fa367038)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_23">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="55.296" y="44.352" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="48.296" y="48.092" transform="rotate(-0 48.296 48.092)">80</text>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 9.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1e293b" x="31.261859" y="152.064" transform="rotate(-90 31.261859 152.064)">合計確率 (%)</text>
+    </g>
+   </g>
+   <g id="patch_8">
+    <path d="M 55.296 259.776 
+L 55.296 44.352 
+" style="fill: none; stroke: #64748b; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 55.296 259.776 
+L 315.234462 259.776 
+" style="fill: none; stroke: #64748b; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(68.04868 137.00578)">38.1%</text>
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(64.360555 149.00578)">(10候補)</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(120.321018 117.61762)">45.3%</text>
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(116.641018 129.61762)">(23候補)</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(172.601481 111.1549)">47.7%</text>
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(171.613356 123.1549)">(9候補)</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(224.881944 129.73522)">40.8%</text>
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(223.893819 141.73522)">(6候補)</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(277.162407 52.72114)">69.4%</text>
+    <text style="font-size: 8px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #1e40af" transform="translate(273.482407 64.72114)">(20候補)</text>
+   </g>
+   <g id="text_21">
+    <text style="font-weight: 700; font-size: 10.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0f172a" x="55.296" y="32.352" transform="rotate(-0 55.296 32.352)">a  確定勝利5局面の勝利手合計確率と候補数</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_10">
+    <path d="M 403.613538 259.776 
+L 663.552 259.776 
+L 663.552 44.352 
+L 403.613538 44.352 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 415.428923 259.776 
+L 431.726005 259.776 
+L 431.726005 167.359104 
+L 415.428923 167.359104 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #0d9488; opacity: 0.85"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 466.357305 259.776 
+L 482.654387 259.776 
+L 482.654387 202.68864 
+L 466.357305 202.68864 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #0d9488; opacity: 0.85"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 517.285687 259.776 
+L 533.582769 259.776 
+L 533.582769 139.569408 
+L 517.285687 139.569408 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #0d9488; opacity: 0.85"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 568.214069 259.776 
+L 584.511151 259.776 
+L 584.511151 96.484608 
+L 568.214069 96.484608 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #0d9488; opacity: 0.85"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 619.142451 259.776 
+L 635.439533 259.776 
+L 635.439533 180.930816 
+L 619.142451 180.930816 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #0d9488; opacity: 0.85"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 431.726005 259.776 
+L 448.023088 259.776 
+L 448.023088 163.266048 
+L 431.726005 163.266048 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #ea580c; opacity: 0.85"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 482.654387 259.776 
+L 498.951469 259.776 
+L 498.951469 199.888128 
+L 482.654387 199.888128 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #ea580c; opacity: 0.85"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 533.582769 259.776 
+L 549.879851 259.776 
+L 549.879851 124.920576 
+L 533.582769 124.920576 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #ea580c; opacity: 0.85"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 584.511151 259.776 
+L 600.808233 259.776 
+L 600.808233 92.606976 
+L 584.511151 92.606976 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #ea580c; opacity: 0.85"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 635.439533 259.776 
+L 651.736615 259.776 
+L 651.736615 171.236736 
+L 635.439533 171.236736 
+z
+" clip-path="url(#p1f5e4eb3d4)" style="fill: #ea580c; opacity: 0.85"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_6">
+     <g id="line2d_24">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="431.726005" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_22">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(420.365888 276.381)">局面1</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(414.360771 289.131)">(手番60)</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_25">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="482.654387" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_23">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(471.29427 276.381)">局面2</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(465.289153 289.131)">(手番61)</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_26">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="533.582769" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_24">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(522.222652 276.381)">局面3</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(516.217535 289.131)">(手番63)</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_27">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="584.511151" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_25">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(573.142401 276.381)">局面4</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(567.145917 289.131)">(手番63)</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_28">
+      <g>
+       <use xlink:href="#m4a2bf312b3" x="635.439533" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_26">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(624.079416 276.381)">局面5</text>
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; fill: #334155" transform="translate(618.074299 289.131)">(手番65)</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_10">
+     <g id="line2d_29">
+      <path d="M 403.613538 259.776 
+L 663.552 259.776 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_30">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="259.776" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_27">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="263.516" transform="rotate(-0 396.613538 263.516)">0</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_31">
+      <path d="M 403.613538 216.6912 
+L 663.552 216.6912 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_32">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="216.6912" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_28">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="220.4312" transform="rotate(-0 396.613538 220.4312)">2</text>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_33">
+      <path d="M 403.613538 173.6064 
+L 663.552 173.6064 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_34">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="173.6064" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_29">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="177.3464" transform="rotate(-0 396.613538 177.3464)">4</text>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_35">
+      <path d="M 403.613538 130.5216 
+L 663.552 130.5216 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_36">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="130.5216" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_30">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="134.2616" transform="rotate(-0 396.613538 134.2616)">6</text>
+     </g>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_37">
+      <path d="M 403.613538 87.4368 
+L 663.552 87.4368 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_38">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="87.4368" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_31">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="91.1768" transform="rotate(-0 396.613538 91.1768)">8</text>
+     </g>
+    </g>
+    <g id="ytick_15">
+     <g id="line2d_39">
+      <path d="M 403.613538 44.352 
+L 663.552 44.352 
+" clip-path="url(#p1f5e4eb3d4)" style="fill: none; stroke-dasharray: 2.96,1.28; stroke-dashoffset: 0; stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 0.8"/>
+     </g>
+     <g id="line2d_40">
+      <g>
+       <use xlink:href="#mb4f9553c01" x="403.613538" y="44.352" style="fill: #334155; stroke: #334155; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_32">
+      <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #334155" x="396.613538" y="48.092" transform="rotate(-0 396.613538 48.092)">10</text>
+     </g>
+    </g>
+    <g id="text_33">
+     <text style="font-size: 9.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1e293b" x="379.596663" y="152.064" transform="rotate(-90 379.596663 152.064)">単体確率 (%)</text>
+    </g>
+   </g>
+   <g id="patch_21">
+    <path d="M 403.613538 259.776 
+L 403.613538 44.352 
+" style="fill: none; stroke: #64748b; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 403.613538 259.776 
+L 663.552 259.776 
+" style="fill: none; stroke: #64748b; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_34">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #9a3412" x="439.874546" y="158.057568" transform="rotate(-0 439.874546 158.057568)">+0.19%</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #9a3412" x="490.802928" y="194.679648" transform="rotate(-0 490.802928 194.679648)">+0.13%</text>
+   </g>
+   <g id="text_36">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #9a3412" x="541.73131" y="119.712096" transform="rotate(-0 541.73131 119.712096)">+0.68%</text>
+   </g>
+   <g id="text_37">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #9a3412" x="592.659692" y="87.398496" transform="rotate(-0 592.659692 87.398496)">+0.18%</text>
+   </g>
+   <g id="text_38">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #9a3412" x="643.588074" y="166.028256" transform="rotate(-0 643.588074 166.028256)">+0.45%</text>
+   </g>
+   <g id="text_39">
+    <text style="font-weight: 700; font-size: 10.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0f172a" x="403.613538" y="32.352" transform="rotate(-0 403.613538 32.352)">b  候補手単体の確率（Greedy選択が勝利手を上回る）</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_23">
+     <path d="M 409.563538 76.652 
+L 530.263538 76.652 
+Q 531.963538 76.652 531.963538 74.952 
+L 531.963538 50.302 
+Q 531.963538 48.602 530.263538 48.602 
+L 409.563538 48.602 
+Q 407.863538 48.602 407.863538 50.302 
+L 407.863538 74.952 
+Q 407.863538 76.652 409.563538 76.652 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #e2e8f0; stroke-linejoin: miter"/>
+    </g>
+    <g id="patch_24">
+     <path d="M 411.263538 59.482 
+L 428.263538 59.482 
+L 428.263538 53.532 
+L 411.263538 53.532 
+z
+" style="fill: #0d9488; opacity: 0.85"/>
+    </g>
+    <g id="text_40">
+     <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: start" x="435.063538" y="59.482" transform="rotate(-0 435.063538 59.482)">最善の勝利手</text>
+    </g>
+    <g id="patch_25">
+     <path d="M 411.263538 72.232 
+L 428.263538 72.232 
+L 428.263538 66.282 
+L 411.263538 66.282 
+z
+" style="fill: #ea580c; opacity: 0.85"/>
+    </g>
+    <g id="text_41">
+     <text style="font-size: 8.5px; font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'DejaVu Sans', sans-serif; text-anchor: start" x="435.063538" y="72.232" transform="rotate(-0 435.063538 72.232)">選択手（トークン操作）</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p55fa367038">
+   <rect x="55.296" y="44.352" width="259.938462" height="215.424"/>
+  </clipPath>
+  <clipPath id="p1f5e4eb3d4">
+   <rect x="403.613538" y="44.352" width="259.938462" height="215.424"/>
+  </clipPath>
+ </defs>
+</svg>
